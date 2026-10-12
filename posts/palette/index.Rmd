@@ -2,9 +2,8 @@
 title: "A New palette() for R"
 author: "Achim Zeileis, Paul Murrell, Martin Maechler, Deepayan Sarkar"
 date: 2019-11-21
-categories: ["graphics"]
+categories: ["graphics", "colors"]
 description: "R 4.0 debuts a new default color palette with improved perceptual balance and colorblind-friendly design."
-
 ---
 
 ```{r setup, include=FALSE}
