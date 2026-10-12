@@ -1,0 +1,32 @@
+project:
+  type: website
+
+website:
+  description: "The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors"
+  site-url: https://blog.R-project.org/
+  title: "The R Project Blog"
+  favicon: Rlogo.png
+  image: Rlogo.png
+  image-alt: R logo
+  open-graph: true
+  navbar:
+    logo: Rlogo.png
+    logo-alt: R logo
+    right:
+      - about.qmd
+      - icon: bluesky
+        href: https://bsky.app/profile/r-foundation.bsky.social
+      - icon: mastodon
+        href: https://fosstodon.org/@R_Foundation
+      - icon: linkedin
+        href: https://www.linkedin.com/company/the-r-foundation-for-statistical-computing
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+      - styles.scss
+
+execute:
+  freeze: auto

@@ -1,0 +1,29 @@
+---
+title: "About"
+image: Rlogo.svg
+about:
+  template: broadside
+  image-alt: R logo
+  links:
+    - icon: bluesky
+      text: Bluesky
+      href: https://bsky.app/profile/r-foundation.bsky.social
+    - icon: mastodon
+      text: Mastodon
+      href: https://fosstodon.org/@R_Foundation
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/company/the-r-foundation-for-statistical-computing
+
+---
+
+Welcome to the R Project blog! Here, members of the R Core Team and the R
+Foundation, along with other contributors, share news, insights, and plans
+related to the R core implementation and other related topics.
+
+The blog posts represent individual opinions of their authors. Unless stated
+so explicitly, they should not be taken as positions of R Core or the R
+Foundation. 
+
+In the interest of technical quality of the posts, the authors may modify
+existing posts after publication.

@@ -1,0 +1,31 @@
+/*-- scss:defaults --*/
+
+$rlogo-lightgray: #CBCED0; /* rgb(203, 206, 208, maxColorValue = 255) */
+$rlogo-darkgray: #84838B;  /* rgb(132, 131, 139, maxColorValue = 255) */
+$rlogo-blue: #276DC3;      /* rgb( 39, 109, 195, maxColorValue = 255) */
+$rlogo-darkblue: #165CAA;  /* rgb( 22,  92, 170, maxColorValue = 255) */
+
+$link-color: $rlogo-darkblue;
+$link-hover-color: $rlogo-blue;
+$navbar-hl: $rlogo-blue;
+$navbar-hover-color: $rlogo-blue;
+$toc-color: $rlogo-darkblue;
+$toc-hl: $rlogo-darkblue;
+
+$pagination-color: $rlogo-darkblue;
+$pagination-border-color: $rlogo-darkblue;
+$pagination-bg: #ffffff;
+$pagination-hover-color: #ffffff;
+$pagination-hover-bg: $rlogo-darkblue;
+$pagination-hover-border-color: $rlogo-darkblue;
+$pagination-active-color: #ffffff;
+$pagination-active-bg: $rlogo-darkblue;
+$pagination-active-border-color: $rlogo-darkblue;
+
+
+/*-- scss:rules --*/
+
+.quarto-about-broadside.column-page > .about-main > .about-entity {
+  background-size: contain !important;
+  background-position: center;
+}
