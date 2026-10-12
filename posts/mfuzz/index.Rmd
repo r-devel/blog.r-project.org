@@ -2,7 +2,7 @@
 title: "Debugging Sensitivity to C Math Library on Linux"
 author: "Tomáš Kalibera"
 date: 2026-01-30
-categories: ["linux", "math", "testing"]
+categories: ["testing", "numerical"]
 description: "Fuzzing tool (mfuzz) helps establish robust numerical test tolerances on Linux."
 
 ---

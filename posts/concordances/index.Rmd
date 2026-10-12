@@ -3,6 +3,7 @@ title: "Concordances"
 author: "Duncan Murdoch"
 date: "2022-10-20"
 output: html_document
+categories: ["documentation", "Sweave"]
 description: "Using concordances to map error locations from generated files back to original R source files."
 
 ---

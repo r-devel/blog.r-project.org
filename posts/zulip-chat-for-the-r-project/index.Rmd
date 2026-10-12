@@ -2,7 +2,7 @@
 title: "Zulip Chat for the R Project"
 author: "Ella Kaye and Heather Turner"
 date: "2026-09-22"
-categories: ["R Core", "R Foundation", "mentoring", "development infrastructure"]
+categories: ["R Foundation", "R Core", "community"]
 description: "R Project adopts open-source Zulip platform to replace Slack for developer chat and collaboration."
 
 ---

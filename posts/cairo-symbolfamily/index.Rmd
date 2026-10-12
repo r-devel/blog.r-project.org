@@ -2,7 +2,7 @@
 title: "Changes to Symbol Fonts for Cairo Graphics Devices"
 author: "Paul Murrell"
 date: 2020-04-17
-categories: ["Internals", "grid, units"]
+categories: ["graphics", "internals"]
 abstract: In R 4.0.0, Cairo-based graphics devices will allow the user to select
   a symbol font.  That is not as straightforward as it sounds.
 description: "Simplifying symbol font selection in Cairo-based graphics devices for R 4.0.0."

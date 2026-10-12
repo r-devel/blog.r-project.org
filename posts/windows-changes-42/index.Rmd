@@ -2,7 +2,7 @@
 title: "Upcoming Changes in R 4.2 on Windows"
 author: "Tomas Kalibera, Uwe Ligges, Kurt Hornik, Simon Urbanek, Deepayan Sarkar, Luke Tierney, Martin Maechler"
 date: 2021-12-07
-categories: ["User-visible Behavior", "Windows", "UTF-8", "UCRT", "encodings", "CRAN"]
+categories: ["windows", "encoding", "UTF-8", "UCRT"]
 description: "R 4.2 on Windows brings UTF-8 support, new toolchain, and end of 32-bit support."
 
 ---

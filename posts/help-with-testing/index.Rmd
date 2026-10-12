@@ -2,7 +2,7 @@
 title: "R Can Use Your Help: Testing R Before Release"
 author: "Tomas Kalibera, Luke Tierney, Kurt Hornik"
 date: 2021-04-28
-categories: ["External Contributions", "testing", "bugs", "bugzilla"]
+categories: ["R Core", "community", "testing"]
 description: "Guidance for community testing of pre-release R versions to catch regressions before official release."
 
 ---

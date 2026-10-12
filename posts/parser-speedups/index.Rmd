@@ -2,7 +2,7 @@
 title: "Parser Speedups"
 author: "Tomas Kalibera"
 date: 2019-01-07
-categories: ["Internals", "Performance", "parsing", "source references", "parse data"]
+categories: ["R Core", "performance", "language"]
 description: "Multiple parser optimizations improve R code parsing performance through various efficiency improvements."
 
 ---

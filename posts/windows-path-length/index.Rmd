@@ -2,7 +2,7 @@
 title: "Path Length Limit on Windows"
 author: "Tomas Kalibera"
 date: 2023-03-07
-categories: ["Internals", "User-visible Behavior", "Windows", "MAX_PATH", "PATH_MAX", "long paths"]
+categories: ["windows", "internals"]
 description: "R now supports longer file paths on modern Windows systems, overcoming MAX_PATH limitations."
 
 ---

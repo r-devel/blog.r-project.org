@@ -2,7 +2,7 @@
 title: "Use of C++ in Packages"
 author: "Tomas Kalibera"
 date: 2019-03-28
-categories: ["Package development", "Internals", "C++", "PROTECT bugs"]
+categories: ["C/C++", "packages"]
 description: "Technical issues with using C++ to interface with R and recommendations for using C instead for R API interactions."
 
 ---

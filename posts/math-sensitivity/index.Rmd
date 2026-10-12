@@ -2,7 +2,7 @@
 title: "Sensitivity to C Math Library and mingw-w64 v12"
 author: "Tomas Kalibera"
 date: 2025-04-24
-categories: ["Windows", "Math", "Package Development", "numerical accuracy", "testing", "test tolerance"]
+categories: ["numerical", "windows"]
 description: "mingw-w64 v12 changes to math functions cause test failures in about 20 CRAN packages on Windows."
 
 ---

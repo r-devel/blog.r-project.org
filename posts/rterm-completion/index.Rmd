@@ -2,7 +2,7 @@
 title: "Sporadic Rterm Crashes with Completion"
 author: "Tomas Kalibera"
 date: 2022-11-01
-categories: ["Windows", "Internals", "debugging", "completion"]
+categories: ["windows", "internals"]
 description: "Debugging and fixing elusive Rterm crashes occurring during tab completion."
 
 ---

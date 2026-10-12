@@ -3,7 +3,7 @@ title: "When You Think `class(.) == *`, Think Again!"
 slug: "when-you-think-class.-think-again"
 author: "Martin Maechler"
 date: 2019-11-09
-categories: ["User-visible Behavior", "Safe Programming", "class", "S3", "inheritance", "OO"]
+categories: ["classes/methods", "language"]
 description: "A historical quirk: R matrices are not arrays in the inheritance sense, with important implications for S3 methods."
 
 ---

@@ -2,7 +2,7 @@
 title: "Problems with iconv on macOS"
 author: "Tomas Kalibera"
 date: 2024-12-11
-categories: ["Internals", "macOS", "User-visible Behavior", "encodings", "iconv"]
+categories: ["encoding", "macOS"]
 description: "R addresses macOS iconv changes causing crashes and encoding conversion issues with workarounds for R 4.4 and R-devel."
 
 ---

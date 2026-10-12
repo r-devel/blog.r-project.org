@@ -2,7 +2,7 @@
 title: "Reducing the Backlog of Open Bug Reports"
 author: "Tomas Kalibera"
 date: 2025-10-13
-categories: ["External Contributions", "User-visible Behavior", "Internals", "debugging", "bugs", "bugzilla"]
+categories: ["R Core", "community", "testing"]
 description: "Sustained effort reduces R bug tracker backlog by 25% with clear explanations for all resolutions."
 
 ---

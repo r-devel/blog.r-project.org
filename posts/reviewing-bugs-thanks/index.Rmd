@@ -2,7 +2,7 @@
 title: "Thanks for Reviewing Bug Reports"
 author: "Tomas Kalibera, Luke Tierney"
 date: 2019-12-16
-categories: ["External Contributions", "debugging", "bugs", "bugzilla"]
+categories: ["R Core", "community", "testing"]
 description: "Community effort significantly improves R bug resolution rate and backlog management."
 
 ---

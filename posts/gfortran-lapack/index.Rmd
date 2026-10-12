@@ -2,7 +2,7 @@
 title: "GFortran Issues with LAPACK"
 author: "Tomas Kalibera"
 date: 2019-05-15
-categories: ["Package Development", "R Installation", "Fortran", "C", "LAPACK", "BLAS"]
+categories: ["R Core", "Fortran", "BLAS/LAPACK"]
 description: "Recent GFortran optimizations break BLAS/LAPACK interoperability; workaround using -fno-optimize-sibling-calls."
 
 ---

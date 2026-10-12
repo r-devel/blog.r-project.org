@@ -2,7 +2,7 @@
 title: "Unprotecting by Value"
 author: "Tomas Kalibera"
 date: 2018-12-10
-categories: ["Internals", "User-visible Behavior", "parsing", "PROTECT bugs"]
+categories: ["C/C++", "internals"]
 description: "Why UNPROTECT_PTR is dangerous and how to safely avoid it in R C/C++ code."
 
 ---

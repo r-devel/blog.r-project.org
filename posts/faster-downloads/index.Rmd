@@ -2,7 +2,7 @@
 title: "Faster Downloads"
 author: "Tomas Kalibera"
 date: 2024-12-02
-categories: ["User-visible Behavior", "Internals", "downloading files", "package installation"]
+categories: ["performance", "packages"]
 description: "R 4.5 speeds up package downloads through simultaneous file transfer, reducing installation time significantly."
 
 ---

@@ -2,7 +2,7 @@
 title: "Long Input Lines"
 author: "Tomas Kalibera"
 date: 2024-08-30
-categories: ["Internals", "User-visible Behavior", "Windows","Unix", "front-ends", "line editing", "parsing"]
+categories: ["R Core", "language", "internals"]
 description: "R now supports pasting unlimited-length code into the console, removing the 4096 byte limit."
 
 ---

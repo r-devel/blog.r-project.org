@@ -2,7 +2,7 @@
 title: "Windows/UTF-8 Build of R and CRAN Packages"
 author: "Tomas Kalibera"
 date: 2020-07-30
-categories: ["User-visible Behavior", "Windows", "UTF-8", "UCRT", "encodings"]
+categories: ["windows", "encoding", "UTF-8"]
 description: "Experimental R build brings UTF-8 Unicode support to Windows with 92% CRAN package compatibility."
 
 ---

@@ -2,7 +2,7 @@
 title: "HCL-Based Color Palettes in grDevices"
 author: "Achim Zeileis, Paul Murrell"
 date: 2019-04-01
-categories: ["User-visible Behavior", "hcl colors"]
+categories: ["graphics"]
 description: "R 3.6 introduces perceptually-balanced HCL color palettes for better data visualization and improved colorblind accessibility."
 
 ---
