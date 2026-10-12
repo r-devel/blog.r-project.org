@@ -3,6 +3,8 @@ title: "New Tricks for the R Sweave Drivers"
 author: "Vincent Goulet and Kurt Hornik"
 date: "2026-09-18"
 categories: ["R core", "Sweave"]
+description: "Enhancements to R Sweave drivers improve literate programming capabilities for documentation."
+
 ---
 
 ```{r setup, include=FALSE}

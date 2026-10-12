@@ -3,6 +3,7 @@ title: "(Not) Interrupting Background Tasks with Ctrl+C"
 author: "Tomas Kalibera"
 date: 2023-05-23
 categories: ["Internals", "User-visible Behavior", "Windows","Unix", "system", "pipe", "signals"]
+description: "Fixing a bug where Ctrl+C was incorrectly interrupting background tasks like those started with system(wait=FALSE) or pipe()."
 
 ---
 

@@ -3,6 +3,7 @@ title: "Improved Multi-Byte Support in RTerm"
 author: "Tomas Kalibera"
 date: 2021-04-17
 categories: ["User-visible Behavior", "Windows", "Internals", "encodings", "UCRT", "UTF-8", "getline"]
+description: "RTerm now supports multi-byte characters for Japanese and other non-European languages in R 4.1."
 
 ---
 

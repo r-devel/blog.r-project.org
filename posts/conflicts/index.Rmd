@@ -3,6 +3,8 @@ title: "Managing Search Path Conflicts"
 author: Luke Tierney
 date: 2019-03-19
 categories: ["User-visible Behavior", "search path conflicts"]
+description: "R 3.6 adds the conflicts.policy option to give more control over how package search path conflicts are handled."
+
 ---
 
 ```{r global_options, include=FALSE}

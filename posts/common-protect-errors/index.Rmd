@@ -3,6 +3,7 @@ title: "Common PROTECT Errors"
 author: "Tomas Kalibera"
 date: 2019-04-18
 categories: ["Internals", "User-visible Behavior", "PROTECT bugs", "package checking", "C"]
+description: "Guide to finding and fixing common PROTECT errors in R C/C++ packages using the rchk tool."
 
 ---
 

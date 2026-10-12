@@ -3,6 +3,7 @@ title: "R Can Use Your Help: Reviewing Bug Reports"
 author: "Tomas Kalibera, Luke Tierney"
 date: 2019-10-09
 categories: ["External Contributions", "debugging", "bugs", "bugzilla"]
+description: "Guide for community members to help review and resolve R bug reports on Bugzilla without coding expertise needed."
 
 ---
 

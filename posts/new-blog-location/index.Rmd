@@ -3,6 +3,8 @@ title: "Moving to blog.r-project.org"
 author: "Tomas Kalibera"
 date: 2022-06-30
 categories: ["blog location"]
+description: "R Blog relocates to blog.r-project.org for broader visibility after 37 posts at developer.r-project.org."
+
 ---
 
 The R blog moves to

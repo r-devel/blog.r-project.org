@@ -3,6 +3,8 @@ title: "Generalizing Support for Functional OOP in R"
 author: "Tomasz Kalinowski, Michael Lawrence, Martin Maechler, Davis Vaughan, Hadley Wickham, Luke Tierney"
 date: 2024-05-17
 categories: ["Internals", "Package Development", "OO", "S7", "S4", "S3"]
+description: "R core introduces new generics to enable next-generation OOP systems like S7 and improve functional OOP support."
+
 ---
 
 ## Generalizing Support for Functional OOP in R

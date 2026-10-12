@@ -3,6 +3,8 @@ title: "Upcoming Changes in R 4.2.1 on Windows"
 author: "Tomas Kalibera"
 date: 2022-06-16
 categories: ["User-visible Behavior", "Windows", "Rgui", "UTF-8", "UCRT", "encodings"]
+description: "R 4.2.1 fixes Windows-specific issues from the UTF-8/UCRT transition."
+
 ---
 
 R 4.2.1 is [scheduled](https://developer.r-project.org/) to be released next

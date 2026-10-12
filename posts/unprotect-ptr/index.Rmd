@@ -3,6 +3,8 @@ title: "Unprotecting by Value"
 author: "Tomas Kalibera"
 date: 2018-12-10
 categories: ["Internals", "User-visible Behavior", "parsing", "PROTECT bugs"]
+description: "Why UNPROTECT_PTR is dangerous and how to safely avoid it in R C/C++ code."
+
 ---
 
 In short, `UNPROTECT_PTR` is dangerous and should not be used.  This text

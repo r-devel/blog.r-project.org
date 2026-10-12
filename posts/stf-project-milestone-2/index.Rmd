@@ -3,6 +3,8 @@ title: "Sovereign Tech Fund Project: Milestone 2"
 author: "Šimon Urbánek and Tomáš Kalibera"
 date: 2026-09-29
 categories: ["Linux", "macOS", "Windows", "Package Building", "binaries", "versioning", "STF"]
+description: "Improvements to R binary packages enable better version detection and consistency across platforms."
+
 ---
 
 ## Sovereign Tech Fund (STF) Project

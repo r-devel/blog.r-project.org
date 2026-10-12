@@ -3,6 +3,8 @@ title: "Groups and Paths and Masks in R Graphics"
 author: "Paul Murrell"
 date: 2021-12-06
 categories: ["Internals", "graphics"]
+description: "R 4.2.0 adds groups, compositing operators, and affine transformations to the graphics engine."
+
 ---
 
 ```{r eval=FALSE, echo=FALSE}

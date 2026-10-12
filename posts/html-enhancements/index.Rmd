@@ -3,6 +3,8 @@ title: "Enhancements to HTML Documentation"
 author: "Deepayan Sarkar and Kurt Hornik"
 date: 2022-04-08
 categories: ["Internals", "User-visible Behavior", "documentation", "package checking"]
+description: "R 4.2 enhances help pages with math rendering via KaTeX/MathJax, syntax highlighting, and live example output."
+
 ---
 
 The upcoming release of R (version 4.2.0) features several

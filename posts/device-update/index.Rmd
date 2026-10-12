@@ -3,6 +3,8 @@ title: "Updating Graphics Devices for R 4.2.0"
 author: "Paul Murrell"
 date: 2021-12-14
 categories: ["Internals", "graphics"]
+description: "Essential updates for graphics device packages to support R 4.2.0 new features and functionality."
+
 ---
 
 A number of new graphics features have been added to the R graphics
