@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2022-06-16">
+
+<title>Upcoming Changes in R 4.2.1 on Windows – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Upcoming Changes in R 4.2.1 on Windows – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/windows-changes-421/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Upcoming Changes in R 4.2.1 on Windows</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">Windows</div>
+                <div class="quarto-category">Rgui</div>
+                <div class="quarto-category">UTF-8</div>
+                <div class="quarto-category">UCRT</div>
+                <div class="quarto-category">encodings</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 16, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>R 4.2.1 is <a href="https://developer.r-project.org/">scheduled</a> to be released next week with a number of Windows-specific fixes. All Windows R users currently using R 4.2.0 should upgrade to R 4.2.1. This text has more details on some of the fixes.</p>
+<p>R 4.2.0 on Windows came with a significant improvement. It uses UTF-8 as the native encoding and for that it switched to the Universal C Runtime (UCRT). This in turn required creating a new R toolchain for Windows and re-building R, R packages and all (statically linked) dependencies with it (<a href="https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html">Rtools42</a>, <a href="https://blog.r-project.org/2021/12/07/upcoming-changes-in-r-4.2-on-windows">more details</a> on the transition).</p>
+<p>Using UTF-8 as the native encoding significantly reduces the number of encoding conversion issues when working with characters not representable in the encoding used normally by Windows, so e.g.&nbsp;problems with Asian characters on systems running in Europe, Americas or anywhere else where latin scripts are used.</p>
+<p>R 4.2.0 has been regularly tested with CRAN and Bioconductor packages before the release, but several issues not covered by automated R/package testing and missed by the limited manual testing have been found by users after the release. Thanks to users who <a href="https://www.r-project.org/bugs.html">reported</a> issues via R bugzilla, R-devel mailing list, R-help mailing list as well as private messages, soon after the R 4.2.0 release, these issues were fixed for R 4.2.1. Moreover, the good news is that no major issues with the rather significant transition to UTF-8/UCRT have been found to this date.</p>
+<p>It would be nice to get more help from the R community volunteers with testing R before releases, as detailed in a blog post from <a href="https://blog.r-project.org/2021/04/28/r-can-use-your-help-testing-r-before-release">April 2021</a>. As far I can tell from when we are receiving bug reports, this is still not happening much. Such testing doesn’t have to be only “manual”, a lot of interactive testing in principle can be automated as well, but in either case that requires effort and time that would have to be contributed.</p>
+<section id="clipboard" class="level1">
+<h1>Clipboard</h1>
+<p>Clipboard connection support in R on Windows (see <code>?connection</code> and search for “clipboard”) was rewritten in R 4.2.0 to use Unicode (UTF16-LE) Windows API interface to fix encoding issues (<a href="https://bugs.r-project.org/show_bug.cgi?id=18267">PR#18267</a>). Unfortunately, there was an error in computing offsets in the connection stream which resulted in an bug observed during consecutive writes (<a href="https://bugs.r-project.org/show_bug.cgi?id=18332">PR#18332</a>), fixed in R 4.2.1. This only impacted programmatic access to the clipboard via the R connections API.</p>
+<p>It was a rather embarrassing omission of a pair of parentheses and apparently I was only testing the original bug fix using a single write operation, not multiple. While fixing the bug with consecutive writes, I also found and fixed a spurious warning about an ignored encoding argument, which is a by-product of internal conversions to/from UTF16-LE inside the connections code.</p>
+<p>Clipboard connection testing is for good reasons not allowed in automated CRAN package checks (as clipboard is a user/system-wide device, regarded the same as user’s home files pace, see <a href="https://cran.r-project.org/web/packages/policies.html">CRAN Repository Policy</a>), so the issue hence could not have been found that way.</p>
+</section>
+<section id="invalid-parameters-passed-to-c-runtime" class="level1">
+<h1>Invalid parameters passed to C runtime</h1>
+<p>Another issue found after the release was with the R <code>Sys.getlocale</code> function attempting to query an unsupported locale category on Windows. The function is documented to accept also <code>LC_MESSAGES</code>, <code>LC_PAPER</code> and <code>LC_MEASUREMENT</code> categories on Windows, even though they are not supported there; <code>Sys.getlocale</code> returns an empty string.</p>
+<p>The implementation used to call the C runtime function <code>setlocale</code> to obtain the locale information even for <code>LC_MESSAGES</code>, and that worked in the past. But, it does no longer with UCRT when invalid parameter handlers are enabled (see <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/parameter-validation">Parameter Validation</a> in MSDN).</p>
+<p>By default, MinGW-W64 and hence applications built using Rtools42 disable the invalid parameter handlers, so we have never ran into that during automated CRAN and Bioconductor package checking, nor during manual testing using the “normal” builds. But, if R is embedded in an application built using Microsoft compilers, the invalid parameter handlers may be enabled by default and may terminate/crash R.</p>
+<p>This has only been found after R 4.2.0 release inside RStudio which had the handlers enabled. It was reported that <code>rJava</code> crashed during initialization, because it was using <code>Sys.getlocale</code> to query the <code>LC_MESSAGES</code> locale category.</p>
+<p>The <code>getlocale</code> implementation has been fixed in R 4.2.1 not to query the unsupported locale categories. In addition, R-devel has been extended to optionally enable these handlers for checking (via <code>_R_WIN_CHECK_INVALID_PARAMETERS_</code>), and CRAN package checks were ran using this setting. Luckily, only few packages have been affected. One package trigered invalid parameter handler by accidentally closing a handle twice, so attempting to close an invalid handle.</p>
+<p>As usual, checking all CRAN packages is not only a service to the package maintainers, but also serves as a check for R itself.</p>
+</section>
+<section id="rgui" class="level1">
+<h1>Rgui</h1>
+<p>Perhaps surprisingly, a number of users have found issues in Rgui after the R 4.2.0 release. This shows that Rgui is still actively used, and not only directly, but also as an interactive R console window connected to and controlled by other applications (<a href="https://dasher.acecentre.net/">Dasher</a>, <a href="https://tinn-r.org">Tinn-R</a>).</p>
+<p>Problems with transition to UTF-8 were somewhat surprising to me as Rgui has been designed as a Unicode application and, using the GraphApp library, written to support Unicode characters not representable in the native/ANSI Windows encoding. Rgui has limitations in supporting non-BMP characters, but that was not the issue here. GraphApp, at least the version included and customized in the R distribution, has two very distinct modes of operation: “Unicode” and “non-Unicode” windows. Both modes support working with characters not representable in the native/ANSI Windows encoding.</p>
+<p>However, by default, “non-Unicode” windows are used in a single-byte locale (the native/ANSI) and in some contexts are also used by accident even on multi-byte locale (due to initialization/bootstrapping issues). Hence, Windows systems of R users of languages using single-byte encoding have always been using “non-Unicode” GraphApp windows, and it wasn’t discovered/reported that the “Unicode” windows lacked some features and had some bugs. As R 4.2.0 switched to UTF-8, a multi-byte locale, Rgui started using “Unicode” GraphApp windows and these issues popped up. The reports were from users from Europe and South America.</p>
+<p>One of the consequences was that the accent keys (dead keys) almost didn’t work. Some were not supported at all and some couldn’t be typed without combining them with the next character. The reported cases (and a number of additional I found while debugging) have been fixed. However, handling of these characters, at least in the form done in GraphApp “Unicode” windows, is very language-specific and depends on keyboard layouts. It is hence definitely not impossible that some accents via dead keys still will not work: in that case, the best course of action is to use copy-paste (or some other input method common for the specific language) as a work around, and report a bug. As a last resort, non-ASCII characters in string literals can be represented using <code>\u</code> and <code>\U</code> escapes.</p>
+<p>GraphApp “Unicode” windows are internally designed differently and respond to different Windows API messages. Hence, injection of text via <code>SendInput</code>, as used in Dasher, didn’t work. Luckily this has still been fixable and is fixed in R 4.2.1. Tinn-R used <code>WM_CHAR</code> messages, instead, and they stopped working as well. This seems unfixable without bigger changes to GraphApp, because the “Unicode” windows are simply designed to handle related messages differently, but Tinn-R luckily can switch to <code>SendInput</code>, which is also a better way to do text injection, despite it has also limitations (more details <a href="https://devblogs.microsoft.com/oldnewthing/20050530-11/?p=35513">here</a>). If there are other similar applications that used <code>WM_CHAR</code> or <code>WM_KEYDOWN</code>/<code>WM_KEYUP</code> messages, the best/simplest course of action is to switch to <code>SendInput</code>. Switching to embedding may be more flexible and reliable in the long-term, but require a much higher investment.</p>
+<p>Rgui has a “Script Editor”, which is implemented using a RichEdit control (part of Windows). GraphApp has been using the ANSI (<code>*A</code>) interface to the control, so one would expect that it should work with UTF-8 as it worked before with whatever was the ANSI encoding (even double-byte). However, it turned out that the <code>RichEdit20A</code> version of the control does not, it was not possible to copy and execute a line of R code which contained non-ASCII characters (characters were received in the ANSI encoding, not respecting that Rgui opted for UTF-8 in its manifest). However, the <code>RichEdit20W</code> version of the control accepts UTF-8 properly, even using the ANSI (<code>*A</code>). If any expert on these things is reading these lines, I would be happy for a review of the current code or for an explanation, as this doesn’t seem to be documented.</p>
+<p>Rgui has also experienced a significant performance regression of <code>txtProgressBar</code>. The progress bar is based on carriage return characters and repeated rewriting of the previous state. Rgui has a not very efficient way of implementing these: it remembers the full history of the line, interpreting the carriage returns only on redraws. While redrawing a line, Rgui computes width of each character. So, every update of the progress bar adds to the work to be done on the next redraw, and even previous lines shown in the window have to be redrawn, so, if one runs the progress bar several times, the performance overheads are increasing.</p>
+<p>This has only been detected in R 4.2.0 running in UTF-8, because UTF-8 is a multi-byte locale and a different code path to compute the character widths has been used. It turns out that this code contributed long time ago to R had a bug in caching a locale identifier, so it was re-computed on every character, plus an optimization for ASCII characters (relevant for the progress bar) accidentally only took place after the broken caching. Fixing this old performance bug in R fixed this performance regression in Rgui and potentially will improve performance also on other systems where R is built to use the internal width calculation.</p>
+</section>
+<section id="other" class="level1">
+<h1>Other</h1>
+<p>Rtools42 have been updated and the official build of R 4.2.1 (at the time of this writing <a href="https://cran.r-project.org/bin/windows/base/rpatched.html">R-4.2.1 release candidate</a>) will be built using version 5253.</p>
+<p>Compared to version 5168 used to build R 4.2.0, there is now also the <code>tidy</code> tool for checking HTML in packages and a number of libraries have been updated, from which R itself and then all CRAN packages using those would benefit: 15 out of those are used by R and recommended packages, see a <a href="https://developer.r-project.org/WindowsBuilds/Rtools42/news.html">complete list</a> for details. All CRAN packages have been tested (and where needed updated) for the new versions. Note that CRAN packages are required to use libraries from Rtools when those are available <a href="https://cran.r-project.org/web/packages/policies.html">CRAN Repository Policy</a> has more details).</p>
+<p>For a summary of additional updates in R 4.2.1, see the <a href="https://stat.ethz.ch/R-manual/R-patched/doc/html/NEWS.html">NEWS file of the R-patched branch</a> and look for “Changes in R 4.2.0 patched” (when still before the release) or to “Changes in R 4.2.1” (when after the release).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

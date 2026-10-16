@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2021-03-12">
+
+<title>Windows/UTF-8 Toolchain and CRAN Package Checks – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Windows/UTF-8 Toolchain and CRAN Package Checks – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/windows-utf8-3/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Windows/UTF-8 Toolchain and CRAN Package Checks</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">Windows</div>
+                <div class="quarto-category">UTF-8</div>
+                <div class="quarto-category">UCRT</div>
+                <div class="quarto-category">encodings</div>
+                <div class="quarto-category">CRAN</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 12, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>A new, experimental, build of R for Windows is available, its main aim being to support the UTF-8 encoding and especially non-European languages. Check results for CRAN packages are now available on their CRAN results pages. Please help by reviewing these for your package(s) and if a Windows user by trying the new build, particularly if you use a language written in a non-Latin script.</p>
+<p>The new build can be downloaded from <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">[2]</a> and instructions are at <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html">[1]</a>. The intention is to run the new and old builds in parallel at least until R 4.2.0 is released in 2022. A check service for package maintainers is planned.</p>
+<p>Previous blog posts from <a href="https://blog.r-project.org/2020/05/02/utf-8-support-on-windows/index.html">May 2020</a> and <a href="https://blog.r-project.org/2020/07/30/windows/utf-8-build-of-r-and-cran-packages/index.html">July 2020</a> describe some technical aspects of UTF-8 on Windows.</p>
+<section id="whats-new" class="level2">
+<h2 class="anchored" data-anchor-id="whats-new">Whats new</h2>
+<p>There are regular experimental builds of a new toolchain based on UCRT, libraries for R packages, R-devel and CRAN R binary packages. There is a new CRAN package check <a href="https://cran.r-project.org/web/checks/check_flavors.html#r-devel-windows-x86_64-gcc10-UCRT">flavor</a> <code>r-devel-windows-x86_64-gcc10-UCRT</code>.</p>
+<p>From the current <a href="https://cran.r-project.org/web/checks/check_summary.html">CRAN statistics</a>, nearly 98% of CRAN packages seem to be working (result in <code>OK</code> or <code>NOTE</code>), compared to 99% working with <code>r-devel-windows-ix86+x86_64</code>.</p>
+<p>About 380 packages are still to be fixed. Only some of them may need direct fixing, most will be blocked by their dependencies, but still this may require a lot of work. Moreover, the automated testing so far has been done in Latin 1 locale and additional issues may be found when running in UTF-8.</p>
+</section>
+<section id="how-r-users-may-help" class="level2">
+<h2 class="anchored" data-anchor-id="how-r-users-may-help">How R users may help</h2>
+<p>The key reason for this effort is to support R Windows users of languages not based on the Latin script. Users from Asia often run into problems when they try to process texts on systems in Europe or North America. They may still switch the locale, but that is often inconvenient or restricted.</p>
+<p>There is no workaround for people working with texts in multiple languages based on non-Latin scripts at the same time. One cannot say process names of people both from Japan and India at all, because no Windows locale supports all needed languages.</p>
+<p>Users of languages not based on the Latin script are also the key people who could help with testing. They may install this experimental version of R and try analyzing some texts in their languages. It is likely that there will be a number of errors, both in R and in external software not compatible with UTF-8 encoding. One know problem currently is cursor movements in RTerm and RGui, but there will be more.</p>
+<p>Many of such errors cannot be found by the current automated testing, because that testing does not involve such texts: the tests have been designed for the current version of R. Similarly, these are errors that would not be found by the currently active R developers, who are not users of those languages.</p>
+<p>Discovered issues may be reported to <a href="https://stat.ethz.ch/mailman/listinfo/r-devel">R-devel mailing list</a> or directly to the author. Any report should come with a minimal reproducible example, with minimal data, ideally with non-ASCII characters expressed using <code>\u</code> or <code>\U</code> escapes for ease of debugging, otherwise following the <a href="https://www.r-project.org/bugs.html">general advice</a> on reporting bugs in R.</p>
+</section>
+<section id="automation" class="level2">
+<h2 class="anchored" data-anchor-id="automation">Automation</h2>
+<p>To allow regular checking, the build of the toolchain, libraries, R installer and R binary packages is automated. Products of these builds are available <a href="https://www.r-project.org/nosvn/winutf8/ucrt3">[2]</a> for download and check results are available on CRAN pages (see e.g.&nbsp; <a href="https://cran.r-project.org/web/checks/check_results_tiff.html">tiff</a>). See <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/CRAN/checks/gcc10-UCRT/README.txt">[4]</a> for more information about the individual components of the build and their versioning.</p>
+<p>Scripts <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3">[3]</a> automating the builds and checks are run several times a week. All components are subject to change due to rebuilds and ongoing work. Unlike some other CRAN checks, currently all packages are rebuilt, reinstalled and rechecked on each run.</p>
+<p>The toolchain and libraries are built on Linux using a customized version of MXE (cross-compiled), optionally in a Docker container.</p>
+<p>R and R installers are built on Windows natively using the toolchain and libraries. This can be also optionally done in a Docker container, including automated installation of the necessary dependencies into a clean Windows virtual machine. This script can be also used to set up quickly a virtual machine for manual experimentation/debugging of packages.</p>
+<p>R binary packages are built natively on Windows. However, note that Windows Docker containers can only be run on a Windows host machine.</p>
+<p>Checking of R packages uses the installer and binary R packages built automatically in the previous steps, so the same ones as built and distributed for end users/testers.</p>
+</section>
+<section id="r-updates" class="level2">
+<h2 class="anchored" data-anchor-id="r-updates">R Updates</h2>
+<p>Two related installer changes were made upstream in R-devel. The R installer is normally built for both 32-bit and 64-bit architectures, but now it can also be built for only one. Before, the 64-bit-only installer was not supported at all and the 32-bit-only was broken. This experimental toolchain only supports 64-bit architecture. Support for 32-bit architecture is not planned.</p>
+<p>The R installer can now be used for per-user installation without administrative permissions. Such installation can be run from the command line, so this is suitable for automated testing.</p>
+<p>The remaining changes are only in the patched experimental version of R. Some of them may be ported later, some are only for experimentation.</p>
+<p>Binary packages built for UCRT are flagged as such in their DESCRIPTION file and R will refuse to install binary packages with native code (a.k.a “needing compilation”) without this flag. This prevents installation of incompatible packages into this experimental version of R. The opposite is not true, if someone tried to re-use a package installed by the UCRT build of R-devel in a normal build of R-devel, it would not work, such packages will probably fail in unexpected ways.</p>
+<p>R is patched to download binary packages preferentially from a pre-set location under <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">[2]</a>. This location has binary builds of CRAN packages that need compilation. It has also several BIOC dependencies. However, other binary packages (e.g.&nbsp;those that don’t need compilation) and source packages are downloaded from standard CRAN locations.</p>
+<p>This experimental feature works well when packages are available and up to date. In other cases the user may be offered to install a package from the official CRAN repository, but that installation will then fail with an error message that the package is not built for UCRT, or a package will fail to build due to an outdated patch for UCRT. One may specify <code>type="binary"</code> or <code>type="source"</code> to solve this when the package supports UCRT (see <code>?install.packages</code> for details on how these modes of installation work).</p>
+<p>To make it easier also to install packages from source, patches to R packages are applied automatically by this version of R at package installation time, which is also when binary packages are built. This automated patching is only intended as a temporary measure before package maintainers update their packages.</p>
+<p>The source packages are intact, but based on the package name, R will check a repository of patches and apply a patch if available. This is clearly marked in installation output, in binary package meta-data, and the patch is also included in the binary build of the package. It can be turned off.</p>
+<p>With this feature, users may easily install more source packages “as usual”. The repository of patches is under <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/patches">[2]</a> and the master copy is versioned <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/r_packages/patches/">[3]</a>.</p>
+<p>R now understands <code>.ucrt</code> suffix of <code>Makevars</code> and <code>Makefile</code> files. In this UCRT build, these files are used in preference of files with suffix <code>.win</code>. The original version of R ignores <code>.ucrt</code> files, so they can be already used in the upstream packages to implement customizations needed for UCRT.</p>
+<p>The patches in the patch repository mostly just add these <code>Makevars.ucrt</code> files (customized versions of <code>Makevars.win</code>), only several packages required code changes so far. Package authors are welcome to re-use these patches in their code if they wish to support UCRT.</p>
+</section>
+<section id="coverage-and-how-package-maintainers-may-help" class="level2">
+<h2 class="anchored" data-anchor-id="coverage-and-how-package-maintainers-may-help">Coverage and how package maintainers may help</h2>
+<p>The coverage of R packages has been improved since the previous iteration (<a href="https://blog.r-project.org/2020/07/30/windows/utf-8-build-of-r-and-cran-packages/index.html">July 2020</a>) via more patches to R packages, via more external libraries provided with the toolchain, hence more MXE packages, and via building an external application, <a href="https://mcmc-jags.sourceforge.io/">JAGS</a>, with this new toolchain.</p>
+<p>Instructions <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html">[1]</a> and downloads are available for package authors to experiment with this toolchain and debug their packages. This requires Windows, ideally Windows 10. <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/">Free Windows 10 machines for testing</a> (though-time limited) are available from Microsoft and can be used on Linux, Mac and Windows in VirtualBox and other virtualization software.</p>
+<p>There is a number of things package authors could do if they want their packages to be supported. First, package authors may review package patches, improve and incorporate them into their code, and ask for them to be removed from the central repository.</p>
+<p>Then, several current CRAN packages require external libraries not yet provided by the toolchain. Package authors may help by adding support for these external libraries via providing MXE packages (build configurations). Ideally this support would be contributed to upstream MXE, but tested also with the modified version of MXE used to build this toolchain and libraries. This would reduce the maintenance costs and allow more people to benefit from the work. See <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html">[1]</a> for more.</p>
+<p>The same applies to when R packages use an external application in a way that requires that application to be rebuilt for UCRT using this toolchain. Ideally, support to do that will be contributed upstream to those applications, to reduce maintenance costs and increase the general benefit for open-source community. It can be expected such additions would be welcome as it is unlikely that open-source software for Windows built using free compilers could keep using MSVCRT forever.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p>Supporting UTF-8 on Windows via UCRT seems to be the only feasible way, as discussed in the <a href="https://blog.r-project.org/2020/05/02/utf-8-support-on-windows/index.html">May 2020</a> post. Still, there are some limitations.</p>
+<p>To reliably use UTF-8 as native encoding in R, both the Windows system encoding (“Active Code Page”) and the C runtime encoding have to be UTF-8. The use of UTF-8 as the system encoding can only be set at application build time. This means that when R is embedded (linked as a DLL) into another application, that application would have to set UTF-8 as the system encoding. This is possible, indeed RGui and RTerm do it in the experimental build, but not all applications embedding R may be ready for UTF-8 as the system encoding. Depending on how these applications decided to provide encoding support on Windows, they may have to be re-designed.</p>
+<p>When UTF-8 cannot be used as the system encoding, the experimental build of R would still run as the normal R does now with the locale encoding on Windows. This happens also on older Windows systems, including Windows Server 2016 and earlier, which do not allow setting UTF-8 as the system encoding and will ignore such request. This is why the CRAN checks are still running with Latin 1 encoding.</p>
+<p>When R packages are linked against external DLLs, such as R package runjags which links to JAGS DLL, there are inverse problems to embedding R. Depending on how the external DLL implements encoding support, this may or may not work with UTF-8 being the system encoding. It would not work for applications built for MSVCRT and using also the <code>-A</code> Windows API calls, such as the current R, and this is also why all R packages have to be rebuilt with the new toolchain.</p>
+<p>Then there are other issues with using multiple C runtimes in the same application. For example, C runtimes implement their own heaps, and hence one must free dynamically allocated objects by the same runtime that allocated them, so to be safe by the same DLL. This restriction is not so intrusive for plain C, but complicates the use of C++, where typically some allocation/deallocation is in code inlined via the header files, while other is in the DLL. In the case of JAGS, this was solved by rebuilding JAGS using this toolchain for UCRT <a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html">[1]</a>, and it might often be the most straightforward solution.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li><p><a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html">Howto: UTF-8 as native encoding in R on Windows.</a> Instructions for all users. To be read always from the beginning, but only the first few sections will be needed for most users, the final ones only for experts or volunteers who want to help.</p></li>
+<li><p><a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">Downloads.</a> The R installer, the toolchain and libraries. Individual components may change or temporarily disappear as this is still being worked on.</p></li>
+<li><p><a href="https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3">Scripts and patches.</a> Resources to build the toolchain, libraries, R installers, R packages, to check R packages, etc.</p></li>
+<li><p><a href="https://www.r-project.org/nosvn/winutf8/ucrt3/CRAN/checks/gcc10-UCRT/README.txt">Details for CRAN check flavor r-devel-windows-x86_64-gcc10-UCRT.</a> Includes more about versioning the builds.</p></li>
+<li><p><a href="https://mxe.cc/">MXE cross-compilation environment.</a> For reference, the toolchain and libraries were built using this tool, with several added or upgraded packages. Some additions were inspired by <a href="https://wiki.octave.org/MXE">MXE-Octave</a> and <a href="https://github.com/msys2/MINGW-packages">MSys2</a>.</p></li>
+<li><p><a href="http://mingw-w64.org">MinGW-w64 project.</a> For reference, allows R to build for Windows using GCC (provides headers and libraries to interface with Windows).</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

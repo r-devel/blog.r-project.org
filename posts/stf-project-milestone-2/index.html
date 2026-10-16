@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Šimon Urbánek and Tomáš Kalibera">
+<meta name="dcterms.date" content="2026-09-29">
+
+<title>Sovereign Tech Fund Project: Milestone 2 – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Sovereign Tech Fund Project: Milestone 2 – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/stf-project-milestone-2/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Sovereign Tech Fund Project: Milestone 2</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Linux</div>
+                <div class="quarto-category">macOS</div>
+                <div class="quarto-category">Windows</div>
+                <div class="quarto-category">Package Building</div>
+                <div class="quarto-category">binaries</div>
+                <div class="quarto-category">versioning</div>
+                <div class="quarto-category">STF</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Šimon Urbánek and Tomáš Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 29, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="sovereign-tech-fund-stf-project" class="level2">
+<h2 class="anchored" data-anchor-id="sovereign-tech-fund-stf-project">Sovereign Tech Fund (STF) Project</h2>
+<p>Starting in mid 2025, the R Project has been working on a series of work packages to improve the long-term stability of the R ecosystem. The project is supported by an investment from the <a href="https://www.sovereign.tech/">Sovereign Tech Agency</a>, under their <a href="https://www.sovereign.tech/tech/r-project">Sovereign Tech Fund</a>. In a series of blog posts, some details about the achieved results will be shared with the public, with this post covering Milestone 2. These blog posts are a tribute to the late <a href="https://www.R-project.org/doc/obit/tomas.html">Tomáš Kalibera</a>, who continued working on this project during his last months.</p>
+</section>
+<section id="challenges-for-binary-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-for-binary-r-packages">Challenges for Binary R Packages</h2>
+<p>R packages are fundamental to the success of R since they provide a way for large number of people to contribute to the R ecosystem without having to rely on changes in R itself. The contributions can range from cutting edge statistical methods to visualisation tools or bindings to other useful systems. R packages are created and distributed in <em>source</em> form, requiring additional processing before they can be used by the user. This processing can be quite complex for packages that contain native code or rely on additional dependent libraries or tools - making them harder for users to use.</p>
+<p>One of the key aspects of solving that problem is that the Comprehensive R Archive Network (<a href="https://CRAN.R-project.org/">CRAN</a>) distributes ready-to-use binaries for the two most popular operating systems Windows and macOS, which makes it easy for users to download and use both R and all packages present on CRAN. The complexities of dealing with tools and dependencies are thus handled by the team producing the binaries, here the CRAN team. The goal is that all parts necessary for the function of the package are included in the binary package such they do not require the user to download or install anything else. This means that any required dependent parts such as libraries have to be included as well.</p>
+<p>Historically, there are two challenges related to binary packages. Firstly, the R package system is entirely based on full identification by package <em>name</em> and <em>version</em>. However, the same source package (name + version) may result in more than one binary package file in cases when a dependency requires the package to be re-built. For example, a library used by the package may have a serious vulnerability and thus a newer version of the library must be used and included in a newer version of the binary package, even though the source package did not change. Another case is that a package may make a change that affects those package that use it in an internal way. For example, the methods may be cached from the a package that is used and if they change the cached version must be updated. This poses a problem since tools like <code>update.packages()</code> only see the name and version and thus have no way of finding out that the binary package must be re-installed.</p>
+<p>Secondly, the support for binary packages has been added for each operating system individually. Historically, Windows packages use a different archive format and entirely different way to be processed than macOS packages. In addition, there is no direct support for binary packages for other operating systems. Both are an issue for sustainability since it is hard to maintain or support future changes, such as different architectures or operating systems.</p>
+<p>Addressing both of those major points was the goal for the Milestone 2 of the <a href="https://www.sovereign.tech/tech/r-project">Sovereign Tech Fund</a>: to provide a way for binary packages to signal that they need to be updated even if the source package has been changed, and to unify the support for binary packages extensible beyond Windows and macOS.</p>
+</section>
+<section id="package-freshness" class="level2">
+<h2 class="anchored" data-anchor-id="package-freshness">Package Freshness</h2>
+<p>The way package repositories work is by providing a well-known location of an index file <code>PACKAGES</code> which lists all packages in a given repository and their metadata which is mostly obtained from the <code>DESCRIPTION</code> files of the packages. The most important ones are the package name and version, but there are others. This information is obtained using the <code>available.packages()</code> function. What distinguished a source package from a binary package is the presence of the <code>Built</code> field:</p>
+<pre><code>&gt; packageDescription("tools")$Built
+[1] "R 4.6.1; x86_64-apple-darwin20; 2026-06-25 22:07:05 UTC; unix"</code></pre>
+<p>It allows R to determine if the package is compatible with the currently-used R by looking at the R version and the platform string (here <code>x86_64-apple-darwin20</code> which identifies Intel-based Mac with macOS 11). Another useful information is the timestamp of the build.</p>
+<p>This provides R with a mechanism to determine that a given package has been re-built even if the version remained the same. To implement this feature, this information is propagated into the <code>PACKAGES</code> file and provide it to <code>available.packages()</code>. One user-visible change is that the <code>Built</code> field as returned from <code>available.packages()</code> only contained the R version, but now is provided in full. This allows to check the freshness as well as determine compatibility with the R build used.</p>
+<p>As a side note, it also means that the <code>checkBuilt=</code> argument in <code>update.packages()</code> now becomes a bit of a misnomer since it has been defined to only check the R version and was used to upgrade packages from one annual R release to another, which was a rare event. However, regular updates are now considering the full <code>Built</code> field and this is crucial to detect new binaries and therefore the <code>checkBuilt=</code> argument retains its original meaning (only comparing R versions) even though the field has been expanded.</p>
+<p>One additional complication is that functions like <code>install.packages()</code> and <code>update.packages()</code> support a virtual convenience installation type <code>"both"</code> which is intended to augment the binary installation with source packages where the binary does not exist or has an older version. The main problem is that, historically, this has been performed by checking the availability solely using the source repository. Therefore tools that assessed package freshness like <code>old.packages()</code> only ever looked at the source packages. In order to support <code>"both"</code> they now need to fetch the availability from both the source and binary repositories, which means that they can no longer operate on one package database alone.</p>
+<p>Finally, there are cases where a change in one package may require a re-build of another package that depends on it without the latter needing to be changed. This can happen either if the package changes its ABI inadvertently or in cases where some information from the package is cached in the packages that import it. It means that an update of a package may require its reverse-dependencies to be rebuilt - and this may be true for both source and binary packages (e.g., if the package cached some information from the dependency).</p>
+<p>The key here is that an update of the source package needs a way to communicate this information, and that this information is specific to repositories as it is caused by the relative relationship of packages and updates (it does not occur if simply a snapshot is installed). We already have a field that can be used for this purpose in repositories: <code>Published</code>. Therefore the new scheme is that if a package is re-published with the same version in the repository then it counts as being more recent. Since this is a repository-level metadata it can be set by the repository independently, thus allowing all reverse-dependencies to be tagged accordingly. This can be done either by the repository maintainer triggering such updates, or by a package author declaring the list of packages that are known to be affected (if known explicitly) in the <code>Invalidates:</code> field (which is really only informative for the repository maintainers). Note that the update of the <code>Published:</code> field should be done only once when such a compatibility-breaking package is published since regular version updates will make it obsolete.</p>
+<p>Theses two mechanisms now allow repositories to determine when a package needs to be re-installed, even if the source version of the package did not change. R will now automatically install updated binaries, making sure the user’s library is up to date.</p>
+</section>
+<section id="custom-binary-packages" class="level2">
+<h2 class="anchored" data-anchor-id="custom-binary-packages">Custom Binary Packages</h2>
+<p>The second challenge related to binary R packages is that the support for binary packages has been added independently for Windows and macOS, based on the fact that users of those operating systems do not expect to install software from sources. Each operating system uses a different format (Windows binary packages use ZIP archives, while for macOS gzip-compressed tar balls with the <code>.tgz</code> extension are used) and code path within R. The idea of a binary package is not limited to just Windows and macOS. The goal of the second update was to unify the support of binary packages and to make it extensible to support arbitrary operating systems.</p>
+<p>There are two components to this: the format of the archives and location of files in R package repositories. The <code>tar</code> format is used everywhere but on Windows, therefore it makes sense as a basis. The gzip compression is fairly dated and newer compression formats yield better compression even at comparable speeds, thus reducing the size of repositories. Therefore the decision was made to support newer compression and thus formats including <code>.tar.bz2</code>, <code>.tar.xz</code> and <code>.tar.zstd</code>. The last one is optional since R does not require the presence of the Zstandard library.</p>
+<p>The other component is the ability to declare and locate files for a specific build of R which matches the binaries it produces. The macOS binaries already provide a way of distinguishing different binary builds by using a suffix to <code>pkgType</code>, so for example the binaries for x86_86 (Intel) architecture for macOS 11 (Big Sur) use the type <code>"mac.binary.big-sur-x86_64"</code>. The <code>contrib.url()</code> function transforms this information to a path that determines where in a repository the binary package files are located, for the above case that is <code>"/bin/macosx/big-sur-x86_64/contrib/4.6"</code>.</p>
+<p>To generalize this concept, package types of the form <code>&lt;system&gt;.binary.&lt;build&gt;</code> are now mapped to</p>
+<p><code>/bin/&lt;system&gt;/&lt;build&gt;/contrib/&lt;x.y&gt;</code></p>
+<p>where <code>&lt;system&gt;</code> is the lowercase name of the operating system (e.g., <code>linux</code>), <code>&lt;build&gt;</code> is the designation of the specific build of R which generated this binary and <code>&lt;x.y&gt;</code> is the R version without patch level. The build name may contain alphanumeric characters, <code>_</code> and <code>-</code>. Currently, there are no specific restrictions on the build names, but it is a good idea to include at least the architecture and possibly toolchain name if multiple incompatible toolchain exist for the platform.</p>
+<p>Note that the values <code>mac</code> and <code>win</code> for <code>&lt;system&gt;</code> are reserved for compatibility with old R versions as those will revert back to the legacy package code. In order to use the new functionality on Windows use <code>windows</code> and on macOS use <code>macos</code>. For example, the current (at the time of writing) R-devel builds for Windows ARM64 use <code>windows.binary.clang-aarch64</code> and on macOS arm64 use <code>macos.binary.arm64</code>.</p>
+<p>The <code>pkgType</code> of the current R build can be seen in <code>.Platform$pkgType</code>. A build of R can declare the kind of binaries it produces by setting the <code>R_PLATFORM_PKGTYPE</code> environment variable which will be in turn reflected in <code>.Platform$pkgType</code>.</p>
+<p>At user level, specifying <code>type="binary"</code> in <code>install.packages()</code> and friends will match the binary corresponding to the currently used R build. Similarly, <code>type="both"</code> is the logical equivalent of using <code>type="source"</code> and <code>type="binary"</code>. Legacy names like <code>"win.binary"</code> or <code>"mac.binary"</code> should no longer be used since they are no longer just two binary types.</p>
+<p>All tools have been updated to deal with the new binaries, so, for example using <code>R CMD INSTALL --build</code> in R built with <code>pkgType="macos.binary.arm64"</code> produces a correspondingly named <code>.tar.xz</code> binary package:</p>
+<pre><code>$ R CMD INSTALL --build base64enc_0.1-6.tar.gz 
+[...]
+packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar.xz’
+* DONE (base64enc)</code></pre>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

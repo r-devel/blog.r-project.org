@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2019-03-28">
+
+<title>Use of C++ in Packages – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Use of C++ in Packages – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/cxx/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Use of C++ in Packages</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Package development</div>
+                <div class="quarto-category">Internals</div>
+                <div class="quarto-category">C++</div>
+                <div class="quarto-category">PROTECT bugs</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 28, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>About 20% packages from CRAN and BIOC repositories include some native code and more than a half of those include some code in C++. This number is rather high given that the R API and runtime have been designed for C (or Fortran) and cannot be used reliably from C++, without extensive effort and restrictions. To avoid nasty bugs in such code, one needs to know R internals well, and when following the restrictions, one cannot use much from C++ anyway. This text describes some of these technical issues and gives some recommendations.</p>
+<p>A summary of the recommendation would be: don’t use C++ to interface with R. If you need to implement some computation in native code, use C (or perhaps Fortran), not C++, or completely avoid interacting with the R runtime (e.g.&nbsp; <code>.C</code> or <code>.Fortran</code> interfaces are fine, indeed, many external libraries are written in C++).</p>
+<p>I got to writing this text mostly based on my experience with helping package authors who get <code>rchk</code> (PROTECT bug finding tool) reports for their C++ code, but believe they are false alarms. When I read the referenced lines of their code, I often concluded they were really false alarms (unlike C where it is by now quite rare), but also I would see some problem of using C++ with R API on those lines or very close. Unfortunately these problems are very common and can lead to crashes and other hard to find bugs.</p>
+<section id="raii" class="level1">
+<h1>RAII</h1>
+<p>RAII (resource acquisition is initialization) is a feature/idiom sometimes considered as the core innovation of C++ over C. It allows to easily allocate memory on the C stack and safely release it as the stack is unwound, either along normal returns or C++ exceptions. When used wisely, it allows for elegant and fast scoped-memory management. Indeed, there is more, but the other things can be gotten also in C, even though perhaps in a less elegant way.</p>
+<p>Unfortunately, RAII does not work with <code>setjmp/longjmp</code> functions provided by the C runtime for exception handling. In case of a long jump, destructors for statically allocated local variables are not executed. This is a property of the C/C++ runtimes and consequence of incompatibilities between performance goals and implementations of C++ exceptions and <code>setjmp/longjmp</code>. Typically, C++ exceptions are designed to have minimal overhead when not taken, because they are used to implement error paths. However, long jumps have to be very fast when they happen, because they are used in language interpreters for control flow of the interpreted language; it makes sense to pay some performance overhead even when these jumps are not taken. Still, indeed, it is frustrating that long jumps cannot run the destructors, even if it caused some performance overhead.</p>
+<p>R internally uses <code>setjmp/longjmp</code> to implement control flow of interpreted loops and return statements (sometimes, but not always, the byte-code compiler allows to elide the long jumps), but also for error handling. An R error, e.g.&nbsp;a result of a call to <code>error()</code> or an allocation failure when allocating from the R heap, cause a long jump. If called from C++, the long jump will not run the destructors.</p>
+<p>Consequently, this means one cannot rely on that destructors will be run in a package implemented in C++. The memory on the stack will still be freed (the long jump will do that), but memory allocated using <code>new</code> operator say within a constructor of a statically allocated object, and de-allocated in a destructor of that object using <code>delete</code>, will not be freed, causing a memory leak. This is a common error.</p>
+<p>R restores the protection stack depth before taking a long jump, so if a C++ destructor includes say <code>UNPROTECT(1)</code> call to restore the protection stack depth, it does not matter it is not executed, because R will do that automatically. This is unfortunately the only thing one can safely do inside a destructor, but a common error is that destructors are written to do much more.</p>
+</section>
+<section id="wrapping-r-api-calls" class="level1">
+<h1>Wrapping R API calls</h1>
+<p>One cannot easily guess which R API functions may long jump, also this may change between R versions without notice. When programming in C, this is not a problem and the long jump will lead to standard R error handling. When programming in C++, if one wants to use destructors (and, well, C++ without destructors is probably quite useless), the only option is to wrap all R API calls using code that will convert the long jumps to C++ exceptions, or that will otherwise run some cleanup code. This conversion is possible e.g.&nbsp;using <code>R_UnwindProtect</code>, but is far from trivial; see <a href="https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Condition-handling-and-cleanup-code">Writing R Extensions 6.12</a>, but requires some verbose coding/boiler-plate. Rcpp currently uses this API.</p>
+<p>If R long jumps are converted to C++ exceptions, these exceptions also need to be converted back to long jumps when the code returns from C++ to C (R runtime).</p>
+</section>
+<section id="protect-errors-on-function-return" class="level1">
+<h1>PROTECT errors on function return</h1>
+<p>Even if we convert the long jumps to C++ exceptions and back, there is unfortunately another issue with destructors. Functions that return <code>SEXP</code> by convention return it unprotected, and the caller protects it. However, if any destructor that is run when such function is exitting allocates, R GC may run and it may destroy the value before being returned. Unfortunately, in such destructors we do not have access to the variable that holds such object, so we cannot protect it. One should therefore avoid allocation from the R heap in destructors, but that is hard given that almost any R API function can allocate: one should just not call any R API function from a destructor.</p>
+<p>We found an error like this in the <code>NAM</code> package (detected by a CRAN check using ASAN, but it required some time to analyze): an Rcpp function used Rcpp <code>RNGScope</code> object which restores the state of the random number generator in its destructor. Unfortunately, this means it has to call into an R API (<code>PutRNGstate</code>), which allocates, and hence may run GC, which in turn has destroyed the value to be returned from that function. Indeed, debugging these things is far from trivial, in this case we were lucky that <code>ASAN</code> caught it.</p>
+<p>Similar errors could easily happen in various operators and copy constructors, when the return value from one function is being passed to another function. If some of these calls happen implicitly, it would be easy to forget to protect it by the caller.</p>
+</section>
+<section id="memory-leaks-and-asynchronous-de-initialization" class="level1">
+<h1>Memory leaks and asynchronous de-initialization</h1>
+<p>Memory leaks of dynamically allocated memory are possible also in packages written in plain C, but I’ve seen them often in C++ code interfacing with R: memory allocated using <code>new</code>, freed using <code>delete</code>, with calls to the R API in between, often with even explicit calls to <code>error</code>, and without any attempt to recover from a long jump (if long jumps were converted to C++ exceptions, one would have to handle those, instead). In case of an error this memory is permanently leaked. With C, one can use say <code>R_alloc</code> that is deallocated automatically and also on a long jump (see <a href="https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#Memory-allocation">Writing R Extensions 6.1.1</a>).</p>
+<p>This can be solved using a statically allocated object with a destructor (in case we have the converted long jumps to exceptions), or using an R object with a finalizer. One can create such a dummy R object on the R heap, PROTECT it, give it a finalizer to release the memory using <code>delete</code>, and UNPROTECT it at the end of the function, if this is where the freeing should happen (or could first happen).</p>
+<p>This way, one can get something like a destructor, which will be run eventually (except e.g.&nbsp;R shutdown), but not synchronously with the end of the scope, so not RAII. This idiom could be used instead of C++ destructors, e.g.&nbsp;when conversion of long jumps is not in place, but it also adds a bit of boiler-plate code. One has to be careful when calling back into R from the finalizer as R is not really reentrant (see <a href="https://cran.r-project.org/doc/manuals/r-devel/R-exts.html#External-pointers-and-weak-references">Writing R Extensions 5.13</a>), but not as careful as in a destructor, where as I mentioned one should not call any function that might allocate.</p>
+</section>
+<section id="automated-unprotection" class="level1">
+<h1>Automated unprotection</h1>
+<p>If R was implemented in C++ with an interface in C++, it would probably have some form of automated unprotection: objects will be unprotected automatically when they get out of scope (using RAII), and that would avoid some kind of protection imbalance errors. There is no way to get this in standard C.</p>
+<p>Packages implemented in C++ sometimes employ some form of automated unprotection, but I would not switch a package from C to C++ just to get automated unprotection, I think there is a benefit in using the standard API for better maintenance and tool support. The protection imbalance errors are very easy to find using the <code>rchk</code> tool, now run regularly for checking CRAN packages and available in a container, and they are not nearly as common as other protection errors (typically one forgets to protect). Such harder protection errors can also be often found by the tool, but rarely when the non-standard API is used (the automated unprotection will confuse the tool).</p>
+<p>In addition, the previous restrictions apply. Automated unprotection cannot simply use <code>R_PreserveObject/R_ReleaseObject</code>, because of long jumps bypassing the destructor, and hence not releasing the object (unless the long jumps were prevented/converted). Automated unprotection should not use <code>UNPROTECT_PTR</code> for the reasons I described earlier (<a href="https://blog.r-project.org/2018/12/10/unprotecting-by-value/index.html">Unprotecting by Value</a>). In principle, automated unprotection can do something like <code>UNPROTECT(n)</code>, but indeed care needs to be taken that the C++ object is not allocated dynamically or that <code>n</code> is the same for all objects allocated, otherwise destructors could be run in the wrong order and cause PROTECT errors or memory leaks. The solution with <code>R_PreserveObject/R_ReleaseObject</code>, if long jumps are converted to exceptions and back, seems safest, but it also requires a lot of work for the conversion.</p>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>When I started working on <code>rchk</code>, the PROTECT bugs finding tool, I first wanted to use plain C to interface with LLVM. Even though the C interface existed, I’ve soon run into problems as it was poorly documented, rather clumsy, and not much used. LLVM is written in C++ and the intended and supported way to use it is indeed through its C++ interface. Luckily, I switched to C++ already at the beginning and wrote the tool completely in C++.</p>
+<p>To interface with R from native code, the right interface is C. Apart from that it avoids the problems I’ve described here, it is the language of the interface documented, supported and maintained by R Core, described together with the various restrictions and low-level rules that have to be followed, at one place. Using the C interface makes the code easier to review and easier to debug than any external wrapper interface. Using sophisticated C++ code on top of the C interface requires tracking things back to the original C interface and thinking about the restrictions (such as what destructors do, but also how and when it is ok to modify objects, etc, things that are much harder to find out than in the original interface).</p>
+<p>The best option for those who need to use C++, e.g.&nbsp;to interface with external libraries where the only meaningful interface is in C++, is to avoid interfacing with R in any way from the C++ code (e.g.&nbsp;extend R via <code>.C</code> interface, if via <code>.Call</code> then with thorough isolation using a C layer). Such C++ code would operate on objects on the C heap (not R heap, except perhaps pointers to existing objects that are allowed to be modified by the R semantics), and would never call into R in any way.</p>
+<p>Packages that are already using C++ would best be carefully reviewed and fixed by their authors. When the use of C++ is very limited and easy to avoid, perhaps it is the best option to do that, otherwise one could use some of the tricks I’ve described here. Note that using Rcpp does not release package authors from thinking about these problems: indeed with Rcpp one can still call R API directly, but even if that is avoided, one can introduce PROTECT errors by incorrectly using existing objects (like the <code>RNGScope</code> example), by introducing complicated destructors of their own objects (allocating R API call from a destructor) or cause a memory leak by allocating memory dynamically without thinking about exceptions.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

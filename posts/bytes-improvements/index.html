@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2022-10-10">
+
+<title>Improvements in Handling Bytes Encoding – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Improvements in Handling Bytes Encoding – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/bytes-improvements/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Improvements in Handling Bytes Encoding</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">encodings</div>
+                <div class="quarto-category">bytes</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 10, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>In R, a string can be declared to be in <em>bytes</em> encoding. According to <code>?Encoding</code>, it must be a non-ASCII string which should be manipulated as bytes and never converted to a character encoding (e.g.&nbsp;Latin 1, UTF-8). This text summarizes recent improvements in how R handles bytes encoded strings and provides some of thoughts about what they should and shouldn’t be used for today.</p>
+<section id="character-vector-string-and-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="character-vector-string-and-encoding">Character vector, string and encoding</h2>
+<p>Particularly for readers not familiar with R, it may be useful to highlight how strings are supported in the language. A <em>character vector</em> is a vector of <em>strings</em>. As any vector, it may be of length zero or more, and it may be <code>NA</code>. The string type is not visible at the R level, but a single string is represented using a character vector of length one, with that string as the element.</p>
+<p>A string literal, such as <code>"hello"</code>, is a character vector of length one:</p>
+<pre><code>&gt; x &lt;- "hello"
+&gt; length(x)
+[1] 1
+&gt; x[1]
+[1] "hello"</code></pre>
+<p>Similarly, there is no type in R to hold a single character. One may extract a single character using e.g.&nbsp;a <code>substring</code> function, but such character would be represented as a string (so a character vector of length one with that single-character string as element):</p>
+<pre><code>&gt; substring(x, 1, 1)
+[1] "h"</code></pre>
+<p>Strings are immutable, they cannot be constructed incrementally, e.g.&nbsp;by filling in individual bytes or characters as in C. Creating a string is potentially an expensive operation, strings are cached/interned and some of their properties are examined and recorded. Currently it is checked and recorded whether the string is ASCII.</p>
+<p>Encoding information is attached to the string, so one character vector may contain strings in different encodings. Supported encodings are currently “UTF-8”, “latin1”, “bytes” and “native/unknown” (more about which comes later).</p>
+<p>Functions accepting character vectors handle strings according to their encoding. E.g. <code>substring</code> counts in bytes for bytes encoded strings, but in characters for character strings (“UTF-8”, “latin1” and “native/unknown”). Not all functions support bytes encoded strings, e.g.&nbsp;<code>nchar(,type="chars")</code> is a runtime error, because a byte encoded string has no characters.</p>
+<p>Functions have to deal with the situation when different strings are in different encodings. Individual functions differ in how they do it, but often character strings are converted to a single character encoding, usually UTF-8, and when that happens, any newly created result strings are also in UTF-8. The user doesn’t have to worry as long as the strings are valid, because they can always then be represented in UTF-8.</p>
+<p>This is more complicated with bytes encoded strings, which cannot be converted to a character encoding. Some functions, such as <code>gsub</code> or <code>match</code>, switch to a different mode if any of the input strings is bytes encoded. In this mode, they ignore encodings of strings and treat all of them as byte sequences. As discussed later, this only makes sense in certain situations.</p>
+</section>
+<section id="bytes-encoded-strings-are-not-byte-arrays" class="level2">
+<h2 class="anchored" data-anchor-id="bytes-encoded-strings-are-not-byte-arrays">Bytes encoded strings are not byte arrays</h2>
+<p>From the previous, it is clear that bytes encoded strings are not like byte arrays in Java or Python or char arrays in C, because one cannot refer to the individual bytes in them. Also, one cannot modify individual bytes using <code>[]</code> operator.</p>
+<p>There are additional differences. The zero byte is reserved and cannot be included in any string. Also, every byte encoded string must contain at least one byte of value greater than 127, because the string must be non-ASCII. ASCII strings are always encoded as “native/unknown” (and while encoding flags can sometimes be manipulated, this rule cannot be violated). It would become clearer, later, that this is due to identity/comparison of ASCII strings.</p>
+<p>So, bytes encoded strings are not usable to represent binary data. Instead, there are <code>raw</code> vectors in R for that. Elements of a raw vector are arbitrary bytes (including zero) and can be indexed and mutated at R level using <code>[]</code>. They don’t work like strings, aren’t printed as strings and aren’t supported by string functions.</p>
+</section>
+<section id="encoding-agnostic-string-operations" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-agnostic-string-operations">Encoding-agnostic string operations</h2>
+<p>Particularly in the past when there were only single-byte encodings, it made sense to think of encoding-agnostic string operations. Not only because sometimes the input encoding wasn’t reliably known, but also because possibly old code not encoding aware or not aware of new encodings could be re-used. Also, there were many different encodings in use.</p>
+<p>When all strings are in the same (stateless) single-byte encoding, one can concatenate them without knowing the encoding, one can do search/replace. If they are all a super-set of ASCII (encodings supported Bby R all are), one can even do parsing of a language that is all-ASCII, including trivial parts such as splitting lines and columns.</p>
+<p>People sometimes had input files in really unknown encoding (the provider of the file didn’t tell). And as long as most of the bytes/characters were ASCII, many things could be done at byte level ignoring encodings.</p>
+<p>A concrete example that still exists in today’s R is the package DESCRIPTION file. The file may be in different encodings, but the encoding is defined in a field named <code>Encoding:</code> inside that file. The file can even have records in different encodings, each with its own <code>Encoding:</code> field. Parsing such file in R requires some encoding-agnostic operations: one doesn’t know in advance of reading the file what the encoding is.</p>
+<p>With multi-byte encodings, things are much more complicated and encoding-agnostic operations no longer really make sense. Still, UTF-8 allows some of them, to the point that it is supported in DESCRIPTION files. UTF-8 is ASCII safe: a multi-byte character is encoded using only non-ASCII bytes, so that all ASCII bytes represent ASCII characters. Also, in UTF-8, searching can be based on bytes: the byte representation of a multi-byte character doesn’t include a byte representation of another character. Still, currently, Debian Control Files (DCF) which DESCRIPTION files are based on, do not allow to define the encoding inside them, today they are required to be in UTF-8. It would make sense to eventually move to UTF-8 in DESCRIPTION files as well.</p>
+<p>Even with UTF-8, indeed, some basic encoding-agnostic operations are not possible, as characters may be represented by multiple bytes. Other multi-byte and particularly stateful encodings make encoding-agnostic operations on the byte stream impossible.</p>
+<p>The current trend seems to be that files must be in a defined known encoding (known without parsing text of the file), and often this encoding is known implicitly as it is required to be UTF-8.</p>
+<p>Still, to support old-style files, such as current DESCRIPTION (or e.g.&nbsp;old LaTeX), byte-based encoding-agnostic operations are needed, and the bytes encoded strings are the right tool for that in R.</p>
+</section>
+<section id="unknown-encoding-is-not-suitable-for-encoding-agnostic-operations" class="level2">
+<h2 class="anchored" data-anchor-id="unknown-encoding-is-not-suitable-for-encoding-agnostic-operations">“unknown” encoding is not suitable for encoding-agnostic operations</h2>
+<p>R has an encoding referred to as “unknown” (see e.g.&nbsp;<code>?Encoding</code>).</p>
+<p>In most parts of R today, strings in this encoding are expected to be valid strings in the native encoding of the R session, and this is why I used “unknown/native” elsewhere in this text. Any encoding conversion (typically to UTF-8) relies on this. If it doesn’t hold, there is in an error, a warning, substituting invalid bytes, etc, depending on the operation.</p>
+<p>Such string conversions may happen at almost any time internally without a direct control of the user, so using “unknown/native” strings to perform encoding-agnostic operations is brittle and error prone. It is still sometimes possible as string validity is not currently checked at creation, but it is not impossible it would be turned into an error in the future, as often invalid strings are simply created by user error.</p>
+<p>Bytes encoded strings, instead, are safe against accidental conversion as by design/definition they cannot be converted to a character string.</p>
+<p>For completeness, it should be said that some parts of R implement certain uncertainty for strings with “unknown/native” encoding. They are meant to be valid strings in the native encoding, but the idea is that we are not so sure we believe that unless it is confirmed by an explicit declaration of the user (some functions allow marking such strings UTF-8 or Latin 1) or by successful conversion to a different encoding. Still, whenever the string encoding is actually needed, it is expected to be the native encoding, and if it is not, there is an error, warning, substitution, transliteration, etc.</p>
+<p>In the past and recently on Windows, the native encoding was often single-byte (and Latin 1), so conversions did not detect invalid bytes as often as now and the results were often acceptable for the reasons described above. Now, when the native encoding is mostly UTF-8, where many byte values cannot be the lead byte, conversions more often detect invalid bytes in old single-byte encoded files.</p>
+<p>Particularly in the past, another bit of uncertainty was what actually was the native encoding and, even today, finding out is platform specific. So, strings were assumed to be in the native encoding, but it was sometimes unknown what that encoding actually was.</p>
+<p>Finally, while it is discouraged, the R session encoding can be changed at runtime. This makes the existing strings in “native/unknown” encoding invalid, or in other words, it is then not known in what encoding are which strings.</p>
+<p>I think that all these sources of uncertainty are becoming of less concern today and that the “unknown” encoding should be understood as “native” and all strings marked with that encoding should be valid in it. The R session encoding should never be changed at runtime. On recent Windows, it should never be changed at all (it should be UTF-8, because, that is the build-time choice for the system encoding in Windows for R). Definitely, “unknown” encoding should not be used for encoding-agnostic operations: we have the bytes encoding for that.</p>
+</section>
+<section id="limitations-of-bytes-encoding-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-bytes-encoding-implementation">Limitations of “bytes” encoding implementation</h2>
+<p>It recently turned out that the existing support for “bytes” encoding had several limitations, which were recently fixed.</p>
+<p>First, it wasn’t possible to read lines from a text file (such as DESCRIPTION) as strings in “bytes” encoding. One would normally read using <code>readLines</code> without specifying an encoding, and then mark as “bytes” using <code>Encoding(x) &lt;- "bytes"</code>, but that approach uses invalid strings, because for a short while the strings are marked as “native/unknown”. This has been improved and now one can use <code>readLines(,encoding="bytes")</code> to read lines from the file as “bytes”. Indeed, this assumes that line separators have that meaning (which must be the case for encoding-agnostic operations).</p>
+<p>Then, there was a problem with regexp operations <code>gsub</code>, <code>sub</code> and <code>strsplit</code>. These operations create sometimes new strings, by substitution or splitting, and the question is what encoding these strings should have. When any of the inputs is encoded as bytes, these operations “use bytes” (work on byte level). But, for historical reasons, they used to return these new strings as “unknown/native”.</p>
+<p>Hence, by processing an input line from say a DESCRIPTION file, represented as bytes encoded string, one could get an invalid “native/unknown” string, which could then be corrupted by accidental conversion to some other encoding. One would have to always change the encoding of the result of every single regexp operation to “bytes”, but that is inconvenient and sometimes cannot be easily done by user, e.g.&nbsp;when calling a function that isn’t doing that (e.g.&nbsp;<code>trimws</code>, which may apply two regexp operations in sequence).</p>
+<p>These functions were changed to mark the newly created strings as bytes when at least one of the input is marked as bytes. It should be said that while the regexp functions allow mixed-encoding use, only a small subset of that makes any sense. Either, all inputs are in a character encoding (so convertible to UTF-8), and then the results will also be in a character encoding. Or, all inputs are bytes encoded or ASCII, and then the results will also be bytes encoded or ASCII. Mixing bytes encoded and other non-ASCII strings doesn’t make sense.</p>
+</section>
+<section id="usebytestrue-in-regexp-operations-and-type-instability" class="level2">
+<h2 class="anchored" data-anchor-id="usebytestrue-in-regexp-operations-and-type-instability">useBytes=TRUE in regexp operations and type instability</h2>
+<p>Now, a natural question is whether we shouldn’t also do this whenever <code>useBytes=TRUE</code>, whether the newly created strings or possibly all strings returned should not be marked as bytes.</p>
+<p>This has been tried in R-devel but reverted for further analysis as it broke too much existing code. I’ve first wanted to mark only the newly created strings as bytes (because we haven’t changed the old ones, so why forgetting about their encoding). This would conceptually make sense, but broke this pattern in user code:</p>
+<pre><code>xx &lt;- gsub(&lt;something_strange&gt;, "", x, useBytes = TRUE)
+stopifnot(identical(xx, yy))</code></pre>
+<p>The pattern removes “something strange” from an input text in a character encoding. When replacement happens, the result element is bytes encoded after the change (but “unknown/native” before the change). When replacement doesn’t happen, it is encoded in the original character encoding of <code>x</code> . However, a bytes encoded string is never treated identical to a string in a character encoding. So, the change has introduced type instability (character vs bytes encoding) where it wasn’t before and tests started failing. I tried to fix this by making all strings returned by the function bytes encoded, but while “stable”, it broke even more code, because it ended up passing bytes encoded strings to string functions that did not (and some could not) support them.</p>
+<p>In the previous, I wrote that using a mixture of bytes and character encoded non-ASCII strings on input doesn’t make sense. <code>useBytes = TRUE</code> with inputs in multiple different character encodings doesn’t make sense, either, for the same reasons (simply the bytes in different inputs mean different things). But, <code>useBytes = TRUE</code> is historically being used, as in this pattern, to achieve some level of robustness against invalid input UTF-8 strings. This works with a subset of regular expressions on UTF-8 inputs with some invalid bytes.</p>
+<p>Being able to process UTF-8 with invalid bytes is a useful feature e.g.&nbsp; when processing textual logs from multiple parallel processes without proper synchronization: multi-byte characters may not be written atomically. While PCRE2 today has better support for invalid bytes in UTF-8 strings, R doesn’t yet provide access to it. Indeed, for some applications, one could simply substitute invalid bytes using <code>iconv</code> and get a valid UTF-8 string to process.</p>
+<p>It should be noted here that the “bytes” encoding (and also character encodings) already do have another type instability wrt to ASCII. If an operation on bytes encoded string say extracts some parts of the string or otherwise processes them, the result may be bytes encoded (when it has at least one non-ASCII byte) or “native/unknown” (when it is ASCII). <code>substring</code> is a trivial example. Hence, results of strings operations should already be treated with some type instability in mind.</p>
+<p>It would seem the pattern above could be handled by (WARNING: this doesn’t work, see below):</p>
+<pre><code>xx &lt;- gsub(&lt;something_strange&gt;, "", x, useBytes = TRUE)
+xx &lt;- iconv(xx)
+stopifnot(identical(xx, yy))</code></pre>
+<p>which would re-flag bytes encoded elements of <code>xx</code> as “unknown/native” and convert elements in a character encoding to “unknown/native” as well. But, this has two problems. The first is that some of the input characters may not be representable in the “unknown/native” encoding (on old systems where UTF-8 is not the native encoding). That could be solved by using <code>xx &lt;- iconv(xx, to="UTF-8")</code>.</p>
+<p>But, there is another problem: <code>iconv(,from="")</code> historically ignores the encoding flag of the input string, but always converts from the “unknown/native” encoding, so it misinterprets strings in other encodings.</p>
+<p>This behavior of <code>iconv</code> has been changed. Now, the encoding flag of the input string takes precedence if it is UTF-8 or Latin 1. This is a change to the documented behavior, but in principle it could only break code that used to depend on using invalid strings. Checking all of CRAN an Bioconductor packages revealed that only one package started failing after the change, and it was actually a good thing because the package had an error; it worked by accident with the old behavior.</p>
+<p>I believe that when considering using <code>useBytes = TRUE</code>, primarily it should be decided whether invalid inputs need to be supported at all, in many applications probably not, but in some they do. Then, one should I think first consider whether substitution using <code>iconv(,sub=)</code> to valid UTF-8 input would be acceptable. If so, that is the simplest, most defensive and future-compatible option for accepting invalid strings.</p>
+<p>Only if that is not acceptable and <code>useBytes = TRUE</code> with regular expressions is to be used, the code should handle type instability wrt to getting results in bytes or “native/unknown” encoding, as discussed above. The documentation of the regexp operations has been updated to make it explicit that in some cases, it is unspecified whether the results would be “bytes” or “unknown/native” encoded (before it was unspecified indirectly). Code should be made robust against possible changes within this range (which may not only be a result of cleanups, but also performance optimizations or refactorings to support new features). Once R gets safer regexp support for handling invalid UTF-8 inputs, such code may have to be updated, anyway.</p>
+<p>I would not consider using <code>useBytes = TRUE</code> in regexp operations for any other reason, because of not only the type instability, but also limitations of the regular expressions that may be used. In the past, this has been done for performance, but performance of regexp operations was improved recently for this reason (see this <a href="https://blog.r-project.org/2022/07/12/speedups-in-operations-with-regular-expressions/index.html">blog post</a>). It also used to be done when the support for handling UTF-8 strings in R was limited, but that again should no longer be a valid reason anymore.</p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>Bytes encoding is R is a bit unusual feature, which is suitable for encoding-agnostic operations at byte level.</p>
+<p>It allows to perform such operations safely. Unsafe alternatives used in the past included using invalid strings in the “unknown/native” encoding, sometimes together with changing the R session locale, but these lead to wrong results (due to accidental transliteration and substitution) or warnings and errors. Unsafe alternatives are also only possible because R tolerates creation of invalid strings, which in turn is hiding errors in user code and packages, which could otherwise be detected by checking string validity at string creation time.</p>
+<p>Recent improvements in R made it easier to use bytes encoding for encoding-agnostic operations at byte level, when they are needed. This text, however, also argues that encoding-agnostic operations should not be much needed in the future when encodings are properly supported, known (and ideally/mostly UTF-8).</p>
+<p>Providing safe alternatives for unsafe operations with “native/unknown” encoding done now, in the form of bytes encoding improvements, better support for regular expressions on invalid UTF-8 inputs or regular expressions speedups, should allow to better detect encoding bugs which are now causing incorrect results or errors, but also to simplify the encoding support in R in the future. Since now UTF-8 is the native encoding also on recent Windows, it should be possible to once have only UTF-8 as the character encoding supported in R.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

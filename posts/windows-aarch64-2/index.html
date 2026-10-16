@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2024-04-23">
+
+<title>R on 64-bit ARM Windows – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="R on 64-bit ARM Windows – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/windows-aarch64-2/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">R on 64-bit ARM Windows</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">Windows</div>
+                <div class="quarto-category">testing</div>
+                <div class="quarto-category">installation</div>
+                <div class="quarto-category">Aarch64</div>
+                <div class="quarto-category">ARM</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 23, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>R 4.4.0, to be released tomorrow, comes with experimental native support for 64-bit ARM Windows machines (aarch64, arm64). Rtools44 with native support for the platform has been released at the beginning of March.</p>
+<p>The effort to add Windows/aarch64 support to R has been announced in <a href="https://blog.r-project.org/2023/08/23/will-r-work-on-64-bit-arm-windows">August, 2023</a>.</p>
+<section id="installation" class="level1">
+<h1>Installation</h1>
+<p>R for Windows/aarch64 is distributed separately from the primary distribution for x86_64 (64-bit Intel machines). There is a special installer of R for Windows/aarch64. From the user perspective it is almost identical to the installer for x86_64. Windows 11 is required by R on aarch64.</p>
+<p>The R installer builds are expected to appear on CRAN pages, but for now can be downloaded from a <a href="https://www.r-project.org/nosvn/winutf8/aarch64/">temporary location</a>, currently including R 4.4 pre-release builds and daily builds of R-devel.</p>
+<p>The installer is itself an x86_64 application, which runs on Windows/aarch64, emulated by the OS transparently to the user. The directory layout is slightly different, because R “sub-architectures” are not used. Hence, e.g.&nbsp;<code>Rgui.exe</code> is located directly in <code>bin</code>, while it is in <code>bin/x64</code> on x86_64.</p>
+<p>The installer can be built natively on Windows/aarch64 from R sources the same way that an installer for x86_64 can be build on x86_64. The installers provided via the URL above are cross-compiled on existing x86_64 infrastructure: the native code is cross-compiled using Rtools44 on Linux/x86_64, the rest including the installer is built on Windows/x86_64.</p>
+<p>R is by default installed to <code>Program Files/R-aarch64</code> (unlike <code>Program Files/R</code> with an x86_64 build) and the default library directory is named <code>aarch64-library</code> (unlike <code>win-library</code> with an x86_64 build). This is to allow side-by-side installation with the x86_64 build, which can run on Windows/aarch64 via emulation.</p>
+<p>The x86_64 version, at the time of this writing, didn’t pass its installation tests when running in the emulator due to numerical differences. The aarch64 did and in addition to that it is indeed expected to have better performance and lower power consumption than running in the emulator.</p>
+<p>Using R on Windows/aarch64 should be considered experimental, both the native version and the emulated x86_64 version. The native support for Windows/aarch64 is still limited in R packages (more below): some packages and external software still need to be adapted. R isn’t tested with CRAN nor Bioconductor packages on Windows/aarch64, neither natively nor via x86_64 emulation. This is unlike x86_64, where regular and frequent testing of R packages by CRAN also indirectly tests R itself.</p>
+<p>Building of R on Windows/aarch64 is documented in <a href="https://cran.r-project.org/bin/windows/base/howto-R-4.4.html">Howto: Building R 4.4 and packages on Windows</a>.</p>
+</section>
+<section id="rtools" class="level1">
+<h1>Rtools</h1>
+<p>Rtools44 includes an installer for Windows/aarch64 and toolchain/libraries tarballs (full, base, cross-compiler, Tcl/Tk bundle), mirroring the usual components provided for Windows/x86_64. They are available from <a href="https://cran.r-project.org/bin/windows/Rtools/rtools44/rtools.html">CRAN</a>. Later versions of Rtools43 already included unreleased temporary builds for aarch64 for testing with the development version of R, which were available from a temporary location.</p>
+<p>Rtools44 is based on LLVM 17 and has almost all the libraries provided in the Intel version. It uses LLVM linker (lld), resource compiler and C++ library (libc++) instead of binutils and libstdc++. LLVM is needed because GCC does not support Windows/aarch64.</p>
+<p>The Rtools44 installer is an x86_64 application, which runs on Windows/aarch64 in the emulator. Rtools44 is installed by default to <code>rtools44-aarch64</code> (unlike <code>rtools44</code> with an x86_64 build) as to allow the two installations to coexist on Windows/aarch64. Having an x86_64 version may be useful for package developers with aarch64 as their main platform. The R installer build will use the correct Rtools automatically: R for aarch64 installed via the installer would use Rtools for aarch64, R for x86_64 will use Rtools for x86_64.</p>
+<p>Note that in a side-by-side installation of Rtools from the installers, one would have even the Msys2 part of Rtools twice, because the Rtools applications are fully independent. The Msys2 part of Rtools consists of build tools, which are currently built for x86_64 and run in the emulator. As is the case since Rtools42, users can also install Rtools from a toolchain+libraries tarball and maintain a separate, single Msys2 installation with the build tools for use with different versions of Rtools toolchain+libraries (say for x86_64 Rtools43, x86_64 Rtools44 and aarch64 Rtools44).</p>
+</section>
+<section id="installing-packages" class="level1">
+<h1>Installing packages</h1>
+<p>At the time of this writing, CRAN does not distribute binary packages for aarch64. All packages have to be installed from source as they are on Linux. That is also the default when R is built on macOS from source (CRAN builds of R use binary packages from CRAN).</p>
+<p>This makes little difference for packages implemented solely in R: only installation takes slightly longer, because packages are byte-compiled and prepared for lazy loading. A binary package only has to be decompressed, which would typically be faster.</p>
+<p>Users however now have to install Rtools whenever they need to install any package that “needs compilation” (so includes C, Fortran or C++ code). Installation of these packages will take much longer than when installing binary versions. Still, it should not make the use any harder: Rtools can be installed accepting the defaults, with no configuration necessary. Base and recommended packages are already part of the R binary distribution, so one does not need Rtools for those. Parallel installation provides a significant performance boost on multi-core systems.</p>
+<p>Expect, though, that some packages will fail to install from source either because they need to be adapted or they require some external software not available yet for the platform.</p>
+</section>
+<section id="porting-and-testing-packages" class="level1">
+<h1>Porting and testing packages</h1>
+<p>In an ideal case, even packages needing compilation would not need any changes: portable, standards-compliant C, Fortran and C++ code should just work and in many cases, CRAN and Bioconductor packages just do. Also, CRAN packages are already tested with LLVM clang on macOS and Linux and with LLVM flang-new on Linux, so code accidentally making assumptions about the platform/compiler should has mostly been detected. A number of GCC compiler extensions is supported by LLVM as well.</p>
+<p>In an ideal case, packages carefully written to follow <a href="https://cran.r-project.org/doc/manuals/R-exts.html">Writing R Extensions</a> and the <a href="https://cran.r-project.org/web/packages/policies.html">CRAN repository policy</a> in linking to external libraries should also work without changes even to the linking/make files, and many do. Such packages use libraries from Rtools (rather than downloading pre-compiled versions), and the names of these libraries are almost always the same as for x86_64. The names differ where R already provides macros (BLAS, LAPACK, OpenMP, Fortran runtime) abstracting out the differences. The macros are documented and recommended for use in Writing R Extensions, so portable packages have already been using those. Packages can use <code>pkg-config</code> in Rtools, which should reduce the maintenance cost for package authors on Rtools updates, but it is not related to nor needed by the aarch64 support.</p>
+<p>In practice, it is easy to overlook some portability issues when testing on a single architecture - and some package code is Windows-specific, so only got tested with GCC and for Intel CPUs so far. Close to 100 patches have been provided to CRAN and Bioconductor package maintainers to fix their packages to build and pass checks on Windows/aarch64. Many of these were easy-to-fix issues of the kinds described above (C++ features removed from current/corresponding standards, GCC-specific compiler options, explicitly naming OpenMP runtime used with GCC, naming conflicts due to using R headers before system headers, the C/C++ compilers being stricter than GCC and spotting issues hence not found before). Some of the cases required more work.</p>
+<p>A long-lasting problem of the R ecosystem is R packages downloading pre-compiled code (static libraries) at build time (R CMD INSTALL). Some packages are doing this despite Rtools has the required libraries, some even when Rtools has newer versions. On CRAN, this is not allowed (it is a violation of the CRAN repository policy). Clearly, such code definitely won’t work on aarch64 when pre-compiled for x86_64. Some of the provided patches have been just emergency hot-fixes disabling the downloads on non-Intel platforms and falling back to compilation from source or to using libraries from Rtools. The recommended way is to use libraries from Rtools, and if they are not there, provide build configurations via upstream MXE.</p>
+<p>A number of packages don’t work on Windows/aarch64 because they link to libraries provided by externally installed software, and such software sometimes isn’t yet readily available (ported or packaged). At the time of this writing, this includes important software like Java, MPI (Microsoft MPI doesn’t support aarch64) and JAGS. This is likely to improve as the platform becomes more popular, and indeed R is not alone, other open-source projects are being adapted to support Windows/aarch64 as well.</p>
+<p>This progress also sometimes drives the need to upgrade, some Rtools libraries had to be updated to newer versions that support Windows/aarch64. One case that will require cooperation from CRAN package authors is Intel TBB (Threading Building Blocks). It is part of Rtools (both x86_64 and aarch64), but a number of CRAN packages use an older version that is embedded in another CRAN package. That older version, however, cannot be built for Windows/aarch64. The new version made several breaking changes in the API and packages will have to be updated.</p>
+<p>Another case was MinGW-W64: the experimentally built Rtools43 versions for aarch64 conditionally used a newer version of MinGW-W64 to avoid some issues on aarch64, but this required debugging and fixing naming conflicts in packages. These conflicts would have had to be fixed regardless of aarch64. Rtools44 now uses the newer version of MinGW-W64 on both platforms.</p>
+<p>Luckily it is extremely uncommon for CRAN and Bioconductor R packages to include (and unconditionally use) Intel assembly code. Such cases should have an automatic fallback to portable C code for platforms that are not supported. A number of Rtools libraries themselves are built for aarch64 thanks to opting-out from hand-written assembly code, not available for aarch64.</p>
+<p>Some CRAN packages cannot be compiled for Windows/aarch64 because of limitations of the flang-new compiler from LLVM.</p>
+</section>
+<section id="hardware-availability" class="level1">
+<h1>Hardware availability</h1>
+<p>There are no powerful 64-bit ARM laptops to run Windows natively, but in October 2023, Qualcomm announced their new 64-bit ARM “Snapdragon Elite X” platform with integrated “Oryon”, with an expectation of PCs to be available in mid-2024. The company is to provide a further statement on April 24 (the day when R 4.4 is to be released). It is not hard to find articles speculating about upcoming systems based on this platform. It is not hard to find benchmark results measured on test systems against Apple M3, generally claiming comparable performance, so there seems to be some progress.</p>
+<p>64-bit ARM processors for server systems have been available for 3 years (Ampere Altra from Ampere Computing). One can also buy developer/prototyping workstations based on these processors (AADP). Still, while there is some server hardware available to run Windows on ARM, Microsoft has not, yet, released a Windows server OS. Currently, one would have to use Windows 11 (and probably figure out how to do that in line with the license in case of a server system).</p>
+<p>R package developers who work on Apple Silicon machines can already test their packages on Windows 11 running in UTM/QEMU (or Parallels). Such developers probably want to test and debug their packages on Windows, and using the aarch64 version of Windows on their machines would be natural (the OS emulator, at the time of this writing, doesn’t support full virtual machines, and, running natively would be preferred, anyway). Regular macOS R users would naturally run R natively on macOS, but if for some reason they were forced to use Windows, it would again be Windows on aarch64.</p>
+</section>
+<section id="ready-for-package-developers" class="level1">
+<h1>Ready for package developers</h1>
+<p>It is common and necessary that software for new platforms is developed before the platforms actually become generally available, because, the development simply takes too long. This is why this work on R and Rtools has been started as soon as compilers for the platform became available, particularly when the LLVM flang-new compiler became stable enough to build base R and recommended packages. R is not alone, there is clearly an effort to make open-source software support Windows/aarch64, e.g.&nbsp;there is already Python for the platform.</p>
+<p>R for Windows/aarch64 and Rtools is now stable enough to allow for development/porting of R packages to the platform and this is what needs to happen if R should be a viable option also on this platform. Most of the fixes would entail making the packages more portable and standards-compliant, which is a good thing on its own and would simplify maintenance and potential support for other future platforms or compilers. This is particularly important for maintainers of packages with a large number of reverse dependencies.</p>
+<p>The easiest way of testing packages for Windows/aarch64 is probably still to run Windows 11 in a virtual machine on Apple Silicon hardware. This is even recommended by Microsoft, it is documented to work in Parallels and QEMU (UTM). The work on R/Rtools has been done via UTM/QEMU. Using Windows natively this way should be easy for R package developers: the OS and R works almost identically to what they have been used for. Performance is comparable to doing similar work natively on an Intel laptop.</p>
+<p>An indirect alternative to cover some cases, but more technically involved, is to use Rtools44 cross-compilers to test compilation on Linux/x86_64. This will only work for packages with a simple installation process, but the approach has been used before when looking for issues in code detected by LTO. The cross-compilers in Rtools themselves should be sufficiently tested, because Rtools libraries themselves are cross-compiled. Also now R installers for aarch64 are cross-compiled, even though minimally tested. However, the limitation is in R packages that were not designed for cross-compilation. Also, this would only test compilation of native code.</p>
+<p>The aarch64 support has been partially integrated into the infrastructure used for testing development versions of Rtools (“ucrt3”) and package build outputs from this are <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">available</a> for CRAN and some Bioconductor packages. These tests patch packages using patches available also at that site, which have been provided to package maintainers and will be removed from the site as they are incorporated into packages. The installation tests are only ran occasionally and may be well behind the current CRAN source package repository.</p>
+<p>At the time of this writing, there is no GitHub Actions runner support for Windows/aarch64, which can be tracked <a href="https://github.com/actions/runner-images/issues/768">here</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

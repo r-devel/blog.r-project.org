@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2018-12-10">
+
+<title>Unprotecting by Value – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Unprotecting by Value – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/unprotect-ptr/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Unprotecting by Value</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Internals</div>
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">parsing</div>
+                <div class="quarto-category">PROTECT bugs</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 10, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>In short, <code>UNPROTECT_PTR</code> is dangerous and should not be used. This text describes why and describes how to replace it, including mset-based functions that have been introduced as a substitute for situations when unprotection by value is really needed. This could be of interest to anyone who writes native code to interface with the R heap, and definitely to all who use <code>UNPROTECT_PTR</code> in their code.</p>
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>R provides several functions to protect pointers to R objects held by local C variables (typed <code>SEXP</code>) from the garbage collector. As documented in <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Garbage-Collection">Writing R Extensions</a>, there are two structures to hold protected pointers: the pointer protection stack and the precious list.</p>
+<p>The <em>pointer protection stack</em> is accessed using <code>PROTECT</code>/<code>UNPROTECT</code>. Pointers are unprotected by being removed from the top of the stack. One can also use <code>PROTECT_WITH_INDEX</code> and then <code>REPROTECT</code> to replace a pointer defined by its position in the stack, which allows to simplify and speed-up code that repeatedly updates local variables holding pointers (in such scenarios, one could in principle still use a sequence of <code>PROTECT</code>/<code>UNPROTECT</code> operations, instead). The pointer protection stack needs to be managed in-line with the C call stack: after returning from a function, the stack depth should be the same as when the function was called (pointer protection balance). These and other rules are described in <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Garbage-Collection">Writing R Extensions</a> and <a href="https://github.com/kalibera/cran-checks/blob/master/rchk/PROTECT.md">The danger of PROTECT errors</a>, they are relatively easy follow and check, both visually and by tools (also, pointer-protection balance is checked to some level at runtime). The stack-based protection and unprotection are fast, do not require additional allocation and are automatically handled during R errors (long jumps): a long jump recovers the previous stack depth, unprotecting the values that have been left on the stack by the code executed after the jump was set but before the jump was executed.</p>
+<p>Although such situations are very rare, sometimes achieving pointer protection balance is difficult, sometimes say package code wishes to keep some allocated space without returning a pointer to it (hence without making the caller protect it, when we have global variables pointing to R heap and for some reason cannot turn them into locals). This is addressed by the <em>precious list</em>, which is accessed using <code>R_PreserveObject</code>/<code>R_ReleaseObject</code>. It is implement as a linked list (and yes, <code>R_PreserveObject</code> allocates!) and objects are unprotected by value. There is no automated unprotection on error, the user is always responsible for unprotecting objects stored on the precious list. To achieve that in case of R errors (long jumps) or in callbacks (e.g.&nbsp;unloading of a package), it may be necessary to allocate a dummy object, set up its finalizer, and let the finalizer release needed objects from the precious list. <code>R_PreserveObject</code> and <code>R_ReleaseObject</code> are also much slower than <code>PROTECT</code>/<code>UNPROTECT</code>.</p>
+<p>The API was still not sufficient for very special applications, applications which used generated code that allocated memory from the R heap, such as the R parser generated by <code>bison</code>. The parser code uses a stack of semantic values, which are pointers to objects on the R heap. Values are pushed on the stack by the tokenizer during shift operations, are both pushed and removed during actions of reduce operations, and are removed on some parse errors. R errors (long jumps) can also occur during parsing. The stack is local to a parsing function. The key problem is that the code of the parser is generated and <code>bison</code> cannot be customized enough to ensure insertion of <code>PROTECT</code>/<code>UNPROTECT</code> operations. It would be natural to allocate the semantic values stack on the R heap, protect it, and protect semantic values when held in local variables but not yet on the semantic values stack, all using <code>PROTECT</code>/<code>UNPROTECT</code>. But, this is not possible. In principle, <code>R_PreserveObject</code>/<code>R_ReleaseObject</code> could be used, but one would have to handle the errors and, most importantly, the performance overhead would not be acceptable.</p>
+<p>To work around this problem, <code>UNPROTECT_PTR</code> has been introduced. It allows relatively fast unprotect-by-value operation for semantic values protected in the pointer protection stack. When new semantic values are created, they are immediatelly put on the protection stack using <code>PROTECT</code> by the tokenizer and reduce rules. The values are unprotected by <code>UNPROTECT_PTR</code> inside the reduce rules, and the pointer protection stack depth is restored after certain parse errors that did not cause a long jump (one can also define a <code>destructor</code> in <code>bison</code> for some tokens and make it call <code>UNPROTECT_PTR</code>, as done in the <code>Rd</code> parser in package <code>tools</code>). <code>UNPROTECT_PTR</code> removes the first occurrence of the pointer (starting at stack top) and squeezes the stack, reducing the stack depth. Using <code>UNPROTECT_PTR</code> this way causes pointer protection imbalance by design (the tokenizer and reduce rules are implemented in different functions), which increases cognitive complexity of the code. It is, however, faster than the precious list and uses less memory, when used carefully it works with R long jumps (automated unprotection), and it may well be that there is not a better way to do protection in the parser than unprotect-by-value (if we don’t modify the generated parser code). It has been used for many years in the parser and, unfortunately, started to be used also outside the parser where not necessary.</p>
+<p>It has been known and <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Garbage-Collection">documented</a> that combining <code>UNPROTECT_PTR</code> with <code>PROTECT_WITH_INDEX</code> is dangerous, because by removing a certain object from the stack by <code>UNPROTECT_PTR</code> and squeezing the stack, the <em>protect index</em> may become invalid/unexpected (objects locations on the stack change). <code>REPROTECT</code> would then replace the wrong pointer, resulting in a memory leak (the object intended for unprotection stays protected) and, worse, premature unprotection (<code>REPROTECT</code> would replace an object that still was to be protected). Code which uses <code>UNPROTECT_PTR</code> is also rather hard to read.</p>
+</section>
+<section id="unprotect_ptr-is-dangerous" class="level1">
+<h1>UNPROTECT_PTR is dangerous</h1>
+<p>While working on some improvements of the parser I realized that <code>UNPROTECT_PTR</code> is unsafe also in combination with <code>PROTECT/UNPROTECT</code>. The problem occurs when the same pointer is stored multiple times on the protection stack. One can accidentally use <code>UNPROTECT_PTR</code> to unprotect the unintended instance of the object, an instance that was intended to be unprotected by <code>UNPROTECT</code>, instead. At the point of <code>UNPROTECT_PTR</code>, nothing bad yet happens, but, when one later gets to the <code>UNPROTECT</code>, the wrong object gets unprotected, resulting in a premature unprotection (protect bug). Unfortunately, it is quite common particularly in the parser for the same pointer to be protected multiple times (<code>R_NilValue</code>, symbols).</p>
+<p>To illustrate this, imagine this sequence of pointers on the stack (3 is protected last, A and A’ are the same pointer, A is intended for unprotection by value):</p>
+<p><code>1A2A'3</code></p>
+<p>after UNPROTECT_PTR(A), we get</p>
+<p><code>1A23</code></p>
+<p>instead of what the enclosing code expected:</p>
+<p><code>12A'3</code></p>
+<p>The depth is ok, say the code later does <code>UNPROTECT(1)</code> intending to unprotect 3 and actually doing so, so still ok. But, then it calls <code>UNPROTECT(1)</code> intending to unprotect <code>A'</code>, but instead unprotecting 2. As a result, <code>A'</code> (<code>A</code>) will still be kept alive (memory leak, possibly temporary, so not that bad), but 2 will be prematurely unprotected, causing a protect bug (and one that may be very hard to debug).</p>
+<p>In principle, <code>R_NilValue</code> and symbols do not need to be protected at all, but they are and sometimes it makes the code more readable when the distinction is not made. Moreover, any function returning a pointer may sometimes return a fresh pointer and sometimes a pointer that already exists (including in the parser, where some list manipulating functions work(ed) that way). So, this seems to be a real danger. Also, using <code>UNPROTECT_PTR</code> the way as in the parser makes verification of other, purely stack-based <code>PROTECT/UNPROTECT</code> operations, harder, both manually and by tools, because it is not made explicit which pointers were intended to be unprotected by <code>UNPROTECT_PTR</code> and which by <code>R_ReleaseObject</code>.</p>
+</section>
+<section id="phasing-out-unprotect_ptr" class="level1">
+<h1>Phasing out UNPROTECT_PTR</h1>
+<p>I have thus removed the use of <code>UNPROTECT_PTR</code> from all R base code. It was relatively easy in the few cases when used outside the parser, I have just rewritten the code using stack-based protection functions. I think in all cases this actually simplified the code.</p>
+<p>For use in the parsers (the R parser and the two parsers from package <code>tools</code>), I’ve introduced API for value-based unprotection outside the pointer protection stack. These functions use a <code>precious multi-set</code> to protect these objects; the multi-set is allocated on the R heap and needs to be protected by the caller (e.g.&nbsp;using <code>PROTECT</code>). Consequently, it is automatically unprotected on the long jump, and hence all pointers protected in the mset get indirectly unprotected as well. The current implementation uses a (vector-) list instead of a pair-list, so is also faster than <code>R_PreserveObject</code>/<code>R_ReleaseObject</code>, but this is just an implementation detail that can change and certainly the unprotection could be made faster if it turns out to be a bottleneck in practice. The main benefit is that these functions use a separate structure for unprotection by value, not polluting the pointer protection stack.</p>
+<pre><code>SEXP R_NewPreciousMSet(int initialSize);
+void R_PreserveInMSet(SEXP x, SEXP mset);
+void R_ReleaseFromMSet(SEXP x, SEXP mset);
+void R_ReleaseMSet(SEXP mset, int keepSize);</code></pre>
+<p>To use this API, one needs first to create a new mset using <code>R_NewPreciousMSet</code> and <code>PROTECT</code> it. The mset is expanded automatically as needed (<code>R_PreserveInMSet</code> may allocate). Objects are released by value via <code>R_ReleaseFromMSet</code> using the same (naive) algorithm as was used in <code>UNPROTECT_PTR</code>, so there should be no performance hit (in principle, the operations could be faster as they do not have to deal with objects intended for stack-based protection). One does not have to release objects explicitly, they will all be released when the mset is garbage collected (e.g.&nbsp;on a long jump that would unprotect the mset). For performance reasons, one may however use <code>R_ReleaseMSet</code> to clear the mset but keep it allocated, if the allocated size is not bigger than given number of elements (this can be used e.g.&nbsp;on errors that are not implemented as long jumps). As anything in R-devel code base, the API is still subject to change.</p>
+<p>Switching from <code>UNPROTECT_PTR</code> to the new API is harder than it may first seem as one has to identify the <code>PROTECT</code> operations that are intended for unprotection by value (and rewrite the code when some code paths unprotect the same “variable” in one way and other code paths in another).</p>
+</section>
+<section id="choosing-the-right-api" class="level1">
+<h1>Choosing the right API</h1>
+<p>I think for memory protection one should always use <code>PROTECT</code>/<code>UNPROTECT</code>, possibly with <code>PROTECT_WITH_INDEX</code>/<code>REPROTECT</code> in performance critical code. <code>R_PreserveObject</code>/<code>R_ReleaseObject</code> help if we have global variables holding on to R memory, but global variables should be avoided anyway also for other reasons, so this should be very rare. Also, arranging for unprotection on error is a bit tedious. <code>R_PreserveInMSet</code>/<code>R_ReleaseFromMSet</code> should be used only in <code>bison</code>/<code>yacc</code> parsers and <code>UNPROTECT_PTR</code> should be phased out from all code.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

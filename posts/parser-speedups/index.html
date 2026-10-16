@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2019-01-07">
+
+<title>Parser Speedups – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Parser Speedups – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/parser-speedups/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Parser Speedups</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Internals</div>
+                <div class="quarto-category">Performance</div>
+                <div class="quarto-category">parsing</div>
+                <div class="quarto-category">source references</div>
+                <div class="quarto-category">parse data</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 7, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>It wasn’t my primary goal to improve parser performance nor to measure it. I’ve been working on optimizations to reduce the runtime overhead of including source reference into packages (this is not done by default due to space and execution time overheads). I’ve added an option to exclude parse data from source references and enabled it by default for packages, as parse data account for most of the runtime overhead of source references while they are rarely needed. Trivially, not collecting parse data also speeds up parsing with source references. While debugging a bug in parse data I found that parental information in the parse data was updated even when source references were not collected; fixing this also improved performance. I’ve then made some fixes to initialization, memory allocation and memory protection of the parser structures, following on bug reports and addressing bugs I’ve discovered while reading the code, including the potential problem of mixing <code>UNPROTECT_PTR</code> with <code>UNPROTECT</code> calls. I’ve been profiling my changes to verify that I was not unnecessarily adding performance regressions, and this profiling has uncovered pathological performance overhead of parse data post-processing on large inputs. For the profiling, I artificially created a large file by concatenating all files from R base packages and I got over 90% of time spent in parse data post-processing (and 10% in all the rest including parsing), but this percentage depends on the size of the input, for smaller files it is much smaller. I fixed its primary cause (the pass of finding parent nodes for comments). While profiling on real (non-concatenated) files from CRAN and BIOC packages, I found and fixed another pathological case that made parse data post-processing very slow with large generated expressions (updating parental information with nodes excluded from the parse data). While profiling I’ve also found that there was some performance improvement recently in the parser (between 3.4 and 3.5) for which I could not find any plausible explanation in commit logs for the parser code. I became curious which they were, so I decided to measure parser performance in a bit more detail.</p>
+<section id="sample-files" class="level1">
+<h1>Sample files</h1>
+<p>The performance numbers below need to be seen in context of that they depend on the files chosen for measurements. It would not be hard at all to create input files to report an arbitrarily large relative performance improvement with some of the optimizations - at least for the finding of parents for comments, larger the input file with comments is, larger is the relative speedup of the optimization. I’ve chosen to measure parse time of concatenated sources of the <code>base</code> package, <code>compiler</code>, <code>tools</code>, <code>utils</code>, and <code>stats</code> from R 3.5.2 to represent different coding styles and file sizes. I’ve also added <code>all</code> as concatenation of all sources from the packages in the base distribution, including the previous ones measured individually, to represent large, hand-written code with comments (this is also the same set I was profiling while working on the optimizations). Then I added the largest files from CRAN/BIOC packages which also represent some of the pathological cases: <code>rgtk2</code> is <code>gtkFuncs.R</code> from package <code>RGtk2</code> version 2.20.35 (a large file with no comments), <code>phylosim</code> is <code>PhyloSimSource.R</code> from package <code>phylosim</code> version 3.0.2 (a large file with a lot of inline comments used for inline technical documentation), and <code>rcoletum</code> is <code>test-GetAnswersComplexForm.R</code> from package <code>RColetum</code> version 0.2.0 (a large generated file with a call to <code>structure()</code> with a very large number of arguments). These are also the three files with the largest number of lines from CRAN+BIOC packages (from the subset that I regularly check, which excludes several packages with dependencies not easily available).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Lines</th>
+<th style="text-align: right;">Chars</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">base</td>
+<td style="text-align: right;">20K</td>
+<td style="text-align: right;">730K</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">stats</td>
+<td style="text-align: right;">29K</td>
+<td style="text-align: right;">1057K</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">compiler</td>
+<td style="text-align: right;">3K</td>
+<td style="text-align: right;">102K</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tools</td>
+<td style="text-align: right;">42K</td>
+<td style="text-align: right;">1634K</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">utils</td>
+<td style="text-align: right;">20K</td>
+<td style="text-align: right;">729K</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">156K</td>
+<td style="text-align: right;">5793K</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">phylosim</td>
+<td style="text-align: right;">52K</td>
+<td style="text-align: right;">1074K</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rcoletum</td>
+<td style="text-align: right;">82K</td>
+<td style="text-align: right;">5418K</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rgtk2</td>
+<td style="text-align: right;">41K</td>
+<td style="text-align: right;">780K</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="measurements" class="level1">
+<h1>Measurements</h1>
+<p>Each iteration runs a fresh instance of <code>RScript</code> with</p>
+<pre><code>options(keep.parse.data = KEEP_PARSE_DATA)
+system.time(
+  dummy &lt;- parse(FILENAME, keep.source= KEEP_SRCREFS)
+)</code></pre>
+<p>I’ve run each of the three settings (no source references, source references without parse data, source references with parse data) 20 times, with every R version and source file, reporting average elapsed time. I’ve calculated also 95% bootstrap confidence intervals, which are used to decide to how many digits to round the results to, but are not reported directly. Measured on 64-bit Ubuntu laptop. The numbers are in seconds, so lower is better.</p>
+<p>I’ve used the latest R tarballs for versions 3.3, 3.4, and 3.5 and then selected R-devel versions (I had to measure a bit more than shown here to validate where the interesting changes happened; note that 73746 and 73747 are between 3.4 and 3.5, so in the “old” R-devel, but 75177 and later are already the current R-devel).</p>
+</section>
+<section id="source-references-with-parse-data" class="level1">
+<h1>Source references with parse data</h1>
+<p><code>KEEP_PARSE_DATA=TRUE, KEEP_SRCREFS=TRUE</code> (source references with parse data) corresponds to calling <code>parse()</code> explicitly to parse a file with default arguments.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">3.3.3</th>
+<th style="text-align: right;">3.4.4</th>
+<th style="text-align: right;">3.5.2</th>
+<th style="text-align: right;">73746</th>
+<th style="text-align: right;">73747</th>
+<th style="text-align: right;">75177</th>
+<th style="text-align: right;">75178</th>
+<th style="text-align: right;">75754</th>
+<th style="text-align: right;">75873</th>
+<th style="text-align: right;">75883</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all.r</td>
+<td style="text-align: right;">20.700</td>
+<td style="text-align: right;">20.600</td>
+<td style="text-align: right;">25.8000</td>
+<td style="text-align: right;">26.0000</td>
+<td style="text-align: right;">25.7000</td>
+<td style="text-align: right;">25.800</td>
+<td style="text-align: right;">25.8000</td>
+<td style="text-align: right;">25.0000</td>
+<td style="text-align: right;">1.560</td>
+<td style="text-align: right;">1.600</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">base.r</td>
+<td style="text-align: right;">0.372</td>
+<td style="text-align: right;">0.370</td>
+<td style="text-align: right;">0.4400</td>
+<td style="text-align: right;">0.4480</td>
+<td style="text-align: right;">0.4480</td>
+<td style="text-align: right;">0.440</td>
+<td style="text-align: right;">0.4390</td>
+<td style="text-align: right;">0.4600</td>
+<td style="text-align: right;">0.103</td>
+<td style="text-align: right;">0.102</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">compiler.r</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.0218</td>
+<td style="text-align: right;">0.0189</td>
+<td style="text-align: right;">0.0189</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.0222</td>
+<td style="text-align: right;">0.0229</td>
+<td style="text-align: right;">0.019</td>
+<td style="text-align: right;">0.019</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">phylosim.r</td>
+<td style="text-align: right;">2.000</td>
+<td style="text-align: right;">1.500</td>
+<td style="text-align: right;">2.4000</td>
+<td style="text-align: right;">2.3900</td>
+<td style="text-align: right;">2.4000</td>
+<td style="text-align: right;">2.400</td>
+<td style="text-align: right;">2.4200</td>
+<td style="text-align: right;">2.6000</td>
+<td style="text-align: right;">0.110</td>
+<td style="text-align: right;">0.110</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rcoletum.r</td>
+<td style="text-align: right;">18.700</td>
+<td style="text-align: right;">18.600</td>
+<td style="text-align: right;">19.0000</td>
+<td style="text-align: right;">18.6000</td>
+<td style="text-align: right;">18.0000</td>
+<td style="text-align: right;">19.000</td>
+<td style="text-align: right;">19.0000</td>
+<td style="text-align: right;">18.3000</td>
+<td style="text-align: right;">18.300</td>
+<td style="text-align: right;">0.770</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rgtk2.r</td>
+<td style="text-align: right;">0.293</td>
+<td style="text-align: right;">0.308</td>
+<td style="text-align: right;">0.1990</td>
+<td style="text-align: right;">0.2070</td>
+<td style="text-align: right;">0.2060</td>
+<td style="text-align: right;">0.199</td>
+<td style="text-align: right;">0.2000</td>
+<td style="text-align: right;">0.1200</td>
+<td style="text-align: right;">0.120</td>
+<td style="text-align: right;">0.130</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stats.r</td>
+<td style="text-align: right;">0.720</td>
+<td style="text-align: right;">0.720</td>
+<td style="text-align: right;">0.7800</td>
+<td style="text-align: right;">0.7990</td>
+<td style="text-align: right;">0.7900</td>
+<td style="text-align: right;">0.790</td>
+<td style="text-align: right;">0.8100</td>
+<td style="text-align: right;">0.7900</td>
+<td style="text-align: right;">0.178</td>
+<td style="text-align: right;">0.178</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tools.r</td>
+<td style="text-align: right;">0.720</td>
+<td style="text-align: right;">0.702</td>
+<td style="text-align: right;">0.6890</td>
+<td style="text-align: right;">0.6890</td>
+<td style="text-align: right;">0.6230</td>
+<td style="text-align: right;">0.700</td>
+<td style="text-align: right;">0.7000</td>
+<td style="text-align: right;">0.7000</td>
+<td style="text-align: right;">0.300</td>
+<td style="text-align: right;">0.298</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">utils.r</td>
+<td style="text-align: right;">0.270</td>
+<td style="text-align: right;">0.270</td>
+<td style="text-align: right;">0.2720</td>
+<td style="text-align: right;">0.2680</td>
+<td style="text-align: right;">0.2690</td>
+<td style="text-align: right;">0.274</td>
+<td style="text-align: right;">0.2710</td>
+<td style="text-align: right;">0.2880</td>
+<td style="text-align: right;">0.100</td>
+<td style="text-align: right;">0.101</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The numbers show a speedup in R-devel 75873 for all sample files except <code>rcoletum</code> and <code>rgtk2</code>. This is the speedup in finding parent nodes for comments, <code>rcoletum</code> is not affected because it has only a trivial number of comments, <code>rgtk2</code> because it has no comments at all. The original algorithm for finding parent nodes is quadratic in the worst case as it has to go potentially through the whole remaining parse data for each comment. The new algorithm is almost linear in the size of the parse data, it takes advantage of the parental information already available in the parse data for non-comment nodes, and of certain ordering properties of entries in the parse data met by the parser (more details available in the source code comments). All large files are likely to benefit, and there is even some improvement visible for the smallest sample file (<code>compiler</code>, about 33%).</p>
+<p>The numbers also show a speedup in R-devel 75883 for <code>rcoletum</code>. This is a simple optimization in updating parental information with nodes excluded from the parse data. For each node, one has to traverse through a sequence of excluded nodes until one finds a non-excluded node. For very large expressions (list of arguments in this case, but could also be a large arithmetic expression), the sequences of excluded nodes are long and the excluded nodes are repeated, hence the searches are repeated as well. The optimization keeps record of the parents already found and re-uses it during followup searches. The speedup depends on the shape of the expression tree and likely only generated files would benefit. The cost for other files should be negligible (and this is in line with the numbers).</p>
+<p>There also seem to be some slowdowns between 3.4.4 and 3.5.2 for <code>all</code>, <code>phylosim</code> and <code>base</code>. These slowdowns are erased in 75873 and 75883. They may be (but I did not verify) caused by virtualization of access to integer vectors used in parse data post-processing. In principle, one could get further speedups over 75883 by rewriting two loops for parse data post-processing, but it is not clear whether is worth the somewhat increased cognitive complexity of the code. 73747 helped in some cases, but this is again not interesting anymore due to big changes in 75873 and 75883.</p>
+</section>
+<section id="source-references-without-parse-data" class="level1">
+<h1>Source references without parse data</h1>
+<p><code>KEEP_PARSE_DATA=FALSE, KEEP_SRCREFS=TRUE</code> (source references without parse data) corresponds to what is now done by default when installing packages using <code>R_KEEP_PKG_SOURCE=yes</code>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">75177</th>
+<th style="text-align: right;">75178</th>
+<th style="text-align: right;">75754</th>
+<th style="text-align: right;">75873</th>
+<th style="text-align: right;">75883</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all.r</td>
+<td style="text-align: right;">1.2700</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.8100</td>
+<td style="text-align: right;">0.813</td>
+<td style="text-align: right;">0.820</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">base.r</td>
+<td style="text-align: right;">0.0720</td>
+<td style="text-align: right;">0.0640</td>
+<td style="text-align: right;">0.0610</td>
+<td style="text-align: right;">0.062</td>
+<td style="text-align: right;">0.063</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">compiler.r</td>
+<td style="text-align: right;">0.0138</td>
+<td style="text-align: right;">0.0122</td>
+<td style="text-align: right;">0.0122</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">0.013</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">phylosim.r</td>
+<td style="text-align: right;">0.0730</td>
+<td style="text-align: right;">0.0600</td>
+<td style="text-align: right;">0.0600</td>
+<td style="text-align: right;">0.070</td>
+<td style="text-align: right;">0.070</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rcoletum.r</td>
+<td style="text-align: right;">0.3900</td>
+<td style="text-align: right;">0.3280</td>
+<td style="text-align: right;">0.3470</td>
+<td style="text-align: right;">0.347</td>
+<td style="text-align: right;">0.400</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rgtk2.r</td>
+<td style="text-align: right;">0.1670</td>
+<td style="text-align: right;">0.1560</td>
+<td style="text-align: right;">0.0900</td>
+<td style="text-align: right;">0.088</td>
+<td style="text-align: right;">0.087</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stats.r</td>
+<td style="text-align: right;">0.1200</td>
+<td style="text-align: right;">0.1040</td>
+<td style="text-align: right;">0.1100</td>
+<td style="text-align: right;">0.107</td>
+<td style="text-align: right;">0.107</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tools.r</td>
+<td style="text-align: right;">0.2100</td>
+<td style="text-align: right;">0.2000</td>
+<td style="text-align: right;">0.1980</td>
+<td style="text-align: right;">0.200</td>
+<td style="text-align: right;">0.200</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">utils.r</td>
+<td style="text-align: right;">0.0680</td>
+<td style="text-align: right;">0.0590</td>
+<td style="text-align: right;">0.0610</td>
+<td style="text-align: right;">0.062</td>
+<td style="text-align: right;">0.062</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The numbers are only for the current R-devel versions, because the option to exclude parse data has been added in R-devel 74761. In prior versions, one always got parse data with source references (which had nearly 25x overhead with <code>all</code>).</p>
+<p>There is a visible speedup for <code>all</code> and <code>rgtk2</code> in R-devel 75754. This optimization uses stretchy lists for intermediate structures in the parser that hold source references before they are compacted into fixed-size newlist blocks. Stretchy lists are linked lists that allow constant-time append operation and have been already in use in the parser, but the temporary source reference lists used the traditional pairlists with linear time append operation. This optimization is expected to help only when such lists are long, such as in large files with a lot of (short) functions (probably it is why it helps so much in <code>rgtk2</code>) or with functions with very long bodies.</p>
+<p>There is an improvement in version 75178, the optimization removes unnecessary updating parental information for the parse data. Such updating is not needed when parse data are not collected.</p>
+</section>
+<section id="no-source-references-no-parse-data" class="level1">
+<h1>No source references, no parse data</h1>
+<p><code>KEEP_PARSE_DATA=FALSE, KEEP_SRCREFS=FALSE</code> (no source references, no parse data) corresponds to what is now (in 3.5 and current R-devel) done by default when installing packages.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">3.3.3</th>
+<th style="text-align: right;">3.4.4</th>
+<th style="text-align: right;">3.5.2</th>
+<th style="text-align: right;">73746</th>
+<th style="text-align: right;">73747</th>
+<th style="text-align: right;">75177</th>
+<th style="text-align: right;">75178</th>
+<th style="text-align: right;">75754</th>
+<th style="text-align: right;">75873</th>
+<th style="text-align: right;">75883</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all.r</td>
+<td style="text-align: right;">0.7310</td>
+<td style="text-align: right;">0.7200</td>
+<td style="text-align: right;">0.4490</td>
+<td style="text-align: right;">0.7040</td>
+<td style="text-align: right;">0.5500</td>
+<td style="text-align: right;">0.5220</td>
+<td style="text-align: right;">0.460</td>
+<td style="text-align: right;">0.470</td>
+<td style="text-align: right;">0.480</td>
+<td style="text-align: right;">0.4810</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">base.r</td>
+<td style="text-align: right;">0.0630</td>
+<td style="text-align: right;">0.0632</td>
+<td style="text-align: right;">0.0477</td>
+<td style="text-align: right;">0.0500</td>
+<td style="text-align: right;">0.0511</td>
+<td style="text-align: right;">0.0570</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">0.051</td>
+<td style="text-align: right;">0.052</td>
+<td style="text-align: right;">0.0520</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">compiler.r</td>
+<td style="text-align: right;">0.0090</td>
+<td style="text-align: right;">0.0092</td>
+<td style="text-align: right;">0.0090</td>
+<td style="text-align: right;">0.0080</td>
+<td style="text-align: right;">0.0082</td>
+<td style="text-align: right;">0.0110</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.0102</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">phylosim.r</td>
+<td style="text-align: right;">0.0618</td>
+<td style="text-align: right;">0.0620</td>
+<td style="text-align: right;">0.0482</td>
+<td style="text-align: right;">0.0500</td>
+<td style="text-align: right;">0.0507</td>
+<td style="text-align: right;">0.0570</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">0.051</td>
+<td style="text-align: right;">0.052</td>
+<td style="text-align: right;">0.0520</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">rcoletum.r</td>
+<td style="text-align: right;">0.5600</td>
+<td style="text-align: right;">0.5720</td>
+<td style="text-align: right;">0.3000</td>
+<td style="text-align: right;">0.5310</td>
+<td style="text-align: right;">0.3640</td>
+<td style="text-align: right;">0.3600</td>
+<td style="text-align: right;">0.300</td>
+<td style="text-align: right;">0.330</td>
+<td style="text-align: right;">0.330</td>
+<td style="text-align: right;">0.3300</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rgtk2.r</td>
+<td style="text-align: right;">0.0849</td>
+<td style="text-align: right;">0.0840</td>
+<td style="text-align: right;">0.0659</td>
+<td style="text-align: right;">0.0690</td>
+<td style="text-align: right;">0.0700</td>
+<td style="text-align: right;">0.0761</td>
+<td style="text-align: right;">0.067</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">0.0710</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stats.r</td>
+<td style="text-align: right;">0.0980</td>
+<td style="text-align: right;">0.0972</td>
+<td style="text-align: right;">0.0760</td>
+<td style="text-align: right;">0.0900</td>
+<td style="text-align: right;">0.0900</td>
+<td style="text-align: right;">0.0880</td>
+<td style="text-align: right;">0.077</td>
+<td style="text-align: right;">0.081</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">0.0830</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tools.r</td>
+<td style="text-align: right;">0.1570</td>
+<td style="text-align: right;">0.1560</td>
+<td style="text-align: right;">0.0960</td>
+<td style="text-align: right;">0.1150</td>
+<td style="text-align: right;">0.1200</td>
+<td style="text-align: right;">0.1140</td>
+<td style="text-align: right;">0.097</td>
+<td style="text-align: right;">0.102</td>
+<td style="text-align: right;">0.104</td>
+<td style="text-align: right;">0.1100</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">utils.r</td>
+<td style="text-align: right;">0.0640</td>
+<td style="text-align: right;">0.0629</td>
+<td style="text-align: right;">0.0470</td>
+<td style="text-align: right;">0.0498</td>
+<td style="text-align: right;">0.0501</td>
+<td style="text-align: right;">0.0562</td>
+<td style="text-align: right;">0.048</td>
+<td style="text-align: right;">0.051</td>
+<td style="text-align: right;">0.051</td>
+<td style="text-align: right;">0.0510</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In absolute numbers, parse times are small in this configuration even for large source files, but they still contribute to the installation time of packages.</p>
+<p>Like when collecting source references without parse data, there is an improvement in version 75178 (not updating parents for parse data as they are not collected).</p>
+<p>In addition, there has been a speedup between 3.4.4 and 3.5.2 for all sample files (perhaps except <code>compiler</code>). Having a closer look it is clear that while there are almost no changes in the parser code; one exception is a port of 75178, which avoided updating parental information when source references were not collected, ported because it was a bugfix. Most of the speedups between 3.4.4 and 3.5.2 happen indirectly through other changes in the R code, and seem to be a result of many smaller performance changes, both slowdowns and speedups.</p>
+<p>One of the bigger speedups was in 73747 (when R-devel was to become R 3.5). In this commit, Luke Tierney changed the GC heuristics to grow the heap for nodes (cells) more aggressively in the first few heap adjustments after R starts. This followed profiling we have been doing that identified several situations when byte-compiled code in the byte-code interpreter ran slower than AST interpreter (the overhead was not in compilation - the code has already been compiled). This turned up to be caused by GC pressure (unnecessarily too many GC runs) with compiled code when the code took a non-trivial amount of memory for the initial heap sizes. The parser and particularly the tokenizer take quite a bit of memory, so it is not surprising GC heuristics had an impact.</p>
+<p>Another speedup was in 73554 (not shown in these numbers, I just measured for <code>gtk2</code>), again due to GC, I’ve updated the GC initial vector memory size, causing the vector heap to grow faster. The change made sense given the current usual memory sizes and it followed again profiling some cases when loading of the compiled code has been taking too long, resulting in some cases in slowdown with already compiled byte-code.</p>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>R parser performance has been improved since version 3.4 already in version 3.5 and the current R-devel has additional improvements when source references with parse data are collected. In the current R-devel, one can also collect source references without parse data, which is significantly faster in addition to reduced installation size.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,3024 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Rlogo.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      page: 25,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="alternate" type="application/rss+xml" title="The R Project Blog" href="index.xml" data-external="1"><meta property="og:title" content="The R Project Blog">
+<meta property="og:image" content="https://blog.R-project.org/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+<meta property="og:image:height" content="155">
+<meta property="og:image:width" content="200">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="./Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(66)</span></div><div class="category" data-category="QWFyY2g2NA==">Aarch64 <span class="quarto-category-count">(4)</span></div><div class="category" data-category="YW5uaXZlcnNhcnk=">anniversary <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QVJN">ARM <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YmluYXJpZXM=">binaries <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QkxBUw==">BLAS <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YmxvZyUyMGxvY2F0aW9u">blog location <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YnVncw==">bugs <span class="quarto-category-count">(6)</span></div><div class="category" data-category="YnVncyUyMGluJTIwdXNlciUyMGNvZGU=">bugs in user code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="YnVnemlsbGE=">bugzilla <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Ynl0ZXM=">bytes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Qw==">C <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QyUyQiUyQg==">C++ <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y2xhc3M=">class <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29sb3Jz">colors <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29tcGxldGlvbg==">completion <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q1JBTg==">CRAN <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Q1ZF">CVE <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVidWdnaW5n">debugging <span class="quarto-category-count">(5)</span></div><div class="category" data-category="ZGV2ZWxvcG1lbnQlMjBpbmZyYXN0cnVjdHVyZQ==">development infrastructure <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RExMJTIwbGltaXQ=">DLL limit <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZG9jdW1lbnRhdGlvbg==">documentation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZG93bmxvYWRpbmclMjBmaWxlcw==">downloading files <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZW5jb2Rpbmdz">encodings <span class="quarto-category-count">(11)</span></div><div class="category" data-category="ZXh0ZXJuYWwlMjBjb250cmlidXRpb25z">external contributions <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RXh0ZXJuYWwlMjBDb250cmlidXRpb25z">External Contributions <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Rm9ydHJhbg==">Fortran <span class="quarto-category-count">(2)</span></div><div class="category" data-category="ZnJvbnQtZW5kcw==">front-ends <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2V0bGluZQ==">getline <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z292ZXJuYW5jZQ==">governance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z3JhcGhpY3M=">graphics <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Z3JpZCUyQyUyMHVuaXRz">grid, units <span class="quarto-category-count">(2)</span></div><div class="category" data-category="aGNsJTIwY29sb3Jz">hcl colors <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aGlzdG9yeQ==">history <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aWNvbnY=">iconv <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW5oZXJpdGFuY2U=">inheritance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aW5zdGFsbGF0aW9u">installation <span class="quarto-category-count">(3)</span></div><div class="category" data-category="aW50ZXJuYWxz">internals <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SW50ZXJuYWxz">Internals <span class="quarto-category-count">(29)</span></div><div class="category" data-category="TEFQQUNL">LAPACK <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bGluZSUyMGVkaXRpbmc=">line editing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TGludXg=">Linux <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bGludXg=">linux <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bG9uZyUyMHBhdGhz">long paths <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWFjT1M=">macOS <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bWF0aA==">math <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWF0aA==">Math <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TUFYX1BBVEg=">MAX_PATH <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWVudG9yaW5n">mentoring <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TkE=">NA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bnVtZXJpY2FsJTIwYWNjdXJhY3k=">numerical accuracy <span class="quarto-category-count">(2)</span></div><div class="category" data-category="T08=">OO <span class="quarto-category-count">(2)</span></div><div class="category" data-category="b3BlbiUyMGZpbGVzJTIwbGltaXQ=">open files limit <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFja2FnZSUyMEJ1aWxkaW5n">Package Building <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFja2FnZSUyMGNoZWNraW5n">package checking <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UGFja2FnZSUyMERldmVsb3BtZW50">Package Development <span class="quarto-category-count">(8)</span></div><div class="category" data-category="UGFja2FnZSUyMGRldmVsb3BtZW50">Package development <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFja2FnZSUyMGluc3RhbGxhdGlvbg==">package installation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFja2FnZSUyMGluc3RhbGxhdGlvbg==">Package installation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYWxsZWw=">parallel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYWxsZWwlMjBpbnN0YWxs">parallel install <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyc2UlMjBkYXRh">parse data <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyc2luZw==">parsing <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UEFUSF9NQVg=">PATH_MAX <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGVyZm9ybWFuY2U=">Performance <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cGlwZQ==">pipe <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UG93ZXI=">Power <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJpemVz">prizes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UFJPVEVDVCUyMGJ1Z3M=">PROTECT bugs <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UFNPQ0slMjBjbHVzdGVy">PSOCK cluster <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UUVNVQ==">QEMU <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UiUyMENNRCUyMElOU1RBTEw=">R CMD INSTALL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UiUyMENvcmU=">R Core <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UiUyMGNvcmU=">R core <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UiUyMEZvdW5kYXRpb24=">R Foundation <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UiUyMEluc3RhbGxhdGlvbg==">R Installation <span class="quarto-category-count">(2)</span></div><div class="category" data-category="cmVndWxhciUyMGV4cHJlc3Npb25z">regular expressions <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Umd1aQ==">Rgui <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UzM=">S3 <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UzMlMjBtZXRob2QlMjBsb29rdXA=">S3 method lookup <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UzQ=">S4 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Uzc=">S7 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2FmZSUyMFByb2dyYW1taW5n">Safe Programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2FuaXRpemVycw==">sanitizers <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2VhcmNoJTIwcGF0aCUyMGNvbmZsaWN0cw==">search path conflicts <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2VjdXJpdHk=">Security <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2hhcmVkJTIwb2JqZWN0cw==">shared objects <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2lnbmFscw==">signals <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c29ja2V0cw==">sockets <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c291cmNlJTIwcmVmZXJlbmNlcw==">source references <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1RG">STF <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c3RyaW5nc0FzRmFjdG9ycw==">stringsAsFactors <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U3dlYXZl">Sweave <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3lzdGVt">system <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVzdCUyMHRvbGVyYW5jZQ==">test tolerance <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dGVzdGluZw==">testing <span class="quarto-category-count">(9)</span></div><div class="category" data-category="VGVzdGluZw==">Testing <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dHJhbnNsYXRpb24=">translation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VUNSVA==">UCRT <span class="quarto-category-count">(8)</span></div><div class="category" data-category="VW5peA==">Unix <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dXNlci12aXNpYmxlJTIwYmVoYXZpb3I=">user-visible behavior <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VXNlci12aXNpYmxlJTIwQmVoYXZpb3I=">User-visible Behavior <span class="quarto-category-count">(29)</span></div><div class="category" data-category="VVRGLTg=">UTF-8 <span class="quarto-category-count">(7)</span></div><div class="category" data-category="dmVyc2lvbmluZw==">versioning <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dmlydHVhbCUyMG1hY2hpbmU=">virtual machine <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V2luZG93cw==">Windows <span class="quarto-category-count">(18)</span></div><div class="category" data-category="d2luZG93cw==">windows <span class="quarto-category-count">(1)</span></div></div></div>
+<!-- main -->
+<main class="content column-page-left" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="TGludXglMkNtYWNPUyUyQ1dpbmRvd3MlMkNQYWNrYWdlJTIwQnVpbGRpbmclMkNiaW5hcmllcyUyQ3ZlcnNpb25pbmclMkNTVEY=" data-listing-date-sort="1790640000000" data-listing-file-modified-sort="1792137334866" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1876">
+<div class="thumbnail"><a href="./posts/stf-project-milestone-2/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/stf-project-milestone-2/index.html" class="no-external">Sovereign Tech Fund Project: Milestone 2</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('TGludXg='); return false;">Linux</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjT1M='); return false;">macOS</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMEJ1aWxkaW5n'); return false;">Package Building</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YmluYXJpZXM='); return false;">binaries</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dmVyc2lvbmluZw=='); return false;">versioning</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U1RG'); return false;">STF</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/stf-project-milestone-2/index.html" class="no-external">
+Starting in mid 2025, the R Project has been working on a series of work packages to improve the long-term stability of the R ecosystem. The project is supported by an…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/stf-project-milestone-2/index.html" class="no-external">
+<div class="listing-date">
+Sep 29, 2026
+</div>
+<div class="listing-author">
+Šimon Urbánek and Tomáš Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="UiUyMENvcmUlMkNSJTIwRm91bmRhdGlvbiUyQ21lbnRvcmluZyUyQ2RldmVsb3BtZW50JTIwaW5mcmFzdHJ1Y3R1cmU=" data-listing-date-sort="1790035200000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="661">
+<div class="thumbnail"><a href="./posts/zulip-chat-for-the-r-project/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/zulip-chat-for-the-r-project/index.html" class="no-external">Zulip Chat for the R Project</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMENvcmU='); return false;">R Core</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMEZvdW5kYXRpb24='); return false;">R Foundation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWVudG9yaW5n'); return false;">mentoring</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGV2ZWxvcG1lbnQlMjBpbmZyYXN0cnVjdHVyZQ=='); return false;">development infrastructure</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/zulip-chat-for-the-r-project/index.html" class="no-external">
+The R Project now has a Zulip instance for informal chat about developing, maintaining and supporting R. The Zulip (pronounced “zoo-lip”) will replace the R Contributors…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/zulip-chat-for-the-r-project/index.html" class="no-external">
+<div class="listing-date">
+Sep 22, 2026
+</div>
+<div class="listing-author">
+Ella Kaye and Heather Turner
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="UiUyMGNvcmUlMkNTd2VhdmU=" data-listing-date-sort="1789689600000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1993">
+<div class="thumbnail"><a href="./posts/new-tricks-sweave-drivers/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/new-tricks-sweave-drivers/index.html" class="no-external">New Tricks for the R Sweave Drivers</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMGNvcmU='); return false;">R core</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U3dlYXZl'); return false;">Sweave</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/new-tricks-sweave-drivers/index.html" class="no-external">
+The concept of literate programming was pioneered by Donald Knuth in 1984 to improve the documentation of computer programs, as this famous quote explains:
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/new-tricks-sweave-drivers/index.html" class="no-external">
+<div class="listing-date">
+Sep 18, 2026
+</div>
+<div class="listing-author">
+Vincent Goulet and Kurt Hornik
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="UiUyMENvcmUlMkNwcml6ZXM=" data-listing-date-sort="1781654400000" data-listing-file-modified-sort="1792137334845" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="401">
+<div class="thumbnail"><a href="./posts/rousseeuw-prize/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/rousseeuw-prize/index.html" class="no-external">Rousseeuw Prize 2026 Awarded to the R Project</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMENvcmU='); return false;">R Core</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHJpemVz'); return false;">prizes</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/rousseeuw-prize/index.html" class="no-external">
+The Rousseeuw Prize for Statistics is a biennial prize that awards pioneering work in statistical methodology. The prize recognizes a statistical innovation, that is, an…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/rousseeuw-prize/index.html" class="no-external">
+<div class="listing-date">
+Jun 17, 2026
+</div>
+<div class="listing-author">
+Martyn Plummer
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="ZXh0ZXJuYWwlMjBjb250cmlidXRpb25zJTJDdXNlci12aXNpYmxlJTIwYmVoYXZpb3IlMkNpbnRlcm5hbHMlMkNkZWJ1Z2dpbmclMkNidWdzJTJDYnVnemlsbGElMkNTVEY=" data-listing-date-sort="1780358400000" data-listing-file-modified-sort="1792137334866" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="423">
+<div class="thumbnail"><a href="./posts/stf-project-milestone-1/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/stf-project-milestone-1/index.html" class="no-external">Sovereign Tech Fund Project: Milestone 1</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZXh0ZXJuYWwlMjBjb250cmlidXRpb25z'); return false;">external contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dXNlci12aXNpYmxlJTIwYmVoYXZpb3I='); return false;">user-visible behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW50ZXJuYWxz'); return false;">internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVidWdnaW5n'); return false;">debugging</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVnemlsbGE='); return false;">bugzilla</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U1RG'); return false;">STF</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/stf-project-milestone-1/index.html" class="no-external">
+Starting in mid 2025, the R Project has been working on a series of work packages to improve the long-term stability of the R ecosystem. The project is supported by an…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/stf-project-milestone-1/index.html" class="no-external">
+<div class="listing-date">
+Jun 2, 2026
+</div>
+<div class="listing-author">
+Simon Urbanek and Tomáš Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="aGlzdG9yeSUyQ2Fubml2ZXJzYXJ5" data-listing-date-sort="1777939200000" data-listing-file-modified-sort="1792137334846" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="114">
+<div class="thumbnail"><a href="./posts/s-at-50/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="posts/s-at-50/s_at_50_poster.jpg"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/s-at-50/index.html" class="no-external">S at 50</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('aGlzdG9yeQ=='); return false;">history</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YW5uaXZlcnNhcnk='); return false;">anniversary</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/s-at-50/index.html" class="no-external">
+<p>Commemorating 50 years of history of S and R.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/s-at-50/index.html" class="no-external">
+<div class="listing-date">
+May 5, 2026
+</div>
+<div class="listing-author">
+Martyn Plummer
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="bGludXglMkNtYXRoJTJDdGVzdGluZw==" data-listing-date-sort="1769731200000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1086">
+<div class="thumbnail"><a href="./posts/mfuzz/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/mfuzz/index.html" class="no-external">Debugging Sensitivity to C Math Library on Linux</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('bGludXg='); return false;">linux</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWF0aA=='); return false;">math</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/mfuzz/index.html" class="no-external">
+C math library functions, such as <code>exp</code> or <code>sin</code>, are not guaranteed to be “precise”. The results might be slightly different on different platforms. A recent change in…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/mfuzz/index.html" class="no-external">
+<div class="listing-date">
+Jan 30, 2026
+</div>
+<div class="listing-author">
+Tomáš Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="d2luZG93cyUyQ21hdGglMkN0ZXN0aW5n" data-listing-date-sort="1767657600000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="491">
+<div class="thumbnail"><a href="./posts/math-sensitivity-mdebug/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/math-sensitivity-mdebug/index.html" class="no-external">Debugging Sensitivity to C Math Library and mingw-w64 v12</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('d2luZG93cw=='); return false;">windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWF0aA=='); return false;">math</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/math-sensitivity-mdebug/index.html" class="no-external">
+<p>The tool mdebug implements configurable wrappers for the C Math library functions.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/math-sensitivity-mdebug/index.html" class="no-external">
+<div class="listing-date">
+Jan 6, 2026
+</div>
+<div class="listing-author">
+Tomáš Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDUiUyMENvcmUlMkNSJTIwRm91bmRhdGlvbiUyQ21lbnRvcmluZyUyQ2RldmVsb3BtZW50JTIwaW5mcmFzdHJ1Y3R1cmUlMkNnb3Zlcm5hbmNl" data-listing-date-sort="1765929600000" data-listing-file-modified-sort="1792137334845" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="593">
+<div class="thumbnail"><a href="./posts/rsmf-enabling-contributors/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/rsmf-enabling-contributors/index.html" class="no-external">RSMF: Enabling the Next Generation of Contributors to R</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMENvcmU='); return false;">R Core</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMEZvdW5kYXRpb24='); return false;">R Foundation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWVudG9yaW5n'); return false;">mentoring</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGV2ZWxvcG1lbnQlMjBpbmZyYXN0cnVjdHVyZQ=='); return false;">development infrastructure</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z292ZXJuYW5jZQ=='); return false;">governance</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/rsmf-enabling-contributors/index.html" class="no-external">
+The Software Sustainability Institute (UK) has awarded a grant of £500k (~650k USD) under the Research Software Maintenance Fund, to the project <em>Enabling the Next Generation…</em>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/rsmf-enabling-contributors/index.html" class="no-external">
+<div class="listing-date">
+Dec 17, 2025
+</div>
+<div class="listing-author">
+Heather Turner
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNJbnRlcm5hbHMlMkNkZWJ1Z2dpbmclMkNidWdzJTJDYnVnemlsbGE=" data-listing-date-sort="1760313600000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="708">
+<div class="thumbnail"><a href="./posts/reducing-bug-backlog/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="posts/reducing-bug-backlog/open.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/reducing-bug-backlog/index.html" class="no-external">Reducing the Backlog of Open Bug Reports</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVidWdnaW5n'); return false;">debugging</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVnemlsbGE='); return false;">bugzilla</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/reducing-bug-backlog/index.html" class="no-external">
+The number of open bug reports in the R bug tracker has been reduced by about 25% during August and September this year. This work has been possible thanks to an investment…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/reducing-bug-backlog/index.html" class="no-external">
+<div class="listing-date">
+Oct 13, 2025
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-categories="V2luZG93cyUyQ01hdGglMkNQYWNrYWdlJTIwRGV2ZWxvcG1lbnQlMkNudW1lcmljYWwlMjBhY2N1cmFjeSUyQ3Rlc3RpbmclMkN0ZXN0JTIwdG9sZXJhbmNl" data-listing-date-sort="1747785600000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="921">
+<div class="thumbnail"><a href="./posts/math-sensitivity-2/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/math-sensitivity-2/index.html" class="no-external">Sensitivity to C Math Library and mingw-w64 v12 - Part 2</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bnVtZXJpY2FsJTIwYWNjdXJhY3k='); return false;">numerical accuracy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdCUyMHRvbGVyYW5jZQ=='); return false;">test tolerance</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/math-sensitivity-2/index.html" class="no-external">
+C math library functions, such as <code>exp</code> or <code>sin</code>, are not guaranteed to be “precise”. The results might be slightly different on different platforms. A recent change in…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/math-sensitivity-2/index.html" class="no-external">
+<div class="listing-date">
+May 21, 2025
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="11" data-categories="V2luZG93cyUyQ01hdGglMkNQYWNrYWdlJTIwRGV2ZWxvcG1lbnQlMkNudW1lcmljYWwlMjBhY2N1cmFjeSUyQ3Rlc3RpbmclMkN0ZXN0JTIwdG9sZXJhbmNl" data-listing-date-sort="1745452800000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2491">
+<div class="thumbnail"><a href="./posts/math-sensitivity/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/math-sensitivity/index.html" class="no-external">Sensitivity to C Math Library and mingw-w64 v12</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TWF0aA=='); return false;">Math</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bnVtZXJpY2FsJTIwYWNjdXJhY3k='); return false;">numerical accuracy</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdCUyMHRvbGVyYW5jZQ=='); return false;">test tolerance</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/math-sensitivity/index.html" class="no-external">
+C math library functions, such as <code>exp</code> or <code>sin</code>, are heavily used by R and packages. The C standard doesn’t require these functions to be “precise”. Instead, there is room for…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/math-sensitivity/index.html" class="no-external">
+<div class="listing-date">
+Apr 24, 2025
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="12" data-categories="V2luZG93cyUyQ0ludGVybmFscyUyQ1BhY2thZ2UlMjBEZXZlbG9wbWVudCUyQ3Nhbml0aXplcnMlMkN0ZXN0aW5n" data-listing-date-sort="1738022400000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1599">
+<div class="thumbnail"><a href="./posts/windows-toolchains/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-toolchains/index.html" class="no-external">Alternative Toolchains on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2FuaXRpemVycw=='); return false;">sanitizers</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-toolchains/index.html" class="no-external">
+R and R packages on Windows, if they include native code, are built using compiler toolchain and libraries from Rtools. There is always a specific version of Rtools for a…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-toolchains/index.html" class="no-external">
+<div class="listing-date">
+Jan 28, 2025
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="13" data-categories="SW50ZXJuYWxzJTJDbWFjT1MlMkNVc2VyLXZpc2libGUlMjBCZWhhdmlvciUyQ2VuY29kaW5ncyUyQ2ljb252" data-listing-date-sort="1733875200000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2517">
+<div class="thumbnail"><a href="./posts/iconv/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/iconv/index.html" class="no-external">Problems with iconv on macOS</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjT1M='); return false;">macOS</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aWNvbnY='); return false;">iconv</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/iconv/index.html" class="no-external">
+For conversion of strings from a given character encoding to another, R uses <code>iconv</code>, a function defined by POSIX. It is available on Linux and macOS with the operating system…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/iconv/index.html" class="no-external">
+<div class="listing-date">
+Dec 11, 2024
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="14" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNJbnRlcm5hbHMlMkNkb3dubG9hZGluZyUyMGZpbGVzJTJDcGFja2FnZSUyMGluc3RhbGxhdGlvbg==" data-listing-date-sort="1733097600000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1904">
+<div class="thumbnail"><a href="./posts/faster-downloads/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/faster-downloads/index.html" class="no-external">Faster Downloads</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZG93bmxvYWRpbmclMjBmaWxlcw=='); return false;">downloading files</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFja2FnZSUyMGluc3RhbGxhdGlvbg=='); return false;">package installation</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/faster-downloads/index.html" class="no-external">
+Most R users would sometimes install or update R packages and hence are impacted by how long this takes. The parts of package installation that take potentially longest have…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/faster-downloads/index.html" class="no-external">
+<div class="listing-date">
+Dec 2, 2024
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="15" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVW5peCUyQ2Zyb250LWVuZHMlMkNsaW5lJTIwZWRpdGluZyUyQ3BhcnNpbmc=" data-listing-date-sort="1724976000000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1791">
+<div class="thumbnail"><a href="./posts/long-input-lines/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/long-input-lines/index.html" class="no-external">Long Input Lines</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VW5peA=='); return false;">Unix</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZnJvbnQtZW5kcw=='); return false;">front-ends</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bGluZSUyMGVkaXRpbmc='); return false;">line editing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyc2luZw=='); return false;">parsing</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/long-input-lines/index.html" class="no-external">
+When using R interactively via a console, one edits a line of input, confirms it by pressing ENTER, then R parses the line, evaluates it, prints the output and lets the user…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/long-input-lines/index.html" class="no-external">
+<div class="listing-date">
+Aug 30, 2024
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="16" data-categories="SW50ZXJuYWxzJTJDUGFja2FnZSUyMERldmVsb3BtZW50JTJDT08lMkNTNyUyQ1M0JTJDUzM=" data-listing-date-sort="1715904000000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1401">
+<div class="thumbnail"><a href="./posts/general-support-oop/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/general-support-oop/index.html" class="no-external">Generalizing Support for Functional OOP in R</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('T08='); return false;">OO</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Uzc='); return false;">S7</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UzQ='); return false;">S4</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UzM='); return false;">S3</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/general-support-oop/index.html" class="no-external">
+R has built-in support for two functional Object Oriented Programming (OOP) systems: S3 and S4, corresponding to the third and fourth version of the S language…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/general-support-oop/index.html" class="no-external">
+<div class="listing-date">
+May 17, 2024
+</div>
+<div class="listing-author">
+Tomasz Kalinowski, Michael Lawrence, Martin Maechler, Davis Vaughan, Hadley Wickham, Luke Tierney
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="17" data-categories="U2VjdXJpdHklMkNJbnRlcm5hbHMlMkNidWdzJTJDQ1ZF" data-listing-date-sort="1715299200000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="243">
+<div class="thumbnail"><a href="./posts/cve-2024-27322/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/cve-2024-27322/index.html" class="no-external">Statement on CVE-2024-27322</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('U2VjdXJpdHk='); return false;">Security</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1ZF'); return false;">CVE</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/cve-2024-27322/index.html" class="no-external">
+<em>This is a brief statement on behalf or the R Core Team on the serialization bug recently reported by the cybersecurity form HiddenLayer. The bug has been reported as a…</em>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/cve-2024-27322/index.html" class="no-external">
+<div class="listing-date">
+May 10, 2024
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="18" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDdGVzdGluZyUyQ2luc3RhbGxhdGlvbiUyQ0FhcmNoNjQlMkNBUk0=" data-listing-date-sort="1713830400000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2199">
+<div class="thumbnail"><a href="./posts/windows-aarch64-2/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-aarch64-2/index.html" class="no-external">R on 64-bit ARM Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW5zdGFsbGF0aW9u'); return false;">installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QWFyY2g2NA=='); return false;">Aarch64</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QVJN'); return false;">ARM</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-aarch64-2/index.html" class="no-external">
+R 4.4.0, to be released tomorrow, comes with experimental native support for 64-bit ARM Windows machines (aarch64, arm64). Rtools44 with native support for the platform has…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-aarch64-2/index.html" class="no-external">
+<div class="listing-date">
+Apr 23, 2024
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="19" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDdGVzdGluZyUyQ2luc3RhbGxhdGlvbiUyQ0FhcmNoNjQlMkNBUk0=" data-listing-date-sort="1692748800000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2216">
+<div class="thumbnail"><a href="./posts/windows-aarch64/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-aarch64/index.html" class="no-external">Will R Work on 64-bit ARM Windows?</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW5zdGFsbGF0aW9u'); return false;">installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QWFyY2g2NA=='); return false;">Aarch64</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QVJN'); return false;">ARM</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-aarch64/index.html" class="no-external">
+At WWDC 2023 earlier this year, Apple announced it completed transition from Intel to 64-bit ARM processors (Apple Silicon): no new machines with Intel processors will be…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-aarch64/index.html" class="no-external">
+<div class="listing-date">
+Aug 23, 2023
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="20" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVW5peCUyQ3N5c3RlbSUyQ3BpcGUlMkNzaWduYWxz" data-listing-date-sort="1684800000000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1540">
+<div class="thumbnail"><a href="./posts/background-processes-ctrlc/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/background-processes-ctrlc/index.html" class="no-external">(Not) Interrupting Background Tasks with Ctrl+C</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VW5peA=='); return false;">Unix</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3lzdGVt'); return false;">system</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGlwZQ=='); return false;">pipe</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2lnbmFscw=='); return false;">signals</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/background-processes-ctrlc/index.html" class="no-external">
+When using R interactively from the command line, one can interrupt the current computionation using <code>Ctrl+C</code> key combination and enter a new command. This works both on Unix…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/background-processes-ctrlc/index.html" class="no-external">
+<div class="listing-date">
+May 23, 2023
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="21" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDTUFYX1BBVEglMkNQQVRIX01BWCUyQ2xvbmclMjBwYXRocw==" data-listing-date-sort="1678147200000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="25" data-listing-word-count-sort="4821">
+<div class="thumbnail"><a href="./posts/windows-path-length/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-path-length/index.html" class="no-external">Path Length Limit on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TUFYX1BBVEg='); return false;">MAX_PATH</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UEFUSF9NQVg='); return false;">PATH_MAX</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bG9uZyUyMHBhdGhz'); return false;">long paths</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-path-length/index.html" class="no-external">
+When testing development versions of Rtools for Windows, I’ve ran into strange failures of several CRAN packages where R could not find, read from or write to some files.…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-path-length/index.html" class="no-external">
+<div class="listing-date">
+Mar 7, 2023
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="22" data-categories="SW50ZXJuYWxzJTJDV2luZG93cyUyQ1VURi04JTJDVUNSVCUyQ2VuY29kaW5ncw==" data-listing-date-sort="1667779200000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3656">
+<div class="thumbnail"><a href="./posts/windows-utf8-4/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-utf8-4/index.html" class="no-external">Issues While Switching R to UTF-8 and UCRT on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-utf8-4/index.html" class="no-external">
+From version 4.2.0 released in April 2022, R on Windows uses UTF-8 as the native encoding via UCRT as the new C Windows runtime. The transition for R and its packages has…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-utf8-4/index.html" class="no-external">
+<div class="listing-date">
+Nov 7, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="23" data-categories="V2luZG93cyUyQ0ludGVybmFscyUyQ2RlYnVnZ2luZyUyQ2NvbXBsZXRpb24=" data-listing-date-sort="1667260800000" data-listing-file-modified-sort="1792137334846" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2160">
+<div class="thumbnail"><a href="./posts/rterm-completion/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/rterm-completion/index.html" class="no-external">Sporadic Rterm Crashes with Completion</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVidWdnaW5n'); return false;">debugging</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29tcGxldGlvbg=='); return false;">completion</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/rterm-completion/index.html" class="no-external">
+This post is a story of a bug in Rterm, the console R front-end on Windows, which has been bugging me for several years, but only two weeks ago it showed up unwarily so that…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/rterm-completion/index.html" class="no-external">
+<div class="listing-date">
+Nov 1, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="24" data-listing-date-sort="1666224000000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1460">
+<div class="thumbnail"><a href="./posts/concordances/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/concordances/index.html" class="no-external">Concordances</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/concordances/index.html" class="no-external">
+One of the strengths of R is its ability to help in producing documents. <code>Sweave</code> and <code>knitr</code> can work with <code>.Rnw</code> files, evaluating and automatically inserting the results of R…<code></code><code></code><code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/concordances/index.html" class="no-external">
+<div class="listing-date">
+Oct 20, 2022
+</div>
+<div class="listing-author">
+Duncan Murdoch
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="25" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNlbmNvZGluZ3MlMkNieXRlcw==" data-listing-date-sort="1665360000000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2925">
+<div class="thumbnail"><a href="./posts/bytes-improvements/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/bytes-improvements/index.html" class="no-external">Improvements in Handling Bytes Encoding</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Ynl0ZXM='); return false;">bytes</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/bytes-improvements/index.html" class="no-external">
+In R, a string can be declared to be in <em>bytes</em> encoding. According to <code>?Encoding</code>, it must be a non-ASCII string which should be manipulated as bytes and never converted to a…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/bytes-improvements/index.html" class="no-external">
+<div class="listing-date">
+Oct 10, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="26" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDdHJhbnNsYXRpb24=" data-listing-date-sort="1658707200000" data-listing-file-modified-sort="1792137334839" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1569">
+<div class="thumbnail"><a href="./posts/help-with-translations/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/help-with-translations/message_status_plot-1.svg" alt="Stacked bar chart of translation status in base and default packages (12 July 2022). Languages are ordered by number of correctly translated messages plus the number of fuzzy translations, out of a possible 5862. French: 5760 + 48; Italian: 5764 + 40; Russian: 5693 + 74; Lithuanian: 5677 + 86; German: 5371 + 226; Polish: 5370 + 226; Traditional Chinese: 5368 + 220; Japanese: 5005 + 361; Simplified Chinese: 4789 + 528; Korean: 4487 + 199; Brazilian Portuguese: 2835 + 1209; Norwegian Nynorsk: 1866 + 539; Turkish: 1846 + 532; Danish: 1778 + 471; Spanish: 1381 + 540; Persian: 266 + 9; British English: 11 + 18, English: 1 + 0."  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/help-with-translations/index.html" class="no-external">R Can Use Your Help: Translating R Messages</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dHJhbnNsYXRpb24='); return false;">translation</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/help-with-translations/index.html" class="no-external">
+If you use R you may have wondered if there are ways you can contribute to making R better. An important feature of R that encourages its use around the world is the support…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/help-with-translations/index.html" class="no-external">
+<div class="listing-date">
+Jul 25, 2022
+</div>
+<div class="listing-author">
+Heather Turner and Saranjeet Kaur
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="27" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNQZXJmb3JtYW5jZSUyQ2VuY29kaW5ncyUyQ3JlZ3VsYXIlMjBleHByZXNzaW9ucw==" data-listing-date-sort="1657584000000" data-listing-file-modified-sort="1792137334843" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1414">
+<div class="thumbnail"><a href="./posts/regex-speedups/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/regex-speedups/index.html" class="no-external">Speedups in Operations with Regular Expressions</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGVyZm9ybWFuY2U='); return false;">Performance</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cmVndWxhciUyMGV4cHJlc3Npb25z'); return false;">regular expressions</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/regex-speedups/index.html" class="no-external">
+Regular expression operations in R, such as <code>grep</code> or <code>gsub</code>, sometimes have significant performance overheads due to encoding conversions.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/regex-speedups/index.html" class="no-external">
+<div class="listing-date">
+Jul 12, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="28" data-categories="YmxvZyUyMGxvY2F0aW9u" data-listing-date-sort="1656547200000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="434">
+<div class="thumbnail"><a href="./posts/new-blog-location/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/new-blog-location/index.html" class="no-external">Moving to blog.r-project.org</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YmxvZyUyMGxvY2F0aW9u'); return false;">blog location</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/new-blog-location/index.html" class="no-external">
+The R blog moves to https://blog.r-project.org, a more prominent location, after 37 blog posts (some of them perhaps surprisingly detailed) and a bit over 4 years.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/new-blog-location/index.html" class="no-external">
+<div class="listing-date">
+Jun 30, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="29" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNQYWNrYWdlJTIwRGV2ZWxvcG1lbnQlMkNlbmNvZGluZ3MlMkNyZWd1bGFyJTIwZXhwcmVzc2lvbnM=" data-listing-date-sort="1656288000000" data-listing-file-modified-sort="1792137334843" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="913">
+<div class="thumbnail"><a href="./posts/regex-byte-literals/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/regex-byte-literals/index.html" class="no-external">Why to Avoid in Regular Expressions</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cmVndWxhciUyMGV4cHJlc3Npb25z'); return false;">regular expressions</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/regex-byte-literals/index.html" class="no-external">
+Using <code>\x</code> in string literals is almost always a bad idea, but using it in regular expressions is particularly dangerous.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/regex-byte-literals/index.html" class="no-external">
+<div class="listing-date">
+Jun 27, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="30" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDUmd1aSUyQ1VURi04JTJDVUNSVCUyQ2VuY29kaW5ncw==" data-listing-date-sort="1655337600000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1641">
+<div class="thumbnail"><a href="./posts/windows-changes-421/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-changes-421/index.html" class="no-external">Upcoming Changes in R 4.2.1 on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Umd1aQ=='); return false;">Rgui</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-changes-421/index.html" class="no-external">
+R 4.2.1 is scheduled to be released next week with a number of Windows-specific fixes. All Windows R users currently using R 4.2.0 should upgrade to R 4.2.1. This text has…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-changes-421/index.html" class="no-external">
+<div class="listing-date">
+Jun 16, 2022
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="31" data-categories="SW50ZXJuYWxzJTJDZ3JhcGhpY3M=" data-listing-date-sort="1654732800000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="701">
+<div class="thumbnail"><a href="./posts/definitions-vec/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/definitions-vec/fill-grad-pat.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/definitions-vec/index.html" class="no-external">Vectorised Patterns in R Graphics</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JhcGhpY3M='); return false;">graphics</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/definitions-vec/index.html" class="no-external">
+Support for pattern fills was added to the R graphics engine in R version 4.1.0, with an R interface via the ‘grid’ package.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/definitions-vec/index.html" class="no-external">
+<div class="listing-date">
+Jun 9, 2022
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="32" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNkb2N1bWVudGF0aW9uJTJDcGFja2FnZSUyMGNoZWNraW5n" data-listing-date-sort="1649376000000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="996">
+<div class="thumbnail"><a href="./posts/html-enhancements/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/html-enhancements/index.html" class="no-external">Enhancements to HTML Documentation</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZG9jdW1lbnRhdGlvbg=='); return false;">documentation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFja2FnZSUyMGNoZWNraW5n'); return false;">package checking</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/html-enhancements/index.html" class="no-external">
+The upcoming release of R (version 4.2.0) features several enhancements to the HTML help system.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/html-enhancements/index.html" class="no-external">
+<div class="listing-date">
+Apr 8, 2022
+</div>
+<div class="listing-author">
+Deepayan Sarkar and Kurt Hornik
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="33" data-categories="SW50ZXJuYWxzJTJDZ3JhcGhpY3M=" data-listing-date-sort="1639440000000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="633">
+<div class="thumbnail"><a href="./posts/device-update/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/device-update/index.html" class="no-external">Updating Graphics Devices for R 4.2.0</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JhcGhpY3M='); return false;">graphics</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/device-update/index.html" class="no-external">
+A number of new graphics features have been added to the R graphics engine in the development version of R (to become version 4.2.0):<br>
+groups, compositing operators, affine…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/device-update/index.html" class="no-external">
+<div class="listing-date">
+Dec 14, 2021
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="34" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVVRGLTglMkNVQ1JUJTJDZW5jb2RpbmdzJTJDQ1JBTg==" data-listing-date-sort="1638835200000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1792">
+<div class="thumbnail"><a href="./posts/windows-changes-42/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-changes-42/index.html" class="no-external">Upcoming Changes in R 4.2 on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1JBTg=='); return false;">CRAN</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-changes-42/index.html" class="no-external">
+R 4.2 for Windows will support UTF-8 as native encoding, which will be a major improvement in encoding support, allowing Windows R users to work with international text and…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-changes-42/index.html" class="no-external">
+<div class="listing-date">
+Dec 7, 2021
+</div>
+<div class="listing-author">
+Tomas Kalibera, Uwe Ligges, Kurt Hornik, Simon Urbanek, Deepayan Sarkar, Luke Tierney, Martin Maechler
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="35" data-categories="SW50ZXJuYWxzJTJDZ3JhcGhpY3M=" data-listing-date-sort="1638748800000" data-listing-file-modified-sort="1792137334834" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1194">
+<div class="thumbnail"><a href="./posts/definitions-update/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/definitions-update/group1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/definitions-update/index.html" class="no-external">Groups and Paths and Masks in R Graphics</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JhcGhpY3M='); return false;">graphics</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/definitions-update/index.html" class="no-external">
+<strong>UPDATE:</strong> (2023-05-18) The behaviour of compositing operators was modified in R version 4.3.0 (affecting the “clear” and “source” operators). The examples in this post have…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/definitions-update/index.html" class="no-external">
+<div class="listing-date">
+Dec 6, 2021
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="36" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDdGVzdGluZyUyQ2J1Z3MlMkNidWd6aWxsYQ==" data-listing-date-sort="1619568000000" data-listing-file-modified-sort="1792137334839" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1005">
+<div class="thumbnail"><a href="./posts/help-with-testing/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/help-with-testing/index.html" class="no-external">R Can Use Your Help: Testing R Before Release</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVnemlsbGE='); return false;">bugzilla</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/help-with-testing/index.html" class="no-external">
+If you use R you may have wondered if there are ways you can contribute to making R better. This is another post on how you might help (Reviewing Bug Reports was the first).
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/help-with-testing/index.html" class="no-external">
+<div class="listing-date">
+Apr 28, 2021
+</div>
+<div class="listing-author">
+Tomas Kalibera, Luke Tierney, Kurt Hornik
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="37" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDSW50ZXJuYWxzJTJDZW5jb2RpbmdzJTJDVUNSVCUyQ1VURi04JTJDZ2V0bGluZQ==" data-listing-date-sort="1618617600000" data-listing-file-modified-sort="1792137334846" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1430">
+<div class="thumbnail"><a href="./posts/rterm-utf8/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/rterm-utf8/index.html" class="no-external">Improved Multi-Byte Support in RTerm</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z2V0bGluZQ=='); return false;">getline</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/rterm-utf8/index.html" class="no-external">
+Support for multi-byte characters and hence non-European languages in RTerm, the console-based front-end to R on Windows, has been improved. It is now possible to edit text…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/rterm-utf8/index.html" class="no-external">
+<div class="listing-date">
+Apr 17, 2021
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="38" data-categories="VGVzdGluZyUyQ1dpbmRvd3MlMkNQYWNrYWdlJTIwRGV2ZWxvcG1lbnQlMkNVQ1JUJTJDdmlydHVhbCUyMG1hY2hpbmU=" data-listing-date-sort="1616025600000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="560">
+<div class="thumbnail"><a href="./posts/windows-testing-vm/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-testing-vm/index.html" class="no-external">Virtual Windows Machine for Checking R Packages</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGVzdGluZw=='); return false;">Testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dmlydHVhbCUyMG1hY2hpbmU='); return false;">virtual machine</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-testing-vm/index.html" class="no-external">
+Microsoft provides a free Windows 10 virtual machine for testing. Package maintainers working on Linux and MacOS can use it to test their packages on Windows. See instructions…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-testing-vm/index.html" class="no-external">
+<div class="listing-date">
+Mar 18, 2021
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="39" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVVRGLTglMkNVQ1JUJTJDZW5jb2RpbmdzJTJDQ1JBTg==" data-listing-date-sort="1615507200000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2008">
+<div class="thumbnail"><a href="./posts/windows-utf8-3/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-utf8-3/index.html" class="no-external">Windows/UTF-8 Toolchain and CRAN Package Checks</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1JBTg=='); return false;">CRAN</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-utf8-3/index.html" class="no-external">
+A new, experimental, build of R for Windows is available, its main aim being to support the UTF-8 encoding and especially non-European languages. Check results for CRAN…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-utf8-3/index.html" class="no-external">
+<div class="listing-date">
+Mar 12, 2021
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="40" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNtYWNPUyUyQ3Rlc3RpbmclMkNpbnN0YWxsYXRpb24lMkNOQSUyQ0FhcmNoNjQlMkNBUk0=" data-listing-date-sort="1604275200000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1380">
+<div class="thumbnail"><a href="./posts/apple-silicon/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/apple-silicon/index.html" class="no-external">Will R Work on Apple Silicon?</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjT1M='); return false;">macOS</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVzdGluZw=='); return false;">testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW5zdGFsbGF0aW9u'); return false;">installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TkE='); return false;">NA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QWFyY2g2NA=='); return false;">Aarch64</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QVJN'); return false;">ARM</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/apple-silicon/index.html" class="no-external">
+At WWDC 2020 earlier this year, Apple announced a transition from Intel to ARM-based processors in their laptops. This blog is about the prospects of when R will work on…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/apple-silicon/index.html" class="no-external">
+<div class="listing-date">
+Nov 2, 2020
+</div>
+<div class="listing-author">
+Tomas Kalibera, Simon Urbanek
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="41" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVVRGLTglMkNVQ1JUJTJDZW5jb2Rpbmdz" data-listing-date-sort="1596067200000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1348">
+<div class="thumbnail"><a href="./posts/windows-utf8-2/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-utf8-2/index.html" class="no-external">Windows/UTF-8 Build of R and CRAN Packages</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-utf8-2/index.html" class="no-external">
+R-devel-win.exe is an experimental installer of R, set up to download experimental binary builds of CRAN packages. It sets UTF-8 as the current default encoding on Windows…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-utf8-2/index.html" class="no-external">
+<div class="listing-date">
+Jul 30, 2020
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="42" data-categories="SW50ZXJuYWxzJTJDZ3JhcGhpY3M=" data-listing-date-sort="1594771200000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="598">
+<div class="thumbnail"><a href="./posts/definitions/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/definitions/circle.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/definitions/index.html" class="no-external">New Features in the R Graphics Engine</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JhcGhpY3M='); return false;">graphics</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/definitions/index.html" class="no-external">
+Support for gradient fills, pattern fills, clipping paths and masks has been added to the R graphics engine (in the development version of R, which will probably become R…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/definitions/index.html" class="no-external">
+<div class="listing-date">
+Jul 15, 2020
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="43" data-categories="SW50ZXJuYWxzJTJDZ3JhcGhpY3M=" data-listing-date-sort="1591574400000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="469">
+<div class="thumbnail"><a href="./posts/r-clipping/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/r-clipping/index.html" class="no-external">Improvements to Clipping in the R Graphics Engine</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JhcGhpY3M='); return false;">graphics</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/r-clipping/index.html" class="no-external">
+<strong>UPDATE (2020-11-18): canClip = NA_LOGICAL has been replaced by deviceClip = TRUE</strong>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/r-clipping/index.html" class="no-external">
+<div class="listing-date">
+Jun 8, 2020
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="44" data-categories="VGVzdGluZyUyQ1FFTVUlMkNBYXJjaDY0JTJDUG93ZXI=" data-listing-date-sort="1590710400000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3020">
+<div class="thumbnail"><a href="./posts/qemu-testing/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/qemu-testing/index.html" class="no-external">Testing R on Emulated Platforms</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGVzdGluZw=='); return false;">Testing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UUVNVQ=='); return false;">QEMU</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QWFyY2g2NA=='); return false;">Aarch64</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UG93ZXI='); return false;">Power</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/qemu-testing/index.html" class="no-external">
+Sometimes it is useful to test R on unusual platforms, even when the expected number of users is not large at the moment. It is better to be ready when a new platform…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/qemu-testing/index.html" class="no-external">
+<div class="listing-date">
+May 29, 2020
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="45" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNXaW5kb3dzJTJDVVRGLTglMkNVQ1JUJTJDZW5jb2Rpbmdz" data-listing-date-sort="1588377600000" data-listing-file-modified-sort="1792137334868" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2044">
+<div class="thumbnail"><a href="./posts/windows-utf8/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/windows-utf8/index.html" class="no-external">UTF-8 Support on Windows</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('V2luZG93cw=='); return false;">Windows</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VVRGLTg='); return false;">UTF-8</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VUNSVA=='); return false;">UCRT</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZW5jb2Rpbmdz'); return false;">encodings</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/windows-utf8/index.html" class="no-external">
+R internally allows strings to be represented in the current native encoding, in UTF-8 and in Latin 1. When interacting with the operating system or external libraries, all…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/windows-utf8/index.html" class="no-external">
+<div class="listing-date">
+May 2, 2020
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="46" data-categories="SW50ZXJuYWxzJTJDZ3JpZCUyQyUyMHVuaXRz" data-listing-date-sort="1587081600000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2918">
+<div class="thumbnail"><a href="./posts/cairo-symbolfamily/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/cairo-symbolfamily/index_files/figure-html/unnamed-chunk-2-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/cairo-symbolfamily/index.html" class="no-external">Changes to Symbol Fonts for Cairo Graphics Devices</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZCUyQyUyMHVuaXRz'); return false;">grid, units</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/cairo-symbolfamily/index.html" class="no-external">
+<p>In R 4.0.0, Cairo-based graphics devices will allow the user to select a symbol font. That is not as straightforward as it sounds.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/cairo-symbolfamily/index.html" class="no-external">
+<div class="listing-date">
+Apr 17, 2020
+</div>
+<div class="listing-author">
+Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="47" data-categories="SW50ZXJuYWxzJTJDZ3JpZCUyQyUyMHVuaXRz" data-listing-date-sort="1586736000000" data-listing-file-modified-sort="1792137334839" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="900">
+<div class="thumbnail"><a href="./posts/grid-new-units/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/grid-new-units/grid-new-units-files/scatterplots.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/grid-new-units/index.html" class="no-external">Changes to ‘grid’ Units</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZCUyQyUyMHVuaXRz'); return false;">grid, units</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/grid-new-units/index.html" class="no-external">
+One of the main downsides to the ‘grid’ graphics package is that it is slow. And that makes some important packages that depend on ‘grid’, like ‘ggplot2’, slow. For example…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/grid-new-units/index.html" class="no-external">
+<div class="listing-date">
+Apr 13, 2020
+</div>
+<div class="listing-author">
+Paul Murrell, Thomas Lin Pedersen
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="48" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNJbnRlcm5hbHMlMkNzb2NrZXRzJTJDcGFyYWxsZWwlMkNQU09DSyUyMGNsdXN0ZXI=" data-listing-date-sort="1584403200000" data-listing-file-modified-sort="1792137334866" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2032">
+<div class="thumbnail"><a href="./posts/sockets/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/sockets/index.html" class="no-external">Socket Connections Update</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c29ja2V0cw=='); return false;">sockets</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyYWxsZWw='); return false;">parallel</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UFNPQ0slMjBjbHVzdGVy'); return false;">PSOCK cluster</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/sockets/index.html" class="no-external">
+Starting up a PSOCK cluster is not fast. In R 3.6 on just a few years old laptop with 8 logical cores, running Windows, it takes about 1.7s to start a cluster with 8 nodes:
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/sockets/index.html" class="no-external">
+<div class="listing-date">
+Mar 17, 2020
+</div>
+<div class="listing-author">
+Tomas Kalibera, Luke Tierney
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="49" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNzdHJpbmdzQXNGYWN0b3Jz" data-listing-date-sort="1581811200000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="658">
+<div class="thumbnail"><a href="./posts/stringsasfactors/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/stringsasfactors/index.html" class="no-external">stringsAsFactors</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c3RyaW5nc0FzRmFjdG9ycw=='); return false;">stringsAsFactors</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/stringsasfactors/index.html" class="no-external">
+Since its inception, R has, at least by default, converted (character) strings to factors when creating data frames directly with <code>data.frame()</code> or as the result of using <code>read.…</code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/stringsasfactors/index.html" class="no-external">
+<div class="listing-date">
+Feb 16, 2020
+</div>
+<div class="listing-author">
+Kurt Hornik
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="50" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDZGVidWdnaW5nJTJDYnVncyUyQ2J1Z3ppbGxh" data-listing-date-sort="1576454400000" data-listing-file-modified-sort="1792137334845" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="153">
+<div class="thumbnail"><a href="./posts/reviewing-bugs-thanks/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/reviewing-bugs-thanks/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/reviewing-bugs-thanks/index.html" class="no-external">Thanks for Reviewing Bug Reports</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVidWdnaW5n'); return false;">debugging</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVnemlsbGE='); return false;">bugzilla</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/reviewing-bugs-thanks/index.html" class="no-external">
+Just a quick update and note of thanks to all who have responded to our blog post on 2019-10-09 and helped with reviewing and resolving bug reports. Thanks to your help the…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/reviewing-bugs-thanks/index.html" class="no-external">
+<div class="listing-date">
+Dec 16, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera, Luke Tierney
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="51" data-categories="Y29sb3Jz" data-listing-date-sort="1574294400000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1710">
+<div class="thumbnail"><a href="./posts/palette/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/palette/index_files/figure-html/unnamed-chunk-3-1.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/palette/index.html" class="no-external">A New palette() for R</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29sb3Jz'); return false;">colors</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/palette/index.html" class="no-external">
+<p>This post introduces a new default color palette for R 4.0.0, that uses similar hues as in previous versions but is more balanced in terms of luminance and avoids extremely garish colors.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/palette/index.html" class="no-external">
+<div class="listing-date">
+Nov 21, 2019
+</div>
+<div class="listing-author">
+Achim Zeileis, Paul Murrell, Martin Maechler, Deepayan Sarkar
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="52" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNTYWZlJTIwUHJvZ3JhbW1pbmclMkNjbGFzcyUyQ1MzJTJDaW5oZXJpdGFuY2UlMkNPTw==" data-listing-date-sort="1573257600000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1322">
+<div class="thumbnail"><a href="./posts/class-matrix/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/class-matrix/index.html" class="no-external">When You Think <code>class(.) == *</code>, Think Again!</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('U2FmZSUyMFByb2dyYW1taW5n'); return false;">Safe Programming</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y2xhc3M='); return false;">class</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UzM='); return false;">S3</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aW5oZXJpdGFuY2U='); return false;">inheritance</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('T08='); return false;">OO</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/class-matrix/index.html" class="no-external">
+In a recent discussion on the <code>R-devel</code> mailing list, in a thread started on July 8, head.matrix can return 1000s of columns – limit to n or add new argument? Michael Chirico…<code></code><code></code><code></code><code></code><code></code><code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/class-matrix/index.html" class="no-external">
+<div class="listing-date">
+Nov 9, 2019
+</div>
+<div class="listing-author">
+Martin Maechler
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="53" data-categories="RXh0ZXJuYWwlMjBDb250cmlidXRpb25zJTJDZGVidWdnaW5nJTJDYnVncyUyQ2J1Z3ppbGxh" data-listing-date-sort="1570579200000" data-listing-file-modified-sort="1792137334839" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="691">
+<div class="thumbnail"><a href="./posts/help-with-bugs/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/help-with-bugs/index.html" class="no-external">R Can Use Your Help: Reviewing Bug Reports</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('RXh0ZXJuYWwlMjBDb250cmlidXRpb25z'); return false;">External Contributions</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVidWdnaW5n'); return false;">debugging</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncw=='); return false;">bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVnemlsbGE='); return false;">bugzilla</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/help-with-bugs/index.html" class="no-external">
+If you use R you may have wondered if there are ways you can contribute to making R better. This is the first in several posts on how you might help. This post is about…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/help-with-bugs/index.html" class="no-external">
+<div class="listing-date">
+Oct 9, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera, Luke Tierney
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="54" data-categories="UGFja2FnZSUyMERldmVsb3BtZW50JTJDUiUyMEluc3RhbGxhdGlvbiUyQ0ZvcnRyYW4lMkNDJTJDTEFQQUNLJTJDQkxBUw==" data-listing-date-sort="1569369600000" data-listing-file-modified-sort="1792137334836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1243">
+<div class="thumbnail"><a href="./posts/gfortran-lapack-2/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/gfortran-lapack-2/index.html" class="no-external">GFortran Issues with LAPACK II</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMEluc3RhbGxhdGlvbg=='); return false;">R Installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Rm9ydHJhbg=='); return false;">Fortran</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qw=='); return false;">C</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TEFQQUNL'); return false;">LAPACK</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QkxBUw=='); return false;">BLAS</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/gfortran-lapack-2/index.html" class="no-external">
+This is an update on my previous post from May.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/gfortran-lapack-2/index.html" class="no-external">
+<div class="listing-date">
+Sep 25, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="55" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNTMyUyMG1ldGhvZCUyMGxvb2t1cA==" data-listing-date-sort="1566172800000" data-listing-file-modified-sort="1792137334866" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="516">
+<div class="thumbnail"><a href="./posts/s3-method-lookup/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/s3-method-lookup/index.html" class="no-external">S3 Method Lookup</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UzMlMjBtZXRob2QlMjBsb29rdXA='); return false;">S3 method lookup</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/s3-method-lookup/index.html" class="no-external">
+At the core of the S3 object system as introduced in the White Book lies the idea that (S3) methods are ordinary functions that follow the <code>GEN.CLS</code> naming convention (with <code>GEN…</code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/s3-method-lookup/index.html" class="no-external">
+<div class="listing-date">
+Aug 19, 2019
+</div>
+<div class="listing-author">
+Kurt Hornik
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="56" data-categories="UGFja2FnZSUyMERldmVsb3BtZW50JTJDUiUyMEluc3RhbGxhdGlvbiUyQ0ZvcnRyYW4lMkNDJTJDTEFQQUNLJTJDQkxBUw==" data-listing-date-sort="1557878400000" data-listing-file-modified-sort="1792137334836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18" data-listing-word-count-sort="3554">
+<div class="thumbnail"><a href="./posts/gfortran-lapack/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/gfortran-lapack/index.html" class="no-external">GFortran Issues with LAPACK</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMERldmVsb3BtZW50'); return false;">Package Development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMEluc3RhbGxhdGlvbg=='); return false;">R Installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Rm9ydHJhbg=='); return false;">Fortran</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qw=='); return false;">C</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('TEFQQUNL'); return false;">LAPACK</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QkxBUw=='); return false;">BLAS</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/gfortran-lapack/index.html" class="no-external">
+Recent version of the GNU Fortran compiler (7, 8, 9) include optimizations that break interoperability between C and Fortran code with BLAS/LAPACK. The compiled code of…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/gfortran-lapack/index.html" class="no-external">
+<div class="listing-date">
+May 15, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="57" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNQUk9URUNUJTIwYnVncyUyQ3BhY2thZ2UlMjBjaGVja2luZyUyQ0M=" data-listing-date-sort="1555545600000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1509">
+<div class="thumbnail"><a href="./posts/common-protect-errors/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/common-protect-errors/index.html" class="no-external">Common PROTECT Errors</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UFJPVEVDVCUyMGJ1Z3M='); return false;">PROTECT bugs</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFja2FnZSUyMGNoZWNraW5n'); return false;">package checking</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Qw=='); return false;">C</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/common-protect-errors/index.html" class="no-external">
+This post presents the most common PROTECT bugs present in packages, based on manual inspection of ~100 remaining CRAN packages with reports from <code>rchk</code>.
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/common-protect-errors/index.html" class="no-external">
+<div class="listing-date">
+Apr 18, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="58" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNoY2wlMjBjb2xvcnM=" data-listing-date-sort="1554076800000" data-listing-file-modified-sort="1792137334839" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="957">
+<div class="thumbnail"><a href="./posts/hcl-colors/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' data-src="posts/hcl-colors/index_files/figure-html/swatch-plot-1.svg"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/hcl-colors/index.html" class="no-external">HCL-Based Color Palettes in grDevices</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('aGNsJTIwY29sb3Jz'); return false;">hcl colors</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/hcl-colors/index.html" class="no-external">
+Starting with R 3.6.0 a new <code>hcl.colors()</code> function is available in <code>grDevices</code>, providing a wide range of HCL-based color palettes with much better perceptual properties than…<code></code><code></code><code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/hcl-colors/index.html" class="no-external">
+<div class="listing-date">
+Apr 1, 2019
+</div>
+<div class="listing-author">
+Achim Zeileis, Paul Murrell
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="59" data-categories="UGFja2FnZSUyMGRldmVsb3BtZW50JTJDSW50ZXJuYWxzJTJDQyUyQiUyQiUyQ1BST1RFQ1QlMjBidWdz" data-listing-date-sort="1553731200000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1932">
+<div class="thumbnail"><a href="./posts/cxx/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/cxx/index.html" class="no-external">Use of C++ in Packages</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMGRldmVsb3BtZW50'); return false;">Package development</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QyUyQiUyQg=='); return false;">C++</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UFJPVEVDVCUyMGJ1Z3M='); return false;">PROTECT bugs</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/cxx/index.html" class="no-external">
+About 20% packages from CRAN and BIOC repositories include some native code and more than a half of those include some code in C++. This number is rather high given that the…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/cxx/index.html" class="no-external">
+<div class="listing-date">
+Mar 28, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="60" data-categories="VXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNzZWFyY2glMjBwYXRoJTIwY29uZmxpY3Rz" data-listing-date-sort="1552953600000" data-listing-file-modified-sort="1792137334833" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1917">
+<div class="thumbnail"><a href="./posts/conflicts/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/conflicts/index.html" class="no-external">Managing Search Path Conflicts</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2VhcmNoJTIwcGF0aCUyMGNvbmZsaWN0cw=='); return false;">search path conflicts</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/conflicts/index.html" class="no-external">
+Starting with R 3.6.0 the <code>library()</code> and <code>require()</code> functions allow more control over handling search path conflicts when packages are attached. The policy is controlled by…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/conflicts/index.html" class="no-external">
+<div class="listing-date">
+Mar 19, 2019
+</div>
+<div class="listing-author">
+Luke Tierney
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="61" data-categories="UGFja2FnZSUyMGluc3RhbGxhdGlvbiUyQ1IlMjBDTUQlMjBJTlNUQUxMJTJDcGFyYWxsZWwlMjBpbnN0YWxsJTJDc2hhcmVkJTIwb2JqZWN0cw==" data-listing-date-sort="1550102400000" data-listing-file-modified-sort="1792137334866" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3314">
+<div class="thumbnail"><a href="./posts/staged-install/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/staged-install/index.html" class="no-external">Staged Install</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGFja2FnZSUyMGluc3RhbGxhdGlvbg=='); return false;">Package installation</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UiUyMENNRCUyMElOU1RBTEw='); return false;">R CMD INSTALL</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyYWxsZWwlMjBpbnN0YWxs'); return false;">parallel install</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2hhcmVkJTIwb2JqZWN0cw=='); return false;">shared objects</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/staged-install/index.html" class="no-external">
+This text is about a new feature in R, staged installation of packages. It may be of interest to package authors and maintainers, and particularly to those who maintain…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/staged-install/index.html" class="no-external">
+<div class="listing-date">
+Feb 14, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="62" data-categories="SW50ZXJuYWxzJTJDUGVyZm9ybWFuY2UlMkNwYXJzaW5nJTJDc291cmNlJTIwcmVmZXJlbmNlcyUyQ3BhcnNlJTIwZGF0YQ==" data-listing-date-sort="1546819200000" data-listing-file-modified-sort="1792137334842" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2135">
+<div class="thumbnail"><a href="./posts/parser-speedups/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/parser-speedups/index.html" class="no-external">Parser Speedups</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UGVyZm9ybWFuY2U='); return false;">Performance</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyc2luZw=='); return false;">parsing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c291cmNlJTIwcmVmZXJlbmNlcw=='); return false;">source references</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyc2UlMjBkYXRh'); return false;">parse data</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/parser-speedups/index.html" class="no-external">
+It wasn’t my primary goal to improve parser performance nor to measure it. I’ve been working on optimizations to reduce the runtime overhead of including source reference…<code></code><code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/parser-speedups/index.html" class="no-external">
+<div class="listing-date">
+Jan 7, 2019
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="63" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNwYXJzaW5nJTJDUFJPVEVDVCUyMGJ1Z3M=" data-listing-date-sort="1544400000000" data-listing-file-modified-sort="1792137334867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1659">
+<div class="thumbnail"><a href="./posts/unprotect-ptr/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/unprotect-ptr/index.html" class="no-external">Unprotecting by Value</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFyc2luZw=='); return false;">parsing</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('UFJPVEVDVCUyMGJ1Z3M='); return false;">PROTECT bugs</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/unprotect-ptr/index.html" class="no-external">
+In short, <code>UNPROTECT_PTR</code> is dangerous and should not be used. This text describes why and describes how to replace it, including mset-based functions that have been…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/unprotect-ptr/index.html" class="no-external">
+<div class="listing-date">
+Dec 10, 2018
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="64" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNwYWNrYWdlJTIwY2hlY2tpbmclMkNidWdzJTIwaW4lMjB1c2VyJTIwY29kZQ==" data-listing-date-sort="1539302400000" data-listing-file-modified-sort="1792137334841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="783">
+<div class="thumbnail"><a href="./posts/if-cond-length/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/if-cond-length/index.html" class="no-external">Conditions of Length Greater Than One</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cGFja2FnZSUyMGNoZWNraW5n'); return false;">package checking</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVncyUyMGluJTIwdXNlciUyMGNvZGU='); return false;">bugs in user code</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/if-cond-length/index.html" class="no-external">
+Historically R language allows conditions in <code>if</code> and <code>while</code> statements to be vectors (of length greater than one). The first element is used but the remaining elements are…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/if-cond-length/index.html" class="no-external">
+<div class="listing-date">
+Oct 12, 2018
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="65" data-categories="SW50ZXJuYWxzJTJDVXNlci12aXNpYmxlJTIwQmVoYXZpb3IlMkNETEwlMjBsaW1pdCUyQ29wZW4lMjBmaWxlcyUyMGxpbWl0" data-listing-date-sort="1521763200000" data-listing-file-modified-sort="1792137334835" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1393">
+<div class="thumbnail"><a href="./posts/dll-limit/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/dll-limit/index.html" class="no-external">Maximum Number of DLLs</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('SW50ZXJuYWxz'); return false;">Internals</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VXNlci12aXNpYmxlJTIwQmVoYXZpb3I='); return false;">User-visible Behavior</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('RExMJTIwbGltaXQ='); return false;">DLL limit</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('b3BlbiUyMGZpbGVzJTIwbGltaXQ='); return false;">open files limit</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/dll-limit/index.html" class="no-external">
+Some packages contain native code, which is linked to R dynamically in the form of dynamically loaded libraries (DLLs). Recently, R users started loading increasing numbers…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/dll-limit/index.html" class="no-external">
+<div class="listing-date">
+Mar 23, 2018
+</div>
+<div class="listing-author">
+Tomas Kalibera
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
+</div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

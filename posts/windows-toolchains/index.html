@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2025-01-28">
+
+<title>Alternative Toolchains on Windows – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Alternative Toolchains on Windows – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/windows-toolchains/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Alternative Toolchains on Windows</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Windows</div>
+                <div class="quarto-category">Internals</div>
+                <div class="quarto-category">Package Development</div>
+                <div class="quarto-category">sanitizers</div>
+                <div class="quarto-category">testing</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 28, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>R and R packages on Windows, if they include native code, are built using compiler toolchain and libraries from <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a>. There is always a specific version of Rtools for a given version of R. Rtools44 is used for R 4.4.x, and hence R 4.4.x and packages for that version of R are always built with GCC 13.3 for x86_64 systems and with LLVM 17 for aarch64 systems. This is the case at least since Rtools42 (R 4.2 was released in April, 2022).</p>
+<p>Having a fixed toolchain is normally a benefit, but it is sometimes useful to be able to test the code of R and packages with other toolchains.</p>
+<p>This blog post is about recent improvements in R-devel (to become R 4.5) which allow this without changing the code and allow the use of sanitizers. It may be of interest to maintainers of packages that include native code (C, Fortran or C++), and to people working the the source code of base R.</p>
+<section id="benefits-of-a-fixed-toolchain" class="level1">
+<h1>Benefits of a fixed toolchain</h1>
+<p>Having a fixed toolchain has certain benefits. When all users of a package use that package built via the same toolchain, it is very unlikely they would run into compilation problems not seen by the developers such as unsupported options, unsupported language features or incompatibility with system headers. It doesn’t matter whether users download package binaries say from CRAN or Bioconductor or build them from source: all of these use the same Rtools. To some extent, this also reduces the risks users would run into runtime bugs caused by compiler differences, even though this depends on the quality of testing.</p>
+<p>Unlike Linux, there is no established software distribution of open-source software that could be expected to exist on Windows users’ machines. R itself and R packages hence link such needed external dependencies statically: the R executable, R shared libraries and shared libraries of R packages already include all the needed code, which avoids maintenance problems that would be otherwise imposed on the users, say if dynamic linking of external dependencies was used.</p>
+<p>Particularly on Windows, it is not safe to link code compiled by different toolchains statically due to possible differences in runtime (may include C runtime, compiler runtime, C++ library, etc). All code linked statically should be compiled by exactly the same toolchain.</p>
+<p>Having a fixed toolchain then makes this easy to achieve without rebuilding always everything from scratch: the toolchain is distributed together with static libraries compiled by that toolchain. R itself is built by the same toolchain. This works as long as packages only use either pre-compiled code from Rtools or code that is always compiled using the toolchain from Rtools at package installation time (i.e.&nbsp;source code embedded in the package). On <a href="https://cran.r-project.org/web/packages/policies.html">CRAN</a> this is a requirement.</p>
+<p>Some problems may arise in a single address space even with dynamic linking, when different dynamically linked parts are built by different toolchains. These problems are less common, sometimes may be avoided by careful interface design, some have been avoided by switching to UCRT as the Windows C runtime (in R 4.2).</p>
+<p>With R, dynamic linking is used primarily between R, R packages, and wrapper libraries provided by R, which are also built by Rtools. Indeed, some dynamic libraries linked are built by different toolchains: system libraries and in rare cases some external dependencies of R packages.</p>
+<p>Rtools used for a given minor version of R, e.g.&nbsp;Rtools44, are usually updated several times and frozen some time before the next R minor release, e.g.&nbsp;R 4.5.0. This could mean that some dynamically linked parts are built by a slightly different version of Rtools44, e.g.&nbsp;R release built with a different version than an already installed package or previously built and not-yet-rebuilt binary version of the package. To minimize these risks, these small updates in Rtools do not change the toolchain: typically they use the same version of GCC or only increase a patch version, the same version of binutils and the mingw-w64 runtime.</p>
+</section>
+<section id="drawbacks-of-a-fixed-toolchain" class="level1">
+<h1>Drawbacks of a fixed toolchain</h1>
+<p>Some of the benefits mentioned above are also drawbacks. A fixed environment may be good at hiding errors, but then, they wouldn’t be found by testing.</p>
+<p>These errors then may show up when the compiler toolchain is actually updated in a new version of Rtools. Problems may also show up when a new architecture is added and uses a different toolchain, such as LLVM toolchain on aarch64.</p>
+<p>These problems in practice are usually found in Windows-specific code and Windows-specific configuration (e.g.&nbsp;make files), because non-portabilities in code used also on Unix would be likely quickly found on Linux, where different distributions and installations use different toolchains.</p>
+</section>
+<section id="testing-with-alternative-toolchains" class="level1">
+<h1>Testing with alternative toolchains</h1>
+<p>As described above, it is key that all code in packages and in R is built by the same toolchain. So all of this only applies to testing, when one builds all of R and R packages completely from source. Binaries built by different/alternative toolchains should never be distributed to users. It is only recommended for experienced package authors to experiment with this testing and it requires knowledge of Rtools as well as Msys2.</p>
+<p>Testing base R with alternative toolchain in the past required changes in R source code (make files). It was still done time to time, but with the current R-devel, one can use at least some alternative toolchains without modifying the code.</p>
+<p>This is useful for better testing of R itself, because new compilers may introduce stricter checks that discover bugs in the code that could result potentially in incorrect results or crashes even with other (or older) compilers. So, this is useful even though for Windows, we use a fixed compiler, which is known before the corresponding release of R.</p>
+<p>There are additional benefits of testing with additional toolchains described below.</p>
+<p>R-devel now by default uses <code>pkg-config</code> for figuring out which external libraries to link and which C preprocessor directives to use for those libraries from which library/include directories. R 4.4 and earlier used a fixed setup tuned for the corresponding version of Rtools.</p>
+<p><code>pkg-config</code> is supported both by Rtools and by toolchains in <a href="https://www.msys2.org/">Msys2</a>. This made it easier to encapsulate the differences between toolchains and compiled libraries, even though it did not completely erase the need for tweaks to support Msys2 toolchains. Not all Msys2 toolchains would work at the moment with R. Not all are necessary, but the interesting ones for testing are “ucrt64” and “clang64”.</p>
+<p>One can use the “ucrt64” toolchain from Msys2 to test a recent GCC on x86_64. Especially around the end of the year, Msys2 will have a newer version of GCC than Rtools issued the year before. At this time, it is 14.2, which could easily be the toolchain version for the next Rtools. There is no special configuration needed. R make files with find the compiler toolchain on PATH. So, package authors who would want to prepare their packages a bit even before Rtools45 is released, can do it using “ucrt64”.</p>
+<p>The “clangarm64” Msys2 toolchain on aarch64 would serve the same purpose. Package authors can test their packages with a newer version of LLVM than Rtools has, around this time of the year. However, this requires access to aarch64 hardware.</p>
+<p>The “clang64” toolchain from Msys2 can be used to test R and packages with the LLVM compiler toolchain, including the flang-new Fortran compiler. This allows to test compatibility of a package with LLVM for those who do not have access to a Windows/aarch64. Many of the issues found in R packages on Windows/aarch64 are in fact because of using non-portable GCC features or options that are not supported by LLVM. Only one bit of special configuration is needed, set <code>USE_LLVM = 1</code> in <code>MkRules.local</code>, as is done when building on Windows/aarch64.</p>
+<p>To be able to test R package with these alternative toolchains, it is necessary to use only static libraries already available on the system of the user (so, in real use static libraries only from Rtools, but in these tests, they will be from the corresponding toolchain from Msys2). One also needs to use <code>pkg-config</code> so that the proper library dependencies and C preprocessor directives apply to the toolchain.</p>
+<p>One needs to specify all pkg-config packages directly used by the R package when querying <code>pkg-config</code> for libraries and flags. This may not always be the case normally when Rtools is used, because Rtools uses static linking, so <code>pkg-config</code> with Rtools would include to the link list all static dependencies of the libraries, some of which may be also directly used by the R package, but may belong to other pkg-config packages.</p>
+<p>Msys2 uses dynamic linking. Dynamic libraries remember their dependencies on their own, so <code>pkg-config</code> will not include those in the list of libraries to link. Building with an alternative Msys2 toolchain is hence a good test of whether the specification is complete.</p>
+<p>Now, it should be said that even with Rtools, packages get tested by multiple toolchains when they are tested with multiple versions of R. CRAN currently tests R-devel, the current release and the previous release. Also, a new release of Rtools is usually available some time before an R release, so that packages using R-devel may be tested with it.</p>
+</section>
+<section id="testing-with-sanitizers" class="level1">
+<h1>Testing with sanitizers</h1>
+<p>Sanitizers are useful tools for finding different bugs in programs, including memory access/allocation errors and relying on undefined behavior. In some cases, sanitizers have discovered R memory protection (“PROTECT”) errors.</p>
+<p>Unfortunately, GCC currently does not support sanitizers on Windows. LLVM supports sanitizers on x86_64, but not on aarch64. Rtools hence doesn’t support sanitizers on any platform.</p>
+<p>With the Msys2 “clang64” toolchain, one may now use sanitizers by setting <code>SANOPTS</code> in <code>MkRules.local</code> to a suitable value, such as <code>-fsanitize=address,undefined,bounds</code>, which is then passed to the compiler and linker where needed during compilation of R itself and then of packages.</p>
+<p>The new sanitizer support has been used with base R and the discovered issues, where possible, were fixed. These issues included code that is only used on Windows, but also common code where differences between Unix and Windows mattered (e.g.&nbsp;size of integer, long vs size of pointer).</p>
+<p>Testing the sanitizer support with packages only extended to packages distributed with base R. Problems may appear when checking other packages.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

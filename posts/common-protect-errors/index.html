@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomas Kalibera">
+<meta name="dcterms.date" content="2019-04-18">
+
+<title>Common PROTECT Errors – The R Project Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Rlogo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-e2e7c36d802e0e3ea913054637a146ae.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Common PROTECT Errors – The R Project Blog">
+<meta property="og:description" content="The R Project blog - by members of the R Core Team and the R Foundation, along with other contributors">
+<meta property="og:image" content="https://blog.R-project.org/posts/common-protect-errors/Rlogo.png">
+<meta property="og:site_name" content="The R Project Blog">
+<meta property="og:image:alt" content="R logo">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo light-content">
+    <img src="../../Rlogo.png" alt="R logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">The R Project Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://bsky.app/profile/r-foundation.bsky.social"> <i class="bi bi-bluesky" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@R_Foundation"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/company/the-r-foundation-for-statistical-computing"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Common PROTECT Errors</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Internals</div>
+                <div class="quarto-category">User-visible Behavior</div>
+                <div class="quarto-category">PROTECT bugs</div>
+                <div class="quarto-category">package checking</div>
+                <div class="quarto-category">C</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tomas Kalibera </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 18, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>This post presents the most common PROTECT bugs present in packages, based on manual inspection of ~100 remaining CRAN packages with reports from <code>rchk</code>.</p>
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>Any C/C++ code interacting with R, both inside R itself and in packages, needs to inform the garbage collector about which objects on the R heap are reachable from local variables. Pointers to such objects are kept on the pointer protection stack or the precious list or multi-set, but the most common is the pointer protection stack with <code>PROTECT</code>/<code>UNPROTECT</code> macros. Failure to protect an object that is later accessed is a common error, which can lead to incorrect results or a crash, and such bugs are often very hard to find, because they can be triggered by inconsequential changes that happen to change when GC is run.</p>
+<p>One of the tools that help to find PROTECT errors is <a href="https://github.com/kalibera/rchk/">rchk</a>, which is run regularly for CRAN packages and if any potential problem is found, the report is available under “Additional issues” in CRAN Package Check Results. More information about the pointer protection API is available in <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Garbage-Collection">Writing R Extensions</a>, more advice how to use the API is <a href="https://github.com/kalibera/cran-checks/blob/master/rchk/PROTECT.md">here</a>. <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Using-gctorture">Gctorture</a> is a runtime tool available in R for discovery of PROTECT errors.</p>
+</section>
+<section id="running-rchk" class="level1">
+<h1>Running <code>rchk</code></h1>
+<p>One can install <code>rchk</code> natively on Linux (tested on Debian, Ubuntu, Fedora), this is how I use it and the installation procedure should be easy enough to follow for anyone programming in C. There is also a vagrant script to install <code>rchk</code> automatically into virtualbox with Ubuntu as guest system (which would work on host systems including Linux, Windows and macOS). Recently there is also a pre-built singularity container with rchk (the guest system is Ubuntu). See <a href="https://github.com/kalibera/rchk/">rchk documentation</a> for details. Things can be as simple as</p>
+<pre><code>singularity pull --name rchk.img shub://kalibera/rchk:def
+singularity run rchk.img jpeg</code></pre>
+<p>to check the current CRAN version of package jpeg. One can indeed provide a tarball instead. Installing system dependencies for R packages that needs them requires a singularity overlay (covered <a href="https://github.com/kalibera/rchk/blob/master/doc/SINGULARITY.md">here</a>).</p>
+</section>
+<section id="not-protecting-fresh-objects" class="level1">
+<h1>Not protecting fresh objects</h1>
+<p>It is surprisingly not uncommon to see a sequence of calls, particularly calls to <code>coerceVector()</code> or some macro that wraps it, without the necessary protection:</p>
+<pre><code>SEXP MM = coerceVector(_MM, INTSXP);
+SEXP NN = coerceVector(_NN, INTSXP);</code></pre>
+<p>Here the second call to <code>coerceVector()</code> may run GC and may destroy <code>MM</code>, the result of the previous call to <code>coerceVector()</code>. One indeed needs to protect <code>MM</code> before the second call to prevent this from happening.</p>
+<p>One should conservatively assume that all functions allocate, and that all functions which return an <code>SEXP</code> are actually returning a fresh <code>SEXP</code> that needs protection. The reason is that this can change, allocation or copying of an object can be introduced on a code path where it did not exist before. Also, allocation can exist in functions where one would not guess that (e.g.&nbsp; reading a variable from a frame, it can run an active binding).</p>
+<p><code>rchk</code> still tries hard to find out which functions allocate and does not report errors when unprotected variables are exposed to functions that don’t allocate, as far as the tool can see. The reports for this problem say something like “unprotected variable MM while calling allocating function Rf_coerceVector”.</p>
+</section>
+<section id="allocating-argument-expression-with-unprotected-argument" class="level1">
+<h1>Allocating argument expression with unprotected argument</h1>
+<p>The caller is always responsible for ensuring that all arguments passed to a function have been protected. Historically, some core R API functions are <em>callee-protect</em>, they protect their own arguments and keep them protected for the whole duration of their call. It is better not to rely on this property, but it is often done and <code>rchk</code> tries to detect callee-protect functions and not report an error.</p>
+<p>The obvious reason not to rely on this property is because it could change. There is also then a subtle detail whether the argument is protected until the end of the function, or only until the last moment when it is needed by the function, and confusing these two could introduce a bug. A less obvious reason is that one can easily introduce another error:</p>
+<pre><code>lang3(R_BracketSymbol, lang2(R_ClassSymbol, R_NilValue), ScalarReal(cur_class_i + 1)</code></pre>
+<p>In this example, a callee-protect function is called with two allocating arguments. It is true that <code>lang3</code> protects its arguments, but it does not help: the unprotected result of the call to <code>ScalarInteger()</code> can get destroyed during the allocating call to <code>lang2()</code>, well before <code>lang3()</code> is even invoked. This is a very common problem.</p>
+<p>Another variant:</p>
+<pre><code>setAttrib( ans, install("class"), mkString2( "srcref", 6 ) );</code></pre>
+<p>Here the object allocated by <code>mkString2()</code> but not protected can get destroyed by the call to <code>install()</code>. Note that <code>install()</code> places symbols in the symbol table where the garbage collector can find them, so they do not have to be protected, but the function still allocates when the symbol is not yet found in the symbol table. In principle, some common symbols like “class” in this case will be in the symbol table, because <code>class()</code> is part of the API, but one should never rely on that.</p>
+<p>Less obvious variant:</p>
+<pre><code>setAttrib( ans, install("srcfile"), srcfile );</code></pre>
+<p>This is still wrong if <code>srcfile</code> is unprotected. It can be destroyed by the call to <code>install()</code>. Note that the order of evaluation of function arguments in C is undefined, so one should not write code that would be correct only in say the reverse order.</p>
+<p><code>rchk</code> reports these errors typically as “Suspicious call (two or more unprotected arguments) to”, this is from the <code>maacheck</code> tool (part of <code>rchk</code>). These reports in particular should be taken seriously as they are very rarely wrong (still, the tool may sometimes conservatively assume that some complicated function is allocating when it is in fact not).</p>
+</section>
+<section id="premature-unprotection" class="level1">
+<h1>Premature unprotection</h1>
+<p>Several packages have unprotected an object too soon. I am not sure how it happened, but perhaps it is less error-prone wrt to future code changes to just unprotect all objects at the end of a function unless there is a real danger that too much memory would be blocked from re-use for too long.</p>
+<pre><code>PROTECT(destVector = allocVector(REALSXP,ssize));
+for (i = 0; i &lt; ssize; i++){
+   REAL(destVector)[i] = working_space[shift+i];
+}
+UNPROTECT(1);
+PROTECT(f = allocVector(INTSXP,fNPeaks));</code></pre>
+<p>In this example, <code>destVector</code> has been properly protected before being filled in, but then unprotected, then <code>allocVector()</code> was called, and later (not shown here) <code>destVector</code> was read again.</p>
+<p>A less obvious but common example is when a function assumed not to allocate is called just before returning from a function:</p>
+<pre><code>PROTECT(myint = NEW_INTEGER(len));
+p_myint = INTEGER_POINTER(myint);
+for(int i=0;i&lt;n;i++) p_myint[i] = sigma_0[i];
+UNPROTECT(2);
+PutRNGstate();
+return myint;</code></pre>
+<p>Function <code>PutRNGstate()</code> allocates. I know I am repeating myself, but package writers should not assume for any function that it does not allocate. These things can be very surprising and they can change, and change out of their control.</p>
+</section>
+<section id="passing-unprotected-argument-to-a-normal-function" class="level1">
+<h1>Passing unprotected argument to a normal function</h1>
+<p>Arguments have to be protected by the caller. A common error is to pass an unprotected argument to a function, which then destroys the argument before using it</p>
+<pre><code>PROTECT( ret = NEW_OBJECT(MAKE_CLASS( TIME_CLASS_NAME )));</code></pre>
+<p>Here, the argument to <code>NEW_OBJECT()</code> allocated by <code>MAKE_CLASS()</code> can be destroyed by <code>NEW_OBJECT()</code> before it is read. It has to be protected.</p>
+<pre><code>Rf_eval(Rf_lang3(symbols::new_env, Rf_ScalarLogical(TRUE), parent), R_BaseEnv);</code></pre>
+<p>Here the argument allocated by <code>Rf_lang3()</code> can be destroyed by <code>Rf_eval()</code> before being used, it has to be protected before being passed to <code>Rf_eval()</code>.</p>
+<p>These rules indeed also apply to functions defined in a package: functions taking a number of <code>SEXP</code> arguments should be able to assume that these arguments are protected.</p>
+</section>
+<section id="protection-imbalance-on-a-return-branch" class="level1">
+<h1>Protection imbalance on a return branch</h1>
+<p>Each function should keep pointer protection balance: when it exits normally (not via a long jump), the pointer protection stack size should be the same as when the function has been invoked (and the protection stack should be the same even wrt to content).</p>
+<pre><code>  SEXP sBC = PROTECT(allocVector(REALSXP, rank==0 ? n : 0));
+  if (rank == 0) {
+    if (REAL(sBC) == NULL) {
+        REprintf("Rank %d: error!\n", rank);
+        return NULL;
+    }
+  }</code></pre>
+<p>In this example, on the return path ending with <code>return NULL</code> the function kept (at least) one extra pointer on the pointer protection stack (in this example, the branch is actually dead because <code>REAL(sBC)</code> would never be <code>NULL</code>, but it still illustrates the problem).</p>
+<p>Forgetting to unprotect along paths that call <code>return</code> is a common error. <code>rchk</code> reports pointer protection imbalance in the function (“has possible protection stack imbalance”), but one needs to find manually where it is caused (looking for <code>return</code> statements and checking for <code>UNPROTECT</code> around usually works).</p>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>Writing C code, and specifically C code for R, comes with responsibilities. One of them is ensuring that R objects are properly PROTECTed (when programming in R directly, one does not have to worry).</p>
+<p><code>rchk</code> results have been available from CRAN for almost two years, and the CRAN team has been tirelessly reminding package maintainers to check their reports. The tool cannot find all PROTECT bugs, and particularly so as it has been tuned to report fewer false alarms. As a result, almost all of the remaining reports for the CRAN packages now are true errors, and most of them can be fixed trivially (the hard part is to find where they are, but that work has already been done).</p>
+<p>Many of the remaining false alarms are things that would be good to fix anyway (e.g.&nbsp;the tool assumes that <code>getAttrib(x, R_NamesSymbol)</code> returns a fresh object, even though <code>x</code> is of a type that current version of R would return some object indirectly protected through <code>x</code>).</p>
+<p>This post has been written based on manual inspection of all of the remaining <code>rchk</code> reports for CRAN packages (and obvious bugs were reported to the package maintainers), in hope that this could make the number of packages with PROTECT bugs detectable by <code>rchk</code> drop further and stay low.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/blog\.R-project\.org\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
