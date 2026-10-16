@@ -2,7 +2,9 @@
 title: "Conditions of Length Greater Than One"
 author: "Tomas Kalibera"
 date: 2018-10-12
-categories: ["Internals", "User-visible Behavior", "package checking", "bugs in user code"]
+categories: ["language", "internals"]
+description: "Converting a long-standing warning to error for if/while conditions with length > 1 requires careful ecosystem coordination."
+
 ---
 
 Historically R language allows conditions in `if` and `while` statements to

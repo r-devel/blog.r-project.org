@@ -1,9 +1,10 @@
 ---
 title: "Debugging Sensitivity to C Math Library and mingw-w64 v12"
 author: "Tomáš Kalibera"
-description: "The tool mdebug implements configurable wrappers for the C Math library functions."
 date: 2026-01-06
-categories: ["windows", "math", "testing"]
+categories: ["testing", "numerical"]
+description: "New debugging tool (mdebug) with configurable wrappers helps identify package sensitivity to math library changes."
+
 ---
 
 C math library functions, such as `exp` or `sin`, are not guaranteed to be

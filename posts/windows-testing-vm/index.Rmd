@@ -2,7 +2,8 @@
 title: "Virtual Windows Machine for Checking R Packages"
 author: "Tomas Kalibera"
 date: 2021-03-18
-categories: ["Testing", "Windows", "Package Development", "UCRT", "virtual machine"]
+categories: ["testing", "windows"]
+description: "Free Windows VM setup from Microsoft for testing R packages on Linux and macOS systems."
 
 ---
 

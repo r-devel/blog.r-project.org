@@ -2,7 +2,8 @@
 title: "R on 64-bit ARM Windows"
 author: "Tomas Kalibera"
 date: 2024-04-23
-categories: ["User-visible Behavior", "Windows", "testing", "installation", "Aarch64", "ARM"]
+categories: ["R Core", "platform support", "windows"]
+description: "R 4.4.0 now supports native 64-bit ARM Windows with the new Rtools44 toolchain."
 
 ---
 

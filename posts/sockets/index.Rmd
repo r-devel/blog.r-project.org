@@ -2,7 +2,8 @@
 title: "Socket Connections Update"
 author: "Tomas Kalibera, Luke Tierney"
 date: 2020-03-17
-categories: ["User-visible Behavior", "Internals", "sockets", "parallel", "PSOCK cluster"]
+categories: ["R Core", "performance", "internals"]
+description: "Socket improvements dramatically speed up parallel cluster startup times (14 seconds down to 0.4 seconds)."
 
 ---
 

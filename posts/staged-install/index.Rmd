@@ -2,7 +2,9 @@
 title: "Staged Install"
 author: "Tomas Kalibera"
 date: 2019-02-14
-categories: ["Package installation", "R CMD INSTALL", "parallel install", "shared objects"]
+categories: ["packages", "performance"]
+description: "Staged installation prevents race conditions during parallel package installation."
+
 ---
 
 This text is about a new feature in R, staged installation of packages.  It

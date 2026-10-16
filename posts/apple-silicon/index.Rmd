@@ -2,7 +2,8 @@
 title: "Will R Work on Apple Silicon?"
 author: "Tomas Kalibera, Simon Urbanek"
 date: 2020-11-02
-categories: ["User-visible Behavior", "macOS", "testing", "installation", "NA", "Aarch64", "ARM"]
+categories: ["R Core", "platform support", "testing"]
+description: "Investigating R's native support for Apple Silicon ARM processors and the transition from Intel, including compiler needs and floating-point considerations."
 
 ---
 
