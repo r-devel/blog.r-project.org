@@ -11,15 +11,21 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: rocker/r2u:noble
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Get script
+        run: curl -OLs https://eddelbuettel.github.io/r-ci/run.sh && chmod 0755 run.sh
+
+      - name: Bootstrap
+        run: ./run.sh bootstrap
 
       - name: Dependencies
         run: ./run.sh install_all
@@ -27,22 +33,9 @@ jobs:
       - name: Render site
         run: quarto render
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to GitHub pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
-          path: _site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          clean: false
+          branch: gh-pages
+          folder: docs
