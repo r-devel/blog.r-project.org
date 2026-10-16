@@ -28,7 +28,7 @@ jobs:
         run: ./run.sh bootstrap
 
       - name: Dependencies
-        run: ./run.sh install_r bench colorspace dplyr ggplot2 kableExtra knitr S7 tidyr
+        run: ./run.sh install_r bench colorspace dplyr ggbeeswarm ggplot2 kableExtra knitr S7 tidyr
 
       - name: Render site
         run: quarto render
