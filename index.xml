@@ -20,7 +20,7 @@
 <lastBuildDate>Sat, 07 Nov 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Distribution-Free Analysis for Stratified Oneway Layouts</title>
-  <dc:creator>Torsten Hothorn and Kurt Hornik</dc:creator>
+  <dc:creator>Torsten Hothorn, Kurt Hornik</dc:creator>
   <link>https://blog.R-project.org/posts/free1way/</link>
   <description><![CDATA[ 
 
@@ -145,7 +145,7 @@ font-style: inherit;">8</span>)</span></code></pre></div></div>
 
                 n = 30
 Total sample size = 30 (Control) + 30 (gCOPD) + 30 (gAsbestosis) = 90
-            power = 0.8006876
+            power = 0.8006798
         sig.level = 0.05
    log-odds ratio = 1.0350087, -0.3706949
 
@@ -172,7 +172,7 @@ NOTE: 'n' is sample size in control group</code></pre>
 </item>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 2</title>
-  <dc:creator>Šimon Urbánek and Tomáš Kalibera</dc:creator>
+  <dc:creator>Šimon Urbánek, Tomáš Kalibera</dc:creator>
   <link>https://blog.R-project.org/posts/stf-project-milestone-2/</link>
   <description><![CDATA[ 
 
@@ -233,7 +233,7 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
 </item>
 <item>
   <title>Zulip Chat for the R Project</title>
-  <dc:creator>Ella Kaye and Heather Turner</dc:creator>
+  <dc:creator>Ella Kaye, Heather Turner</dc:creator>
   <link>https://blog.R-project.org/posts/zulip-chat-for-the-r-project/</link>
   <description><![CDATA[ 
 
@@ -299,7 +299,7 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
 </item>
 <item>
   <title>New Tricks for the R Sweave Drivers</title>
-  <dc:creator>Vincent Goulet and Kurt Hornik</dc:creator>
+  <dc:creator>Vincent Goulet, Kurt Hornik</dc:creator>
   <link>https://blog.R-project.org/posts/new-tricks-sweave-drivers/</link>
   <description><![CDATA[ 
 
@@ -545,7 +545,7 @@ font-style: inherit;">@</span></span></code></pre></div></div>
 </item>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 1</title>
-  <dc:creator>Simon Urbanek and Tomáš Kalibera</dc:creator>
+  <dc:creator>Simon Urbanek, Tomáš Kalibera</dc:creator>
   <link>https://blog.R-project.org/posts/stf-project-milestone-1/</link>
   <description><![CDATA[ 
 
