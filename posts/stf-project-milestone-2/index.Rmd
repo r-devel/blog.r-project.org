@@ -1,6 +1,6 @@
 ---
 title: "Sovereign Tech Fund Project: Milestone 2"
-author: "Šimon Urbánek and Tomáš Kalibera"
+author: "Šimon Urbánek, Tomáš Kalibera"
 date: 2026-09-29
 categories: ["packages", "windows"]
 description: "Improvements to R binary packages enable better version detection and consistency across platforms."

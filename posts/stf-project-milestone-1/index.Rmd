@@ -1,6 +1,6 @@
 ---
 title: "Sovereign Tech Fund Project: Milestone 1"
-author: "Simon Urbanek and Tomáš Kalibera"
+author: "Simon Urbanek, Tomáš Kalibera"
 date: 2026-06-02
 categories: ["R Core", "community", "testing"]
 description: "Sovereign Tech Fund-supported effort triages and resolves 150+ R bugs, reducing backlog by 25%."
