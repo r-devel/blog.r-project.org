@@ -2,7 +2,9 @@
 title: "S3 Method Lookup"
 author: "Kurt Hornik"
 date: 2019-08-19
-categories: ["Internals", "User-visible Behavior", "S3 method lookup"]
+categories: ["R Core", "classes/methods", "internals"]
+description: "Changes to S3 method lookup in R 3.5.0 and delayed registration in R 3.6.0 improve safety and efficiency."
+
 ---
 
 At the core of the S3 object system as introduced in the White Book lies

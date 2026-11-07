@@ -2,7 +2,9 @@
 title: "R Can Use Your Help: Translating R Messages"
 author: "Heather Turner and Saranjeet Kaur"
 date: 2022-07-25
-categories: ["External Contributions", "translation"]
+categories: ["R Core", "community", "documentation"]
+description: "Help make R accessible worldwide by contributing message translations to support localization."
+
 ---
 
 If you use R you may have wondered if there are ways you can contribute to 

@@ -2,7 +2,9 @@
 title: "Maximum Number of DLLs"
 author: "Tomas Kalibera"
 date: 2018-03-23
-categories: ["Internals", "User-visible Behavior", "DLL limit", "open files limit"]
+categories: ["internals", "windows"]
+description: "Understanding R's DLL limits and how they relate to system file descriptor constraints across different platforms."
+
 ---
 
 Some packages contain native code, which is linked to R dynamically in the

@@ -2,7 +2,9 @@
 title: "Why to Avoid \\x in Regular Expressions"
 author: "Tomas Kalibera"
 date: 2022-06-27
-categories: ["User-visible Behavior", "Package Development", "encodings", "regular expressions"]
+categories: ["encoding", "packages"]
+description: "Avoid \\x in regex patterns: encoding issues can silently corrupt your results across platforms."
+
 ---
 
 Using `\x` in string literals is almost always a bad idea, but using it in

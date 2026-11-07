@@ -2,7 +2,9 @@
 title: "Rousseeuw Prize 2026 Awarded to the R Project"
 author: "Martyn Plummer"
 date: 2026-06-17
-categories: ["R Core", "prizes"]
+categories: ["R Foundation", "R Core"]
+description: "R Core Team honored with major statistics prize for decades of impact on statistical computing."
+
 ---
 
 The [Rousseeuw Prize for Statistics](https://rousseeuwprize.org) is a

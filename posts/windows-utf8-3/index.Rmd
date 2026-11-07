@@ -2,7 +2,8 @@
 title: "Windows/UTF-8 Toolchain and CRAN Package Checks"
 author: "Tomas Kalibera"
 date: 2021-03-12
-categories: ["User-visible Behavior", "Windows", "UTF-8", "UCRT", "encodings", "CRAN"]
+categories: ["windows", "encoding", "UTF-8", "CRAN"]
+description: "New UCRT toolchain enables UTF-8 and improved international language support with CRAN checks."
 
 ---
 

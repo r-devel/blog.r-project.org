@@ -2,7 +2,9 @@
 title: "Changes to 'grid' Units"
 author: "Paul Murrell, Thomas Lin Pedersen"
 date: 2020-04-13
-categories: ["Internals", "grid, units"]
+categories: ["graphics", "performance"]
+description: "Major performance improvements to grid units make ggplot2 and grid graphics significantly faster."
+
 ---
 
 ```{r setup, include=FALSE}

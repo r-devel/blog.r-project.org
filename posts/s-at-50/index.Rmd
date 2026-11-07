@@ -1,9 +1,10 @@
 ---
 title: "S at 50"
 author: "Martyn Plummer"
-description: "Commemorating 50 years of history of S and R."
 date: 2026-05-05
-categories: [history, anniversary]
+categories: ["R Foundation", "R Core"]
+description: "Celebrating 50 years of the S and R programming languages with historical perspective."
+
 ---
 
 

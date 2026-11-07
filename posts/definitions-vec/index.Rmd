@@ -2,7 +2,9 @@
 title: "Vectorised Patterns in R Graphics"
 author: "Paul Murrell"
 date: 2022-06-09
-categories: ["Internals", "graphics"]
+categories: ["graphics", "internals"]
+description: "Vectorized pattern fills in R graphics allow multiple patterns in a single function call."
+
 ---
 
 ```{r eval=FALSE, echo=FALSE}

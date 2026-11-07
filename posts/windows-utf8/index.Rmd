@@ -2,7 +2,8 @@
 title: "UTF-8 Support on Windows"
 author: "Tomas Kalibera"
 date: 2020-05-02
-categories: ["User-visible Behavior", "Windows", "UTF-8", "UCRT", "encodings"]
+categories: ["windows", "encoding", "UTF-8"]
+description: "R gains native UTF-8 support on Windows for better international character and data handling."
 
 ---
 

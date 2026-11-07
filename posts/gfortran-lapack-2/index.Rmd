@@ -2,7 +2,8 @@
 title: "GFortran Issues with LAPACK II"
 author: "Tomas Kalibera"
 date: 2019-09-25
-categories: ["Package Development", "R Installation", "Fortran", "C", "LAPACK", "BLAS"]
+categories: ["R Core", "Fortran", "BLAS/LAPACK"]
+description: "GFortran improvements address LAPACK issues with new -ftail-call-workaround option and updated approach in R."
 
 ---
 

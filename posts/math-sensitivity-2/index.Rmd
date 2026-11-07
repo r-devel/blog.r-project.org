@@ -2,7 +2,8 @@
 title: "Sensitivity to C Math Library and mingw-w64 v12 - Part 2"
 author: "Tomas Kalibera"
 date: 2025-05-21
-categories: ["Windows", "Math", "Package Development", "numerical accuracy", "testing", "test tolerance"]
+categories: ["numerical", "windows"]
+description: "Math function differences between Windows Server 2022 and Windows 10 cause additional test failures."
 
 ---
 
