@@ -212,7 +212,7 @@ $system.codepage
 <p>will install <code>ggplot2</code> from the pre-set demo binary repository at <a href="https://www.r-project.org/nosvn/winutf8/demo">https://www.r-project.org/nosvn/winutf8/demo</a>. With it, we can run</p>
 <pre><code>library("ggplot2")
 ggplot(mtcars,aes(x=mpg)) + geom_histogram(binwidth=5) + xlab('マイル/ガロン') + ylab('車の数')</code></pre>
-<p>More usage examples can be found in my previous post from <a href="https://blog.r-project.org/2020/05/02/utf-8-support-on-windows">May</a>. At that time, only base and recommended packages were supported.</p>
+<p>More usage examples can be found in my previous post from <a href="../../2020/05/02/utf-8-support-on-windows">May</a>. At that time, only base and recommended packages were supported.</p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">Background</h2>
 <p>Windows 10 (November 2019 release and newer) allows applications to use UTF-8 as their native encoding when interfacing both with the C library (needs to be UCRT) <em>and</em> with the operating system. This new Windows feature, present in Unix systems for many years, finally allows R on Windows to work reliably with all Unicode characters.</p>

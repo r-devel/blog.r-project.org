@@ -186,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>If you use R you may have wondered if there are ways you can contribute to making R better. This is another post on how you might help (<a href="https://blog.r-project.org/2019/10/09/r-can-use-your-help-reviewing-bug-reports/index.html">Reviewing Bug Reports</a> was the first).</p>
+<p>If you use R you may have wondered if there are ways you can contribute to making R better. This is another post on how you might help (<a href="../../2019/10/09/r-can-use-your-help-reviewing-bug-reports/index.html">Reviewing Bug Reports</a> was the first).</p>
 <p>This post is about helping with testing of pre-release versions of R.</p>
 <p>Maintaining and improving R unavoidably comes with introducing regressions, that is breaking things which worked before. This also happens when external software changes its behavior (OS, compilers, libraries). Regressions that cause the R test suite to fail are found and fixed quickly. Regressions that cause CRAN packages to fail are typically found soon as well when those packages passed their tests before the regression was introduced, yet there is some risk of overlooking these problems as there are always some failing packages (about 50 packages out of over 17,000 currently result in ERROR or WARNING on Linux, more on other platforms, as shown <a href="https://cran.r-project.org/web/checks/check_summary.html">here</a>).</p>
 <p>The biggest risk of overlooking regressions is in things that are not covered by automated tests. To allow us to improve quality of released R versions, we could use your help with testing R.</p>

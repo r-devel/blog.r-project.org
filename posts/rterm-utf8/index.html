@@ -192,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="testing" class="level2">
 <h2 class="anchored" data-anchor-id="testing">Testing</h2>
 <p>To experiment with the new RTerm in the official CRAN MSVCRT build in R-devel, install R from <a href="https://cran.r-project.org/bin/windows/base/rdevel.html">here</a> or the usual places following the 4.1 release process.</p>
-<p>To experiment with the UCRT build, see the <a href="https://blog.r-project.org/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/index.html">blog post</a> about those builds and install R from <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">here</a>.</p>
+<p>To experiment with the UCRT build, see the <a href="../../2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/index.html">blog post</a> about those builds and install R from <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">here</a>.</p>
 <p>The UCRT build requires UCRT, which has to be installed manually on Windows 7 and Windows 8, but is already shipped with Windows 10. Only on recent Windows 10 (November 2019 release or newer), it will use UTF-8 as the native encoding. On older Windows 10 it will use the system locale like the MSVCRT build.</p>
 <p>When UTF-8 is used as native encoding, one needs to run <code>chcp 65001</code> before running R (more below). Use <code>l10n_info()</code> to see if UTF-8 is the native encoding.</p>
 <p>To test the MSVCRT build on a machine running in a European language locale, one needs to switch the locale for testing multi-byte characters. This is a system-wide setting and only should be changed with care. One can switch the display language back say to English from elevated PowerShell command line (when it becomes too difficult from the user interface):</p>

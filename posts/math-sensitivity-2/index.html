@@ -186,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>C math library functions, such as <code>exp</code> or <code>sin</code>, are not guaranteed to be “precise”. The results might be slightly different on different platforms. A recent change in mingw-w64 v12, which is a core dependency of compilers we use on Windows (both GCC and LLVM), resulted in failures in about 20 CRAN packages. Rtools45 uses mingw-w64 v11, the same version as Rtools44, to allow time for resolving the issues. The change in mingw-w64 v12 switched about 90 math functions from internal implementations to UCRT, the Windows C runtime provided by Microsoft and shipped with the OS. The goal of the change was improving performance and reducing maintenance cost of mingw-w64.</p>
-<p>Interested readers should first read the previous <a href="https://blog.r-project.org/2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12">blog post on the topic</a>. This post presents additional observations.</p>
+<p>Interested readers should first read the previous <a href="../../2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12">blog post on the topic</a>. This post presents additional observations.</p>
 <section id="results-differ-between-windows-versions" class="level2">
 <h2 class="anchored" data-anchor-id="results-differ-between-windows-versions">Results differ between Windows versions</h2>
 <p>Four CRAN packages failed on (two independent) CRAN servers, both running the latest version of Windows Server 2022, but they passed their tests on a Windows 10 system. It turned out that the failures were due to math functions returning different values on Windows Server 2022 compared to Windows 10.</p>
