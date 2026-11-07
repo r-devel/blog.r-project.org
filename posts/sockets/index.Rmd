@@ -4,7 +4,8 @@ author: "Tomas Kalibera, Luke Tierney"
 date: 2020-03-17
 categories: ["R Core", "performance", "internals"]
 description: "Socket improvements dramatically speed up parallel cluster startup times (14 seconds down to 0.4 seconds)."
-
+aliases:
+  - "/2020/03/17/socket-connections-update/index.html"
 ---
 
 Starting up a PSOCK cluster is not fast.  In R 3.6 on just a few years old

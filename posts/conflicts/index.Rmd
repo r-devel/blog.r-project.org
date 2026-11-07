@@ -4,7 +4,8 @@ author: Luke Tierney
 date: 2019-03-19
 categories: ["classes/methods", "language"]
 description: "R 3.6 adds the conflicts.policy option to give more control over how package search path conflicts are handled."
-
+aliases:
+  - "/2019/03/19/managing-search-path-conflicts/index.html"
 ---
 
 ```{r global_options, include=FALSE}

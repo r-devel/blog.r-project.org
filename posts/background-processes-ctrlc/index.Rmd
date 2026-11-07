@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2023-05-23
 categories: ["R Core", "language", "internals"]
 description: "Fixing a bug where Ctrl+C was incorrectly interrupting background tasks like those started with system(wait=FALSE) or pipe()."
-
+aliases:
+  - "/2023/05/23/not-interrupting-background-tasks-with-ctrl-c/index.html"
 ---
 
 When using R interactively from the command line, one can interrupt the

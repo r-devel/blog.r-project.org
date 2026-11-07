@@ -4,7 +4,8 @@ author: "Tomáš Kalibera"
 date: 2026-01-30
 categories: ["testing", "numerical"]
 description: "Fuzzing tool (mfuzz) helps establish robust numerical test tolerances on Linux."
-
+aliases:
+  - "/2026/01/30/debugging-sensitivity-to-c-math-library-on-linux/index.html"
 ---
 
 C math library functions, such as `exp` or `sin`, are not guaranteed to be
@@ -62,9 +63,9 @@ packages when debugging issues with mingw-w64 v12 were caused by differences
 in numerical results of only 1 ULP.
 
 Interested readers are referred to previous blog posts on the
-topic from[January](https://blog.r-project.org/2026/01/06/debugging-sensitivity-to-c-math-library-and-mingw-w64-v12/)
-from [April](https://blog.r-project.org/2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12)
-and [May](https://blog.r-project.org/2025/05/21/sensitivity-to-c-math-library-and-mingw-w64-v12-part-2).
+topic from[January](/2026/01/06/debugging-sensitivity-to-c-math-library-and-mingw-w64-v12/)
+from [April](/2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12)
+and [May](/2025/05/21/sensitivity-to-c-math-library-and-mingw-w64-v12-part-2).
 
 ## Wrapping Math library calls
 

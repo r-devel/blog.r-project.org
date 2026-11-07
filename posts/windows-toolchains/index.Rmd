@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2025-01-28
 categories: ["packages", "windows"]
 description: "R-devel now supports alternative Windows toolchains for testing and debugging with different compilers."
-
+aliases:
+  - "/2025/01/28/alternative-toolchains-on-windows/index.html"
 ---
 
 R and R packages on Windows, if they include native code, are built using

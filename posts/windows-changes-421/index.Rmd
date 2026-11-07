@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2022-06-16
 categories: ["windows", "encoding", "UTF-8"]
 description: "R 4.2.1 fixes Windows-specific issues from the UTF-8/UCRT transition."
-
+aliases:
+  - "/2022/06/16/upcoming-changes-in-r-4.2.1-on-windows/index.html"
 ---
 
 R 4.2.1 is [scheduled](https://developer.r-project.org/) to be released next
@@ -17,7 +18,7 @@ the native encoding and for that it switched to the Universal C Runtime
 (UCRT).  This in turn required creating a new R toolchain for Windows and
 re-building R, R packages and all (statically linked) dependencies with it
 ([Rtools42](https://cran.r-project.org/bin/windows/Rtools/rtools42/rtools.html),
-[more details](https://blog.r-project.org/2021/12/07/upcoming-changes-in-r-4.2-on-windows) on the transition).
+[more details](/2021/12/07/upcoming-changes-in-r-4.2-on-windows) on the transition).
 
 Using UTF-8 as the native encoding significantly reduces the number of
 encoding conversion issues when working with characters not representable in
@@ -37,7 +38,7 @@ to UTF-8/UCRT have been found to this date.
 
 It would be nice to get more help from the R community volunteers with testing R
 before releases, as detailed in a blog post from [April
-2021](https://blog.r-project.org/2021/04/28/r-can-use-your-help-testing-r-before-release). 
+2021](/2021/04/28/r-can-use-your-help-testing-r-before-release). 
 As far I can tell from when we are receiving bug reports, this is still not
 happening much. Such testing doesn't have to be only "manual", a lot of
 interactive testing in principle can be automated as well, but in either

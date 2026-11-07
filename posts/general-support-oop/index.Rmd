@@ -4,7 +4,8 @@ author: "Tomasz Kalinowski, Michael Lawrence, Martin Maechler, Davis Vaughan, Ha
 date: 2024-05-17
 categories: ["classes/methods", "packages"]
 description: "R core introduces new generics to enable next-generation OOP systems like S7 and improve functional OOP support."
-
+aliases:
+  - "/2024/05/17/generalizing-support-for-functional-oop-in-r/index.html"
 ---
 
 ## Generalizing Support for Functional OOP in R

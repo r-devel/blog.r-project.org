@@ -4,7 +4,8 @@ author: "Tomas Kalibera, Uwe Ligges, Kurt Hornik, Simon Urbanek, Deepayan Sarkar
 date: 2021-12-07
 categories: ["windows", "encoding", "UTF-8", "UCRT"]
 description: "R 4.2 on Windows brings UTF-8 support, new toolchain, and end of 32-bit support."
-
+aliases:
+  - "/2021/12/07/upcoming-changes-in-r-4.2-on-windows/index.html"
 ---
 
 R 4.2 for Windows will support UTF-8 as native encoding, which will be a
@@ -59,7 +60,7 @@ builds, patched CRAN package binary builds, patched Bioconductor package
 binary builds (only those needed by CRAN), and a compatible build of JAGS and
 Tcl/Tk bundle. Automated R-devel binary builds and CRAN package checks have been
 provided since
-[March 2021](https://blog.r-project.org/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/),
+[March 2021](/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/),
 with results linked from CRAN.
 More information is provided in
 [Howto: UTF-8 as native encoding in R on Windows](https://developer.r-project.org/WindowsBuilds/winutf8/ucrt3/howto.html).
@@ -175,11 +176,11 @@ together with the compiler toolchain.  MXE itself allows building
 ## Recent changes
 
 This is a result of ongoing work presented in earlier blog posts from
-[May 2020](https://blog.r-project.org/2020/05/02/utf-8-support-on-windows/),
-[July 2020](https://blog.r-project.org/2020/07/30/windows/utf-8-build-of-r-and-cran-packages/),
-[March 2021](https://blog.r-project.org/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/).
+[May 2020](/2020/05/02/utf-8-support-on-windows/),
+[July 2020](/2020/07/30/windows/utf-8-build-of-r-and-cran-packages/),
+[March 2021](/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/).
 
-The progress in "ucrt3" since [March 2021](https://blog.r-project.org/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/)
+The progress in "ucrt3" since [March 2021](/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/)
 includes:
 
 ### Rtools42

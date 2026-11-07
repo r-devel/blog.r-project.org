@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2019-04-18
 categories: ["C/C++", "packages"]
 description: "Guide to finding and fixing common PROTECT errors in R C/C++ packages using the rchk tool."
-
+aliases:
+  - "/2019/04/18/common-protect-errors/index.html"
 ---
 
 This post presents the most common PROTECT bugs present in packages, based

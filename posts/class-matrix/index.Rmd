@@ -5,7 +5,8 @@ author: "Martin Maechler"
 date: 2019-11-09
 categories: ["classes/methods", "language"]
 description: "A historical quirk: R matrices are not arrays in the inheritance sense, with important implications for S3 methods."
-
+aliases:
+  - "/2019/11/09/when-you-think-class.-think-again/index.html"
 ---
 
 <!-- slug: the above, as it is in R-devel / bit.ly;  TODO: in future -->

@@ -4,7 +4,8 @@ author: "Paul Murrell"
 date: 2022-06-09
 categories: ["graphics", "internals"]
 description: "Vectorized pattern fills in R graphics allow multiple patterns in a single function call."
-
+aliases:
+  - "/2022/06/09/vectorised-patterns-in-r-graphics/index.html"
 ---
 
 ```{r eval=FALSE, echo=FALSE}
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(
 
 Support for pattern fills
 was added to the R graphics engine 
-[in R version 4.1.0](https://blog.r-project.org/2020/07/15/new-features-in-the-r-graphics-engine/), with an R interface via the
+[in R version 4.1.0](/2020/07/15/new-features-in-the-r-graphics-engine/), with an R interface via the
 'grid' package.
 
 ```{r eval=FALSE}

@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2022-06-30
 categories: ["documentation"]
 description: "R Blog relocates to blog.r-project.org for broader visibility after 37 posts at developer.r-project.org."
-
+aliases:
+  - "/2022/06/30/moving-to-blog.r-project.org/index.html"
 ---
 
 The R blog moves to

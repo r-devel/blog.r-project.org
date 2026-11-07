@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2022-07-12
 categories: ["performance", "encoding"]
 description: "Regex operations are now faster thanks to optimized encoding conversions in R-devel."
-
+aliases:
+  - "/2022/07/12/speedups-in-operations-with-regular-expressions/index.html"
 ---
 
 ```{r setup, include=FALSE}

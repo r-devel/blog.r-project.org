@@ -4,7 +4,8 @@ author: "Martyn Plummer"
 date: 2026-05-05
 categories: ["R Foundation", "R Core"]
 description: "Celebrating 50 years of the S and R programming languages with historical perspective."
-
+aliases:
+  - "/2026/05/05/s-at-50/index.html"
 ---
 
 

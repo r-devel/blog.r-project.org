@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2018-03-23
 categories: ["internals", "windows"]
 description: "Understanding R's DLL limits and how they relate to system file descriptor constraints across different platforms."
-
+aliases:
+  - "/2018/03/23/maximum-number-of-dlls/index.html"
 ---
 
 Some packages contain native code, which is linked to R dynamically in the

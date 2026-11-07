@@ -6,7 +6,8 @@ categories: ["graphics", "internals"]
 abstract: In R 4.0.0, Cairo-based graphics devices will allow the user to select
   a symbol font.  That is not as straightforward as it sounds.
 description: "Simplifying symbol font selection in Cairo-based graphics devices for R 4.0.0."
-
+aliases:
+  - "/2020/04/17/changes-to-symbol-fonts-for-cairo-graphics-devices/index.html"
 ---
 
 ```{r setup, include=FALSE}

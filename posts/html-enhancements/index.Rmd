@@ -4,7 +4,8 @@ author: "Deepayan Sarkar and Kurt Hornik"
 date: 2022-04-08
 categories: ["documentation", "language"]
 description: "R 4.2 enhances help pages with math rendering via KaTeX/MathJax, syntax highlighting, and live example output."
-
+aliases:
+  - "/2022/04/08/enhancements-to-html-documentation/index.html"
 ---
 
 The upcoming release of R (version 4.2.0) features several

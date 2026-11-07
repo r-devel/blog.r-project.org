@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2024-12-02
 categories: ["performance", "packages"]
 description: "R 4.5 speeds up package downloads through simultaneous file transfer, reducing installation time significantly."
-
+aliases:
+  - "/2024/12/02/faster-downloads/index.html"
 ---
 
 Most R users would sometimes install or update R packages and hence are
