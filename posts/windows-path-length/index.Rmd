@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2023-03-07
 categories: ["windows", "internals"]
 description: "R now supports longer file paths on modern Windows systems, overcoming MAX_PATH limitations."
-
+aliases:
+  - "/2023/03/07/path-length-limit-on-windows/index.html"
 ---
 
 

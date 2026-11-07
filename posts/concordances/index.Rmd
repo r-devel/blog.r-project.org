@@ -5,7 +5,8 @@ date: "2022-10-20"
 output: html_document
 categories: ["documentation", "Sweave"]
 description: "Using concordances to map error locations from generated files back to original R source files."
-
+aliases:
+  - "/2022/10/20/concordances/index.html"
 ---
 
 One of the strengths of R is its ability to help in 

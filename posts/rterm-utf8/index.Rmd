@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2021-04-17
 categories: ["windows", "encoding", "UTF-8"]
 description: "RTerm now supports multi-byte characters for Japanese and other non-European languages in R 4.1."
-
+aliases:
+  - "/2021/04/17/improved-multi-byte-support-in-rterm/index.html"
 ---
 
 Support for multi-byte characters and hence non-European languages in RTerm,
@@ -29,7 +30,7 @@ R-devel, install R from
 places following the 4.1 release process.
 
 To experiment with the UCRT build, see the
-[blog post](https://blog.r-project.org/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/index.html)
+[blog post](/2021/03/12/windows/utf-8-toolchain-and-cran-package-checks/index.html)
 about those builds and install R from
 [here](https://www.r-project.org/nosvn/winutf8/ucrt3/).
 

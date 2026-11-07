@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2020-05-29
 categories: ["testing", "QEMU"]
 description: "Test R on ARM and Power platforms using QEMU emulation to prepare for unusual hardware."
-
+aliases:
+  - "/2020/05/29/testing-r-on-emulated-platforms/index.html"
 ---
 
 Sometimes it is useful to test R on unusual platforms, even when the

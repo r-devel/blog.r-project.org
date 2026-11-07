@@ -4,7 +4,8 @@ author: "Tomas Kalibera, Luke Tierney"
 date: 2019-12-16
 categories: ["R Core", "community", "testing"]
 description: "Community effort significantly improves R bug resolution rate and backlog management."
-
+aliases:
+  - "/2019/12/16/thanks-for-reviewing-bug-reports/index.html"
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +13,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 ```
 
 Just a quick update and note of thanks to all who have responded to
-our [blog post](https://blog.r-project.org/2019/10/09/r-can-use-your-help-reviewing-bug-reports/index.html)
+our [blog post](/2019/10/09/r-can-use-your-help-reviewing-bug-reports/index.html)
 on 2019-10-09 and helped with reviewing and resolving bug reports.
 Thanks to your help the pace at which bugs have been resolved has
 increased nicely since the date of that post:

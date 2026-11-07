@@ -4,6 +4,8 @@ author: "Achim Zeileis, Paul Murrell"
 date: 2019-04-01
 categories: ["graphics", "colors"]
 description: "R 3.6 introduces perceptually-balanced HCL color palettes for better data visualization and improved colorblind accessibility."
+aliases:
+  - "/2019/04/01/hcl-based-color-palettes-in-grdevices/index.html"
 ---
 
 ```{r global_options, include=FALSE}

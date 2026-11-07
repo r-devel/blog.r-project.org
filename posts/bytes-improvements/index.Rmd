@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2022-10-10
 categories: ["encoding", "internals"]
 description: "Recent improvements in R's handling of bytes-encoded strings and guidance on their appropriate use cases."
-
+aliases:
+  - "/2022/10/10/improvements-in-handling-bytes-encoding/index.html"
 ---
 
 In R, a string can be declared to be in *bytes* encoding.  According to
@@ -345,7 +346,7 @@ other reason, because of not only the type instability, but also limitations
 of the regular expressions that may be used.  In the past, this has been
 done for performance, but performance of regexp operations was improved
 recently for this reason (see this [blog
-post](https://blog.r-project.org/2022/07/12/speedups-in-operations-with-regular-expressions/index.html)). 
+post](/2022/07/12/speedups-in-operations-with-regular-expressions/index.html)). 
 It also used to be done when the support for handling UTF-8 strings in R was
 limited, but that again should no longer be a valid reason anymore.
 

@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2022-11-07
 categories: ["windows", "encoding", "UTF-8", "UCRT"]
 description: "Technical deep-dive into R's Windows UTF-8/UCRT transition challenges and solutions in R 4.2.0."
-
+aliases:
+  - "/2022/11/07/issues-while-switching-r-to-utf-8-and-ucrt-on-windows/index.html"
 ---
 
 From version 4.2.0 released in April 2022, R on Windows uses UTF-8 as the
@@ -414,7 +415,7 @@ Rterm/getline with support for multi-width and multi-byte characters, and
 also with support for input using `Alt+` sequences. R 4.1 already received a
 rewrite of this code, which was already aiming at UTF-8 support. More
 details are in [Improved Multi-byte Support in
-RTerm](https://blog.r-project.org/2021/04/17/improved-multi-byte-support-in-rterm).
+RTerm](/2021/04/17/improved-multi-byte-support-in-rterm).
 
 What seems to have been useful in the transition to UTF-8: fixing support
 for various `Alt+` input sequences (with and without numlock, on numpad and

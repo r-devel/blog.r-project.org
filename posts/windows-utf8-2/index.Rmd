@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2020-07-30
 categories: ["windows", "encoding", "UTF-8"]
 description: "Experimental R build brings UTF-8 Unicode support to Windows with 92% CRAN package compatibility."
-
+aliases:
+  - "/2020/07/30/windows/utf-8-build-of-r-and-cran-packages/index.html"
 ---
 
 [R-devel-win.exe](https://www.r-project.org/nosvn/winutf8/R-devel-win.exe)
@@ -70,7 +71,7 @@ ggplot(mtcars,aes(x=mpg)) + geom_histogram(binwidth=5) + xlab('マイル/ガロ�
 ```
 
 More usage examples can be found in my previous post from
-[May](https://blog.r-project.org/2020/05/02/utf-8-support-on-windows).
+[May](/2020/05/02/utf-8-support-on-windows).
 At that time, only base and recommended packages were supported.
 
 ## Background

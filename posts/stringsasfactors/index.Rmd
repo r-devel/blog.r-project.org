@@ -4,7 +4,8 @@ author: "Kurt Hornik"
 date: 2020-02-16
 categories: ["language", "classes/methods"]
 description: "Understanding stringsAsFactors behavior and why R's default character-to-factor conversion is changing."
-
+aliases:
+  - "/2020/02/16/stringsasfactors/index.html"
 ---
 
 Since its inception, R has, at least by default, converted (character)

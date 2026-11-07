@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2025-10-13
 categories: ["R Core", "community", "testing"]
 description: "Sustained effort reduces R bug tracker backlog by 25% with clear explanations for all resolutions."
-
+aliases:
+  - "/2025/10/13/reducing-the-backlog-of-open-bug-reports/index.html"
 ---
 
 The number of open bug reports in the [R bug tracker](https://bugs.r-project.org/)
@@ -43,7 +44,7 @@ bugzilla, in some cases I've alerted core developers who have better
 expertise for the reports. 
 
 Six years ago, there was a
-[call for external help](https://blog.r-project.org/2019/10/09/r-can-use-your-help-reviewing-bug-reports)
+[call for external help](/2019/10/09/r-can-use-your-help-reviewing-bug-reports)
 with reviewing bug reports.  The advice provided to potential external
 volunteers still applies.  I would add that it also helps reviewing comments
 in the bug reports: when a bug report discussion ends with a technically

@@ -4,6 +4,8 @@ author: "Achim Zeileis, Paul Murrell, Martin Maechler, Deepayan Sarkar"
 date: 2019-11-21
 categories: ["graphics", "colors"]
 description: "R 4.0 debuts a new default color palette with improved perceptual balance and colorblind-friendly design."
+aliases:
+  - "/2019/11/21/a-new-palette-for-r/index.html"
 ---
 
 ```{r setup, include=FALSE}

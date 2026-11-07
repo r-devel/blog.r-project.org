@@ -4,7 +4,8 @@ author: "Tomáš Kalibera"
 date: 2026-01-06
 categories: ["testing", "numerical"]
 description: "New debugging tool (mdebug) with configurable wrappers helps identify package sensitivity to math library changes."
-
+aliases:
+  - "/2026/01/06/debugging-sensitivity-to-c-math-library-and-mingw-w64-v12/index.html"
 ---
 
 C math library functions, such as `exp` or `sin`, are not guaranteed to be
@@ -19,8 +20,8 @@ change was improving performance and reducing maintenance cost of mingw-w64.
 
 Interested readers should first read the previous
 blog posts on the
-topic from [April](https://blog.r-project.org/2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12)
-and [May](https://blog.r-project.org/2025/05/21/sensitivity-to-c-math-library-and-mingw-w64-v12-part-2).
+topic from [April](/2025/04/24/sensitivity-to-c-math-library-and-mingw-w64-v12)
+and [May](/2025/05/21/sensitivity-to-c-math-library-and-mingw-w64-v12-part-2).
 This post presents a tool which allows interested package authors to debug
 any potential issues in their package.
 

@@ -4,7 +4,8 @@ author: "Paul Murrell, Thomas Lin Pedersen"
 date: 2020-04-13
 categories: ["graphics", "performance"]
 description: "Major performance improvements to grid units make ggplot2 and grid graphics significantly faster."
-
+aliases:
+  - "/2020/04/13/changes-to-grid-units/index.html"
 ---
 
 ```{r setup, include=FALSE}

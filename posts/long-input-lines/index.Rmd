@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2024-08-30
 categories: ["R Core", "language", "internals"]
 description: "R now supports pasting unlimited-length code into the console, removing the 4096 byte limit."
-
+aliases:
+  - "/2024/08/30/long-input-lines/index.html"
 ---
 
 When using R interactively via a console, one edits a line of input,

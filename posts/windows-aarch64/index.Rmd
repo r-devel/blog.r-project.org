@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2023-08-23
 categories: ["R Core", "platform support", "windows"]
 description: "Exploring experimental native support for R on 64-bit ARM Windows machines."
-
+aliases:
+  - "/2023/08/23/will-r-work-on-64-bit-arm-windows/index.html"
 ---
 
 At WWDC 2023 earlier this year, Apple announced it completed transition from
@@ -12,7 +13,7 @@ Intel to 64-bit ARM processors (Apple Silicon): no new machines with Intel
 processors will be offered.  This was three years after the transition has
 been announced at WWDC 2020.  The work on R support for the platform started
 the same year and was part of the next R release, R 4.1.  See this [blog
-post](https://blog.r-project.org/2020/11/02/will-r-work-on-apple-silicon)
+post](/2020/11/02/will-r-work-on-apple-silicon)
 for details on initial experiments with R on the platform.
 
 The situation is very different on Windows.  Windows 10 released in 2017

@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2024-04-23
 categories: ["R Core", "platform support", "windows"]
 description: "R 4.4.0 now supports native 64-bit ARM Windows with the new Rtools44 toolchain."
-
+aliases:
+  - "/2024/04/23/r-on-64-bit-arm-windows/index.html"
 ---
 
 R 4.4.0, to be released tomorrow, comes with experimental native support for
@@ -12,7 +13,7 @@ R 4.4.0, to be released tomorrow, comes with experimental native support for
 for the platform has been released at the beginning of March.
 
 The effort to add Windows/aarch64 support to R has been announced in [August,
-2023](https://blog.r-project.org/2023/08/23/will-r-work-on-64-bit-arm-windows).
+2023](/2023/08/23/will-r-work-on-64-bit-arm-windows).
 
 # Installation
 

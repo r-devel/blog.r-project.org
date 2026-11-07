@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2021-03-18
 categories: ["testing", "windows"]
 description: "Free Windows VM setup from Microsoft for testing R packages on Linux and macOS systems."
-
+aliases:
+  - "/2021/03/18/virtual-windows-machine-for-checking-r-packages/index.html"
 ---
 
 Microsoft provides a free Windows 10 virtual machine for testing.  Package

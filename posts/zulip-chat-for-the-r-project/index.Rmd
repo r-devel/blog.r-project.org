@@ -4,7 +4,8 @@ author: "Ella Kaye and Heather Turner"
 date: "2026-09-22"
 categories: ["R Foundation", "R Core", "community"]
 description: "R Project adopts open-source Zulip platform to replace Slack for developer chat and collaboration."
-
+aliases:
+  - "/2026/09/22/zulip-chat-for-the-r-project/index.html"
 ---
 
 The R Project now has a [Zulip](https://zulip.com) instance for 
@@ -74,7 +75,7 @@ We are launching the Zulip according to the following timeline:
 
 - August 19th - September 22nd: members invited from the R Foundation, 
 [R Contribution Working Group](https://contributor.r-project.org/working-group.html), 
-[RSMF project](https://blog.r-project.org/2025/12/17/rsmf-enabling-the-next-generation-of-contributors-to-r/index.html), and 
+[RSMF project](/2025/12/17/rsmf-enabling-the-next-generation-of-contributors-to-r/index.html), and 
 [R Project Sprint 2026](https://contributor.r-project.org/r-project-sprint-2026/)
 participants, to test the set-up and give feedback.
 

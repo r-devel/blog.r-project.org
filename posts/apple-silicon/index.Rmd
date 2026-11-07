@@ -4,7 +4,8 @@ author: "Tomas Kalibera, Simon Urbanek"
 date: 2020-11-02
 categories: ["R Core", "platform support", "testing"]
 description: "Investigating R's native support for Apple Silicon ARM processors and the transition from Intel, including compiler needs and floating-point considerations."
-
+aliases:
+  - "/2020/11/02/will-r-work-on-apple-silicon/index.html"
 ---
 
 At WWDC 2020 earlier this year, Apple announced a transition from Intel to
@@ -45,7 +46,7 @@ Apple provides an optimized version of BLAS and LAPACK as part of the Accelerate
 framework in macOS.
 
 GCC's GFortran supports 64-bit ARMs: an earlier blog post
-from [May](https://blog.r-project.org/2020/05/29/testing-r-on-emulated-platforms)
+from [May](/2020/05/29/testing-r-on-emulated-platforms)
 was about building and testing R on Linux running on 64-bit ARM (Aarch64)
 inside QEMU emulator.  However, the Apple silicon platform uses a different
 application binary interface (ABI) which GFortran does not support, yet.

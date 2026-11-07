@@ -4,7 +4,8 @@ author: "Tomas Kalibera"
 date: 2019-05-15
 categories: ["R Core", "Fortran", "BLAS/LAPACK"]
 description: "Recent GFortran optimizations break BLAS/LAPACK interoperability; workaround using -fno-optimize-sibling-calls."
-
+aliases:
+  - "/2019/05/15/gfortran-issues-with-lapack/index.html"
 ---
 
 Recent version of the GNU Fortran compiler (7, 8, 9) include optimizations

@@ -4,11 +4,12 @@ author: "Tomas Kalibera"
 date: 2019-09-25
 categories: ["R Core", "Fortran", "BLAS/LAPACK"]
 description: "GFortran improvements address LAPACK issues with new -ftail-call-workaround option and updated approach in R."
-
+aliases:
+  - "/2019/09/25/gfortran-issues-with-lapack-ii/index.html"
 ---
 
 This is an update on my previous post [from
-May](https://blog.r-project.org/2019/05/15/gfortran-issues-with-lapack/index.html). 
+May](/2019/05/15/gfortran-issues-with-lapack/index.html). 
 
 A number of things changed since: GFortran started adopting a fix that by
 default prevents optimizations which break code calling BLAS/LAPACK

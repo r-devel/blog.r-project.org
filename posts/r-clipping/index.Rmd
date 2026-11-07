@@ -4,7 +4,8 @@ author: "Paul Murrell"
 date: 2020-06-08
 categories: ["graphics", "internals"]
 description: "Improvements to graphics engine clipping reduce visual artifacts in output to devices."
-
+aliases:
+  - "/2020/06/08/improvements-to-clipping-in-the-r-graphics-engine/index.html"
 ---
 
 **UPDATE (2020-11-18):  canClip = NA_LOGICAL has been replaced by
