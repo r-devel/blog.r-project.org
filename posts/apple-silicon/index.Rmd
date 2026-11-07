@@ -183,5 +183,5 @@ optimizations or algorithmically in external libraries.
 5. [Floating point exception tracking and NAN propagation](https://www.agner.org/optimize/nan_propagation.pdf)
    A text also on NaN payload propagation by Agner Fog.
 
-6. ARM RunFast Mode (https://developer.arm.com/documentation/ddi0274/h/programmer-s-model/compliance-with-the-ieee-754-standard/ieee-754-standard-implementation-choices)
+6. [ARM RunFast Mode](https://developer.arm.com/documentation/ddi0274/h/programmer-s-model/compliance-with-the-ieee-754-standard/ieee-754-standard-implementation-choices)
    Description of differences of RunFast mode from IEEE 754.
