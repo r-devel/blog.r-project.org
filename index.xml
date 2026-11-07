@@ -17,7 +17,159 @@
 <width>144</width>
 </image>
 <generator>quarto-1.11.9</generator>
-<lastBuildDate>Tue, 29 Sep 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 07 Nov 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Distribution-Free Analysis for Stratified Oneway Layouts</title>
+  <dc:creator>Torsten Hothorn and Kurt Hornik</dc:creator>
+  <link>https://blog.R-project.org/posts/free1way/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Since more than two decades, the <strong>stats</strong> package serves as a home for well-established statistical analysis tools, including linear and generalized linear models or a versatile collection of statistical test procedures featuring <code>*.test()</code> user interfaces. In some cases, such as <code>t.test()</code>, <code>var.test()</code>, or <code>binom.test()</code>, the null and alternative hypotheses are formulated in terms of a parametric model. Model diagnostics and power analysis is relatively simple in this situation and corresponding functionality is provided by <strong>stats</strong>, for example as <code>qqnorm()</code>, <code>power.t.test()</code> etc.</p>
+<p>Other procedures are fully nonparametric. The Smirnov two-sample test, for example, allows testing the null of equal distributions against arbitrary alternatives in the two-sample oneway layout via <code>ks.test()</code>.</p>
+<p>For yet another group of test procedures it is harder to understand the underlying model. This makes model diagnostics and also power analysis much more challenging, which explains the absence of, for example, <code>power.wilcox.test()</code> or <code>power.friedman.test()</code> from the <strong>stats</strong> package.</p>
+<p>Beginning with R version 4.6.0, the novel <code>free1way()</code> function provides a unified interface to semiparametrically efficient population and permutation inference in distribution-free stratified K-sample oneway layouts. This post explains the rationale of this model class and discusses how existing test procedures, for example <code>kruskal.test()</code>, are enhanced by this new tool.</p>
+</section>
+<section id="distribution-free-oneway-layouts" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-free-oneway-layouts">Distribution-free oneway layouts</h2>
+<p>When comparing the distributions of some outcome in certain experimental groups, we might refrain from making assumptions regarding the distribution function in one of these groups (typically a control group corresponding to the first factor level, say <img src="https://latex.codecogs.com/png.latex?F_0">) while, at the same time, assuming that the distribution functions in the remaining groups are simple transformations of this control distribution characterized by a single parameter. Under this model, we assume that the distribution function in the second group <img src="https://latex.codecogs.com/png.latex?F_1"> is a function of distribution function in the control group <img src="https://latex.codecogs.com/png.latex?F_0"> and a parameter <img src="https://latex.codecogs.com/png.latex?%5Ctau">. For example <img src="https://latex.codecogs.com/png.latex?F_1%20=%20F_0%5E%7B%5Cexp(-%5Ctau)%7D">, with <img src="https://latex.codecogs.com/png.latex?%5Ctau"> being our unknown treatment effect parameter to be estimated.</p>
+<p>This idea, going back to Erich Lehmann’s 1953 paper on <a href="https://doi.org/10.1214/aoms/1177729080">The Power of Rank Tests</a>, allows the formulation of many statistical tests for the composite null <img src="https://latex.codecogs.com/png.latex?%5Ctau%20=%200"> or one-sided alternatives. As an example, consider the Wilcoxon-Mann-Whitney rank sum test. It turns out that this classical test is the score test under the proportional-odds model <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7BF_1%7D%7B1%20-%20F_1%7D%20=%20%5Cexp(-%5Ctau)%20%5Cfrac%7BF_0%7D%7B1%20-%20F_0%7D%0A"> whose parameters <img src="https://latex.codecogs.com/png.latex?F_0"> and <img src="https://latex.codecogs.com/png.latex?%5Ctau"> can be estimated by maximising the empirical log-likelihood. If more than two samples are to be compared, the model corresponds to the Kruskal-Wallis test.</p>
+<p>As an illustration, consider the example presented in the manual page of <code>kruskal.test()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">## Hollander &amp; Wolfe (1973), 116.</span></span>
+<span id="cb1-2"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">## Mucociliary efficiency from the rate of removal of dust in normal</span></span>
+<span id="cb1-3"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">##  subjects, subjects with obstructive airway disease, and subjects</span></span>
+<span id="cb1-4"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">##  with asbestosis.</span></span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">example</span>(kruskal.test, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">echo =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">levels</span>(g) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Normal"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"COPD"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Asbestosis"</span>)</span>
+<span id="cb2-2">(kt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kruskal.test</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> g))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  x by g
+Kruskal-Wallis chi-squared = 0.77143, df = 2, p-value = 0.68</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">(ft <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">free1way</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> g))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    3-sample Kruskal-Wallis test against proportional odds alternatives
+
+data:  x by g (Normal, COPD, Asbestosis)
+Perm chi-squared = 0.77143, df = 2, p-value = 0.68
+alternative hypothesis: true log-odds ratio is not equal to 0</code></pre>
+</div>
+</div>
+<p>The test statistics and p-values are identical, but the print method of the latter procedure informs about the alternative this test is powerful (in fact, the locally most powerful test) against.</p>
+<p>In contrast to the classical implementation in <code>kruskal.test()</code> (where <code>coef(kt)</code> comes back empty handed), the novel <code>free1way()</code> is aware of the semiparametric nature of the model and allows to access the estimated log-odds ratios along with a confidence interval (a Rao score interval is presented here):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">LogOR =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(ft),</span>
+<span id="cb6-2">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">confint</span>(ft, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">test =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Rao"</span>))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 LogOR     2.5 %   97.5 %
+gCOPD        1.0350087 -1.397616 3.475640
+gAsbestosis -0.3706949 -2.482256 1.748293</code></pre>
+</div>
+</div>
+<p>The data analysis could also question the sample size needed to demonstrate an overall effect when the true log-odds ratios are close to the one estimated from this dataset</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">power.free1way.test</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">delta =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(ft), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">power =</span> .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      3-sample Kruskal-Wallis test against proportional odds alternatives 
+
+                n = 30
+Total sample size = 30 (Control) + 30 (gCOPD) + 30 (gAsbestosis) = 90
+            power = 0.8008147
+        sig.level = 0.05
+   log-odds ratio = 1.0350087, -0.3706949
+
+NOTE: 'n' is sample size in control group</code></pre>
+</div>
+</div>
+</section>
+<section id="features" class="level2">
+<h2 class="anchored" data-anchor-id="features">Features</h2>
+<p>Binary, ordered categorical, numeric and possibly right-censored outcomes can be analyzed using <code>free1way()</code>. In stratified designs, strata can be specified as blocks. Wald, likelihood-ratio and Rao score tests and confidence intervals are available. In addition, permutation tests (asymptotic and resampling-based, exact for two-sample proportional odds models) can be performed to test hypotheses. Multiple comparisons can be conducted via an interface to the <a href="https://doi.org/10.32614/CRAN.package.multcomp">multcomp package</a>. Similar to Firth’s method in binary GLMs, penalisation via Jeffreys’ prior is implemented.</p>
+</section>
+<section id="resources" class="level2">
+<h2 class="anchored" data-anchor-id="resources">Resources</h2>
+<p>In addition to the documentation, examples, and tests provided in the <strong>stats</strong> package, a dedicated <a href="https://doi.org/10.32614/CRAN.package.free1way.docreg">free1way.docreg package</a> features two vignettes explaining the implementation and statistical framework in depths, along additional regression tests comparing the implementation against benchmarks such as <code>rms::orm()</code> (<a href="https://doi.org/10.32614/CRAN.package.rms">rms package</a>), <code>MASS::polr()</code> (<a href="https://doi.org/10.32614/CRAN.package.MASS">MASS package</a>), or <code>tram::Polr()</code> (<a href="https://doi.org/10.32614/CRAN.package.tram">tram package</a>).</p>
+
+
+</section>
+
+ ]]></description>
+  <category>R Core</category>
+  <category>stats</category>
+  <guid>https://blog.R-project.org/posts/free1way/</guid>
+  <pubDate>Sat, 07 Nov 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 2</title>
   <dc:creator>Šimon Urbánek and Tomáš Kalibera</dc:creator>
@@ -1481,99 +1633,6 @@ font-style: inherit;">$</span>Variable)</span></code></pre></div></div>
   <category>windows</category>
   <guid>https://blog.R-project.org/posts/windows-aarch64-2/</guid>
   <pubDate>Tue, 23 Apr 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Will R Work on 64-bit ARM Windows?</title>
-  <dc:creator>Tomas Kalibera</dc:creator>
-  <link>https://blog.R-project.org/posts/windows-aarch64/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>At WWDC 2023 earlier this year, Apple announced it completed transition from Intel to 64-bit ARM processors (Apple Silicon): no new machines with Intel processors will be offered. This was three years after the transition has been announced at WWDC 2020. The work on R support for the platform started the same year and was part of the next R release, R 4.1. See this <a href="https://blog.r-project.org/2020/11/02/will-r-work-on-apple-silicon">blog post</a> for details on initial experiments with R on the platform.</p>
-<p>The situation is very different on Windows. Windows 10 released in 2017 already supported 64-bit ARM processors, but it didn’t have an emulator to run 64-bit Intel binaries (only 32-bit), so many applications wouldn’t run. The hardware availability was limited at the time: there were only tablet (or tablet-like) options, but no fast laptops nor workstations to use the system. Today, Windows 11 is available and supports emulation of 64-bit Intel applications. Apple M2 and M1 machines can be used (with virtualization) to run Windows and somewhat ironically even Microsoft recommends it as one option. Mac users would probably rather use a macOS version of R, but the hardware availability of ARM machines available to run Windows fully natively has also been improving. So, will R work on Windows on 64-bit ARM?</p>
-<p>The executive summary is: while there is currently no released stable Fortran compiler for the platform, LLVM/flang is already good enough to build at least base R and recommended packages. Only a reasonable amount of changes is needed for R on Windows to build using LLVM. Initial experiments suggest that extending Rtools43 to support LLVM/aarch64 would be possible. More details follow in this post.</p>
-<section id="hardware-for-testing" class="level2">
-<h2 class="anchored" data-anchor-id="hardware-for-testing">Hardware for testing</h2>
-<p>The experiments have been performed on a MacBook Pro machine with Apple M1 Pro processor, running a virtual machine (QEMU/UTM) with Windows 11. The performance of running checks and compilation was acceptable.</p>
-</section>
-<section id="emulation" class="level2">
-<h2 class="anchored" data-anchor-id="emulation">Emulation</h2>
-<p>R 4.3.1 built for 64-bit Intel machines runs on Windows 11 on 64-bit ARM, but it doesn’t pass the installation tests (<a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Testing-a-Windows-Installation">Testing an Installation</a> in R Admin manual) due to numerical differences. Additional testing and analysis would be needed to conclude whether these differences, most likely caused by the emulator, are still acceptable or not.</p>
-<p>Windows on 64-bit ARM also allows hybrid emulation when, in a single address space, part of the code is built for 64-bit Intel (x86_64), but another part can be built to run natively on 64-bit ARM but using proprietary Microsoft ABI called <a href="https://learn.microsoft.com/en-us/windows/arm/arm64ec">arm64ec</a>. Arm64ec is based on x86_64 calling convention and is also used by Windows itself. One can then combine both “true” 64-bit ARM binary (called arm64 or aarch64, the latter used in this text) with an arm64ec binary in a single arm64x binary.</p>
-<p>The experiments reported here targeted aarch64 only, so all code to run in a single address space (R, R packages and external libraries) has to be built for aarch64. Aarch64 code is expected to have best performance and lowest power consumption on the platform.</p>
-</section>
-<section id="r-needs-a-c-and-fortran-compiler" class="level2">
-<h2 class="anchored" data-anchor-id="r-needs-a-c-and-fortran-compiler">R needs a C and Fortran compiler</h2>
-<p>R needs a C and Fortran compiler to build. R for Windows has been traditionally built using GNU Compiler Collection (GCC): gcc for C and gfortran for Fortran code. While GCC supports aarch64 on Linux without problems, and there is at least a development branch of GCC with support for aarch64 on macOS, there is no such GCC support readily available for Windows. A recent effort to add this support may be followed on <a href="https://gcc.gnu.org/bugzilla//show_bug.cgi?id=108678">GCC bugzilla</a>.</p>
-<p>LLVM on the other hand has supported Windows/aarch64 (via MinGW-W64) for many years, at least from 2018, see this <a href="https://groups.google.com/g/llvm-dev/c/wTKhyPt6QIA">thread</a> for details. However, while R could use clang (the C compiler) from LLVM, there was no Fortran 90 compiler option available in LLVM (for any platform) nor any other free Fortran 90 compiler for Windows/aarch64.</p>
-<p>Only earlier this year the flang compiler (sometimes referred to as flang-new, so not the classic flang compiler) in LLVM became usable to the point that it could build R including base and recommended packages on Linux. The testing and additional support for new flang on Unix platforms in R has been done by Brian Ripley, who has been also testing CRAN packages and working with their authors on necessary adjustments to support flang on Unix.</p>
-<p>The new flang progress finally made it possible to actually try out also building R for Windows/aarch64.</p>
-</section>
-<section id="required-changes" class="level2">
-<h2 class="anchored" data-anchor-id="required-changes">Required changes</h2>
-<p>Most of R is being tested by different compilers (including LLVM clang and recently the new flang) and on different platforms (including aarch64), so most of the code did not require any changes. However, the Windows-specific code in R has been recently only used with GCC, binutils and Intel processors and these were sometimes assumed unconditionally. The required changes were as follows.</p>
-<p>Several bits of Intel assembly code were replaced by aarch64 assembly, by C code or removed (entering the debugger, resetting FPU state, swapping bytes).</p>
-<p>C code had to be modernized to make LLVM clang 16 happy. Name conflicts between GraphApp symbols and system headers were resolved. K&amp;R notation in some old incorporated code had to be replaced. Function pointer types were extended to list also argument types. Functions without a prototype had to get one, e.g.&nbsp;explicitly add <code>void</code> as argument when the function takes no arguments.</p>
-<p>Use of <code>dllimport</code> and <code>dllexport</code> attributes had to be updated to prevent cases when adding the attribute in a re-declaration, which is treated as error: <code>dllimport</code> is not needed at all so can be omitted, and <code>dllexport</code> is not used in R because exports from DLLs are handled via definition files.</p>
-<p>A call to <code>isnan</code> on an integer had to be avoided, because it caused a crash, but it shouldn’t be done anyway and normally causes a warning. Clang identifies itself as rather old GCC, so in one case old unused code got unintentionally used, and hence proper conditioning was added for clang.</p>
-<p>File version meta-data specifying the version of R had to be updated because <code>llvm-rc</code>, the resource compiler, requires that each element of <code>FILEVERSION</code> fits into 16 bits. The current SVN release of R no longer fits into 16 bits.</p>
-<p>Support for Windows/aarch64 had to be added to functions detecting the current platform and the compiler in use, e.g.&nbsp;to appear in <code>sessionInfo()</code>. Mapping between selected programming language functions and low-level runtime symbol names had to be provided for this platform (sotools, these are used in package checks).</p>
-<p>Windows make files got initial support for LLVM compilers and tools (<code>USE_LLVM</code>).</p>
-<p>The <code>WIN</code> variable now can be empty to denote an unknown/unspecified architecture (64/32 denoted 64-bit and 32-bit Intel) for which packages will be compiled from source by default and sub-architectures will not be used. With this setting, e.g.&nbsp;<code>Rterm.exe</code> will be in <code>bin</code> instead of say <code>bin/x64</code>. This is similar to how R works by default on Unix.</p>
-<p>These changes are experimental and, if needed, may be amended or removed.</p>
-</section>
-<section id="rtools" class="level2">
-<h2 class="anchored" data-anchor-id="rtools">Rtools</h2>
-<p>As of Rtools42, Rtools is a set of Msys2 build tools, MXE-built compiler toolchain+libraries and several standalone tools. The Msys2 build tools and the standalone tools for x86_64 can be used on Windows 11/aarch64 via emulation. The compiler toolchain and libraries have to be different.</p>
-<p><a href="https://mxe.cc/">MXE</a> is a cross-compiling environment. The compiler toolchain as well as the libraries are built on Linux/x86_64. Thanks to that, existing infrastructure, including hardware, can be used for the building and experimentation.</p>
-<p>While MXE does not support LLVM yet (see a <a href="https://github.com/mxe/mxe/issues/2330">bug report</a> where this can be tracked), MXE has been reported to have been used with slightly customized <a href="https://github.com/mstorsjo/llvm-mingw">llvm-mingw</a> toolchain from Martin Storsjo in the scope of <a href="https://github.com/libvips/build-win64-mxe/tree/master/build/plugins/llvm-mingw">libvips project</a>. Llvm-mingw, however, does not support flang.</p>
-<p>Rtools43, specifically its fork of MXE, has been hence extended to support LLVM 16.0.5 including flang as an <a href="https://svn.r-project.org/R-dev-web/trunk/WindowsBuilds/winutf8/ucrt3/toolchain_libs/mxe/plugins/llvm-mingw/">MXE plugin</a>, re-using llvm-mingw scripts and their libvips modifications.</p>
-<p>Unlike llvm-mingw, only a single LLVM target is supported to match how Rtools are used within the R project and to fit into the MXE target directory layout. So, using the same code base, one can build a bundle (of compiler toolchain and libraries) for x86_64 and a completely separate bundle for aarch64.</p>
-<p>When building the toolchain, first LLVM cross-compilers are built on Linux/x86_64. They run on Linux/x86_64 and produce code to run on Windows/aarch64. Using these cross-compilers, LLVM native compilers are built which run on Windows/aarch64 and produce code to run on Windows/aarch64. Building the native flang compiler required an extra bootstrapping step to work-around issues in cross-compiling MLIR (it helped to take inspiration from how Julia cross-compiles MLIR).</p>
-<p>Almost all but not all libraries present in Rtools43 for x86_64 have already been compiled for aarch64, but many more were compiled than necessary to build base R and recommended packages. Experimental builds are <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">available</a> in three tarballs, similarly to the builds targeting the Intel platform: <code>llvm16_ucrt3_base_aarch64_*.tar.zst</code> is the base toolchain and libraries needed to build base R and recommended packages, <code>llvm16_ucrt3_full_aarch64_*.tar.zst</code> is a super-set containing more libraries, and <code>llvm16_ucrt3_cross_aarch64_*.tar.zst</code> is for cross-compilation.</p>
-<p>The cross-compiler is then used to build a Tcl/Tk bundle for R, which is available as <code>Tcl-aarch64-*-*.zip</code>. Building Tcl/Tk required only a small amount of changes to support LLVM 16, because otherwise it already had support for aarch64.</p>
-<p>However, building the libraries for Rtools43 required numerous changes, when the software wasn’t yet updated for Windows/aarch64. They were of similar nature to the changes needed for R itself, as follows.</p>
-<p>Some hand-written assembly code optimized routines, when not available for aarch64 or when relying on GNU assembler, had to be disabled. Some autoconfig files had to be re-generated with new autoconf to support aarch64, which in turn needed sometimes further fixes in the projects. Some MXE build scripts had to be adapted not to assume Intel CPUs on Windows. Some compiler warnings and errors reported by the (stricter) C compiler had to be handled, mostly again re function prototypes and K&amp;R notation. In some cases, upgrading the libraries helped to get code which supported aarch64, but then additional fixes were needed to make them work. Whenever possible and available, fixes for these libraries were re-used from <a href="https://github.com/msys2/MINGW-packages">Msys2</a>.</p>
-<p>The build of R and recommended packages was then done using Rtools, natively on Windows 11/aarch64, similarly as on Intel machines, using a toolchain+libraries tarball and a separate Msys2 installation.</p>
-<p>Scripts for automating the build of Rtools and the Tcl/Tk bundle in docker containers used for Rtools43 were extended to support Windows/aarch64. The scripts and all the experimental changes to Rtools are available at the usual locations (<a href="https://svn.r-project.org/R-dev-web/trunk/WindowsBuilds/winutf8/ucrt3/toolchain_libs">toolchain+libraries</a>, <a href="https://svn.r-project.org/R-dev-web/trunk/WindowsBuilds/winutf8/ucrt3/tcl_bundle">Tcl/Tk bundle</a>).</p>
-<p>The initial experiments were done using a compiler toolchain and libraries provided by <a href="https://www.msys2.org/wiki/arm64/">Msys2</a>. Only after it became clear the amount of changes needed was reasonable, Rtools have been built for aarch64, and the necessary changes cleaned up, tested using Rtools, and commited to R-devel, the development version of R.</p>
-</section>
-<section id="how-to-experiment" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-experiment">How to experiment</h2>
-<p>R-devel can be built using MkRules.local consisting of</p>
-<pre><code>USE_LLVM = 1
-WIN =</code></pre>
-<p>using Rtools full (or base) toolchain+libraries bundle and a Tcl/Tk bundle, both available <a href="https://www.r-project.org/nosvn/winutf8/ucrt3/">here</a>. R built this way will be automatically installing packages only from source.</p>
-</section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>At the time of writing, R built this way, including recommended packages, passes its tests.</p>
-<p>On its own this would not be a sufficient test for the new flang, but CRAN packages are already being tested to work with flang on Linux by Brian Ripley, with promising results. Future testing on Windows, particularly after upgrading to a newer flang compiler as this one has known problems, should hopefully not reveal too many new problems.</p>
-<p>Almost full Rtools have been built for aarch64, which should allow testing of most CRAN packages (but see the next section).</p>
-<p>The code changes needed for base R and for software built as part of Rtools were not overwhelming and most of them were cleanups and modernization that the software would have to go through at some point, anyway.</p>
-<p>I think there is a value in R being able to use also LLVM compilers on Windows, not necessarily only to support Windows on aarch64. Other constraints or uses may appear in the future with new platforms, interoperability with new languages or use of new tools. Supporting more than one compiler clearly helps to keep the code more portable.</p>
-<p>The same applies to the R packages. Being portable and supporting multiple compilers, and LLVM specifically, even on Windows, is a good thing to do, regardless of whether Windows on aarch64 would become an important platform, and whether that would be soon, or not.</p>
-</section>
-<section id="on-testing-packages" class="level2">
-<h2 class="anchored" data-anchor-id="on-testing-packages">On testing packages</h2>
-<p>A significant source of pain when testing packages with a new toolchain or after a big change in the toolchain is when packages download pre-compiled code. Such code is not, and cannot possibly be, compatible: of course static libraries for Intel cannot be linked into executables or dynamic libraries for aarch64.</p>
-<p>When this downloading is done by a package with a large number of reverse dependencies, it makes any testing of a new or significantly updated toolchain essentially impossible: most R packages cannot be built and tested. This is also one of the reasons why this practice is generally not allowed by the <a href="https://cran.r-project.org/web/packages/policies.html">CRAN repository policy</a>. See <a href="https://cran.r-project.org/bin/windows/base/howto-R-devel.html">Howto: Building R-devel and packages on Windows</a> for additional reasons why this practice is a really bad thing to do. To compare with Rtools itself, it does not have this problem: MXE packages are not downloading any pre-compiled code, so one can easily switch a toolchain and re-build from scratch.</p>
-<p>During the transition from MSVCRT to UCRT on Windows, there was a similar problem and at that time libraries for almost all CRAN packages were created and added to Rtools42. To test them, over 100 CRAN and some Bioconductor packages were patched to use the libraries from Rtools, and these patches were automatically applied while testing. Unfortunately, a number of packages did not incorporate such patches and instead ended up downloading pre-compiled code (then for UCRT) again, repeating the previous problem, which we are now running into yet again.</p>
-<p>It would be great help if CRAN packages still downloading pre-compiled code could be fixed not to do so. In some cases they might be able to find inspiration in older patches created during the UCRT transition, available <a href="https://svn.r-project.org/R-dev-web/trunk/WindowsBuilds/winutf8/ucrt3/r_packages/old_patches">here</a>.</p>
-<p>Additional information for dealing with external libraries on Windows is available in <a href="https://cran.r-project.org/bin/windows/base/howto-R-devel.html">Howto: Building R-devel and packages on Windows</a>, including hints on adding libraries to Rtools (packages to MXE).</p>
-
-
-</section>
-
- ]]></description>
-  <category>R Core</category>
-  <category>platform support</category>
-  <category>windows</category>
-  <guid>https://blog.R-project.org/posts/windows-aarch64/</guid>
-  <pubDate>Wed, 23 Aug 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

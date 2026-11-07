@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/free1way/index.html",
       "/posts/stf-project-milestone-2/index.html",
       "/posts/zulip-chat-for-the-r-project/index.html",
       "/posts/new-tricks-sweave-drivers/index.html",
