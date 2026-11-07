@@ -16,7 +16,7 @@
 <height>112</height>
 <width>144</width>
 </image>
-<generator>quarto-1.10.19</generator>
+<generator>quarto-1.11.9</generator>
 <lastBuildDate>Tue, 29 Sep 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 2</title>
@@ -74,13 +74,8 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
 </section>
 
  ]]></description>
-  <category>Linux</category>
-  <category>macOS</category>
-  <category>Windows</category>
-  <category>Package Building</category>
-  <category>binaries</category>
-  <category>versioning</category>
-  <category>STF</category>
+  <category>packages</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/stf-project-milestone-2/</guid>
   <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
 </item>
@@ -144,10 +139,9 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
 </section>
 
  ]]></description>
-  <category>R Core</category>
   <category>R Foundation</category>
-  <category>mentoring</category>
-  <category>development infrastructure</category>
+  <category>R Core</category>
+  <category>community</category>
   <guid>https://blog.R-project.org/posts/zulip-chat-for-the-r-project/</guid>
   <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
 </item>
@@ -356,7 +350,7 @@ font-style: inherit;">@</span></span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>R core</category>
+  <category>documentation</category>
   <category>Sweave</category>
   <guid>https://blog.R-project.org/posts/new-tricks-sweave-drivers/</guid>
   <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
@@ -392,8 +386,8 @@ font-style: inherit;">@</span></span></code></pre></div></div>
 
 
  ]]></description>
+  <category>R Foundation</category>
   <category>R Core</category>
-  <category>prizes</category>
   <guid>https://blog.R-project.org/posts/rousseeuw-prize/</guid>
   <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
 </item>
@@ -432,13 +426,9 @@ font-style: inherit;">@</span></span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>external contributions</category>
-  <category>user-visible behavior</category>
-  <category>internals</category>
-  <category>debugging</category>
-  <category>bugs</category>
-  <category>bugzilla</category>
-  <category>STF</category>
+  <category>R Core</category>
+  <category>community</category>
+  <category>testing</category>
   <guid>https://blog.R-project.org/posts/stf-project-milestone-1/</guid>
   <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
 </item>
@@ -462,8 +452,8 @@ font-style: inherit;">@</span></span></code></pre></div></div>
 
 
  ]]></description>
-  <category>history</category>
-  <category>anniversary</category>
+  <category>R Foundation</category>
+  <category>R Core</category>
   <guid>https://blog.R-project.org/posts/s-at-50/</guid>
   <pubDate>Tue, 05 May 2026 00:00:00 GMT</pubDate>
 </item>
@@ -543,9 +533,8 @@ sin ( 9996.000000(0x1.386p+13) ) -&gt; -0.520831(-0x1.0aaa510fa1ffep-1) [origina
 </section>
 
  ]]></description>
-  <category>linux</category>
-  <category>math</category>
   <category>testing</category>
+  <category>numerical</category>
   <guid>https://blog.R-project.org/posts/mfuzz/</guid>
   <pubDate>Fri, 30 Jan 2026 00:00:00 GMT</pubDate>
 </item>
@@ -576,9 +565,8 @@ sin ( 9996.000000(0x1.386p+13) ) -&gt; -0.520831(-0x1.0aaa510fa1ffep-1) [origina
 </section>
 
  ]]></description>
-  <category>windows</category>
-  <category>math</category>
   <category>testing</category>
+  <category>numerical</category>
   <guid>https://blog.R-project.org/posts/math-sensitivity-mdebug/</guid>
   <pubDate>Tue, 06 Jan 2026 00:00:00 GMT</pubDate>
 </item>
@@ -633,12 +621,9 @@ sin ( 9996.000000(0x1.386p+13) ) -&gt; -0.520831(-0x1.0aaa510fa1ffep-1) [origina
 </section>
 
  ]]></description>
-  <category>External Contributions</category>
-  <category>R Core</category>
   <category>R Foundation</category>
-  <category>mentoring</category>
-  <category>development infrastructure</category>
-  <category>governance</category>
+  <category>R Core</category>
+  <category>community</category>
   <guid>https://blog.R-project.org/posts/rsmf-enabling-contributors/</guid>
   <pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate>
 </item>
@@ -670,12 +655,9 @@ sin ( 9996.000000(0x1.386p+13) ) -&gt; -0.520831(-0x1.0aaa510fa1ffep-1) [origina
 
 
  ]]></description>
-  <category>External Contributions</category>
-  <category>User-visible Behavior</category>
-  <category>Internals</category>
-  <category>debugging</category>
-  <category>bugs</category>
-  <category>bugzilla</category>
+  <category>R Core</category>
+  <category>community</category>
+  <category>testing</category>
   <guid>https://blog.R-project.org/posts/reducing-bug-backlog/</guid>
   <pubDate>Mon, 13 Oct 2025 00:00:00 GMT</pubDate>
 </item>
@@ -723,12 +705,8 @@ sin ( 9996.000000(0x1.386p+13) ) -&gt; -0.520831(-0x1.0aaa510fa1ffep-1) [origina
 </section>
 
  ]]></description>
-  <category>Windows</category>
-  <category>Math</category>
-  <category>Package Development</category>
-  <category>numerical accuracy</category>
-  <category>testing</category>
-  <category>test tolerance</category>
+  <category>numerical</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/math-sensitivity-2/</guid>
   <pubDate>Wed, 21 May 2025 00:00:00 GMT</pubDate>
 </item>
@@ -837,12 +815,8 @@ x2 == 1</code></pre>
 </section>
 
  ]]></description>
-  <category>Windows</category>
-  <category>Math</category>
-  <category>Package Development</category>
-  <category>numerical accuracy</category>
-  <category>testing</category>
-  <category>test tolerance</category>
+  <category>numerical</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/math-sensitivity/</guid>
   <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
 </item>
@@ -903,11 +877,8 @@ x2 == 1</code></pre>
 </section>
 
  ]]></description>
-  <category>Windows</category>
-  <category>Internals</category>
-  <category>Package Development</category>
-  <category>sanitizers</category>
-  <category>testing</category>
+  <category>packages</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/windows-toolchains/</guid>
   <pubDate>Tue, 28 Jan 2025 00:00:00 GMT</pubDate>
 </item>
@@ -987,11 +958,8 @@ x2 == 1</code></pre>
 </section>
 
  ]]></description>
-  <category>Internals</category>
+  <category>encoding</category>
   <category>macOS</category>
-  <category>User-visible Behavior</category>
-  <category>encodings</category>
-  <category>iconv</category>
   <guid>https://blog.R-project.org/posts/iconv/</guid>
   <pubDate>Wed, 11 Dec 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1064,10 +1032,8 @@ x2 == 1</code></pre>
 </section>
 
  ]]></description>
-  <category>User-visible Behavior</category>
-  <category>Internals</category>
-  <category>downloading files</category>
-  <category>package installation</category>
+  <category>performance</category>
+  <category>packages</category>
   <guid>https://blog.R-project.org/posts/faster-downloads/</guid>
   <pubDate>Mon, 02 Dec 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1158,13 +1124,9 @@ Hello.
 </section>
 
  ]]></description>
-  <category>Internals</category>
-  <category>User-visible Behavior</category>
-  <category>Windows</category>
-  <category>Unix</category>
-  <category>front-ends</category>
-  <category>line editing</category>
-  <category>parsing</category>
+  <category>R Core</category>
+  <category>language</category>
+  <category>internals</category>
   <guid>https://blog.R-project.org/posts/long-input-lines/</guid>
   <pubDate>Fri, 30 Aug 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1418,12 +1380,8 @@ font-style: inherit;">$</span>Variable)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>Internals</category>
-  <category>Package Development</category>
-  <category>OO</category>
-  <category>S7</category>
-  <category>S4</category>
-  <category>S3</category>
+  <category>classes/methods</category>
+  <category>packages</category>
   <guid>https://blog.R-project.org/posts/general-support-oop/</guid>
   <pubDate>Fri, 17 May 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1445,10 +1403,8 @@ font-style: inherit;">$</span>Variable)</span></code></pre></div></div>
 
 
  ]]></description>
-  <category>Security</category>
-  <category>Internals</category>
-  <category>bugs</category>
-  <category>CVE</category>
+  <category>security</category>
+  <category>internals</category>
   <guid>https://blog.R-project.org/posts/cve-2024-27322/</guid>
   <pubDate>Fri, 10 May 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1520,12 +1476,9 @@ font-style: inherit;">$</span>Variable)</span></code></pre></div></div>
 </section>
 
  ]]></description>
-  <category>User-visible Behavior</category>
-  <category>Windows</category>
-  <category>testing</category>
-  <category>installation</category>
-  <category>Aarch64</category>
-  <category>ARM</category>
+  <category>R Core</category>
+  <category>platform support</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/windows-aarch64-2/</guid>
   <pubDate>Tue, 23 Apr 2024 00:00:00 GMT</pubDate>
 </item>
@@ -1616,12 +1569,9 @@ WIN =</code></pre>
 </section>
 
  ]]></description>
-  <category>User-visible Behavior</category>
-  <category>Windows</category>
-  <category>testing</category>
-  <category>installation</category>
-  <category>Aarch64</category>
-  <category>ARM</category>
+  <category>R Core</category>
+  <category>platform support</category>
+  <category>windows</category>
   <guid>https://blog.R-project.org/posts/windows-aarch64/</guid>
   <pubDate>Wed, 23 Aug 2023 00:00:00 GMT</pubDate>
 </item>
