@@ -16,19 +16,16 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Get script
-        run: curl -OLs https://eddelbuettel.github.io/r-ci/run.sh && chmod 0755 run.sh
-
-      - name: Bootstrap
-        run: ./run.sh bootstrap
+      - name: Setup
+        uses: eddelbuettel/github-actions/r-ci@master
 
       - name: Dependencies
         run: ./run.sh install_r bench colorspace dplyr ggbeeswarm ggplot2 kableExtra knitr S7 tidyr
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render site
         run: quarto render
