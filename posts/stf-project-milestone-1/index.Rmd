@@ -4,6 +4,7 @@ author: "Simon Urbanek, Tomáš Kalibera"
 date: 2026-06-02
 categories: ["R Core", "community", "testing"]
 description: "Sovereign Tech Fund-supported effort triages and resolves 150+ R bugs, reducing backlog by 25%."
+image: "stf.png"
 aliases:
   - "/2026/06/02/sovereign-tech-fund-project-milestone-1/index.html"
 ---

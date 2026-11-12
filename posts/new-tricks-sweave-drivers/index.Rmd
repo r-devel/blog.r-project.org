@@ -4,6 +4,7 @@ author: "Vincent Goulet, Kurt Hornik"
 date: "2026-09-18"
 categories: ["documentation", "Sweave"]
 description: "Enhancements to R Sweave drivers improve literate programming capabilities for documentation."
+image: "sweave-tricks.png"
 aliases:
   - "/2026/09/18/new-tricks-for-the-r-sweave-drivers/index.html"
 ---

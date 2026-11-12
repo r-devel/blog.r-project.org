@@ -4,6 +4,7 @@ author: "Torsten Hothorn, Kurt Hornik"
 date: 2026-11-07
 categories: ["R Core", "stats"]
 description: "The novel `stats::free1way()` function implements semiparametrically efficient population- and permutation-based inference in distribution-free stratified K-sample oneway layouts. Some classical `stats::*.test()` procedures gain effect estimates and corresponding confidence intervals as well as tools for power analysis and model diagnostics."
+image: "free1way.png"
 ---
 
 ## Introduction

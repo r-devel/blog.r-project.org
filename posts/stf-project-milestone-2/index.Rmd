@@ -4,6 +4,7 @@ author: "Šimon Urbánek, Tomáš Kalibera"
 date: 2026-09-29
 categories: ["packages", "windows"]
 description: "Improvements to R binary packages enable better version detection and consistency across platforms."
+image: "stf.png"
 aliases:
   - "/2026/09/29/sovereign-tech-fund-project-milestone-2/index.html"
 ---
