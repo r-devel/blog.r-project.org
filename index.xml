@@ -145,7 +145,7 @@ font-style: inherit;">8</span>)</span></code></pre></div></div>
 
                 n = 30
 Total sample size = 30 (Control) + 30 (gCOPD) + 30 (gAsbestosis) = 90
-            power = 0.8018888
+            power = 0.8002641
         sig.level = 0.05
    log-odds ratio = 1.0350087, -0.3706949
 
@@ -169,6 +169,7 @@ NOTE: 'n' is sample size in control group</code></pre>
   <category>stats</category>
   <guid>https://blog.R-project.org/posts/free1way/</guid>
   <pubDate>Sat, 07 Nov 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/free1way/free1way.png" medium="image" type="image/png" height="100" width="144"/>
 </item>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 2</title>
@@ -230,6 +231,7 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
   <category>windows</category>
   <guid>https://blog.R-project.org/posts/stf-project-milestone-2/</guid>
   <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/stf-project-milestone-2/stf.png" medium="image" type="image/png" height="92" width="144"/>
 </item>
 <item>
   <title>Zulip Chat for the R Project</title>
@@ -296,6 +298,7 @@ packaged installation of ‘base64enc’ as ‘base64enc_0.1-6_R_macos-arm64.tar
   <category>community</category>
   <guid>https://blog.R-project.org/posts/zulip-chat-for-the-r-project/</guid>
   <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/zulip-chat-for-the-r-project/zulip.png" medium="image" type="image/png" height="75" width="144"/>
 </item>
 <item>
   <title>New Tricks for the R Sweave Drivers</title>
@@ -506,6 +509,7 @@ font-style: inherit;">@</span></span></code></pre></div></div>
   <category>Sweave</category>
   <guid>https://blog.R-project.org/posts/new-tricks-sweave-drivers/</guid>
   <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/new-tricks-sweave-drivers/sweave-tricks.png" medium="image" type="image/png" height="107" width="144"/>
 </item>
 <item>
   <title>Rousseeuw Prize 2026 Awarded to the R Project</title>
@@ -542,6 +546,7 @@ font-style: inherit;">@</span></span></code></pre></div></div>
   <category>R Core</category>
   <guid>https://blog.R-project.org/posts/rousseeuw-prize/</guid>
   <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/rousseeuw-prize/rousseeuwprize.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 <item>
   <title>Sovereign Tech Fund Project: Milestone 1</title>
@@ -583,6 +588,7 @@ font-style: inherit;">@</span></span></code></pre></div></div>
   <category>testing</category>
   <guid>https://blog.R-project.org/posts/stf-project-milestone-1/</guid>
   <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://blog.R-project.org/posts/stf-project-milestone-1/stf.png" medium="image" type="image/png" height="92" width="144"/>
 </item>
 <item>
   <title>S at 50</title>
