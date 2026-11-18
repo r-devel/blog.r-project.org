@@ -20,6 +20,9 @@ website:
         href: https://fosstodon.org/@R_Foundation
       - icon: linkedin
         href: https://www.linkedin.com/company/the-r-foundation-for-statistical-computing
+      - icon: rss
+        aria-label: "RSS Feed"
+        href: index.xml
 
 format:
   html:
