@@ -8,6 +8,8 @@ listing:
   sort-ui: false
   filter-ui: false
 page-layout: full
+image: Rlogo.png
+image-alt: R logo
 ---
 
 
