@@ -8,8 +8,8 @@ share news, insights, and plans related to the R core implementation and other
 related topics.
 
 - **Source repository:** <https://github.com/r-devel/blog.r-project.org>
-- **Rendered version:** <https://contributor.r-project.org/blog.r-project.org/> _(while under development)_
-- **Official site:** <https://blog.R-project.org/> _(currently still the old blogdown version)_
+- **Rendered version:** <https://contributor.r-project.org/blog.r-project.org/> _(for inspection, see below)_
+- **Official site:** <https://blog.R-project.org/>
 - **Tools:** [Quarto](https://quarto.org/) and [R](https://www.R-project.org/)
 
 
@@ -66,3 +66,45 @@ categories like the ones below should be used if possible.
 - **UCRT** - Windows Universal C Runtime
 - **UTF-8** - when UTF-8 encoding is the focus
 - **windows** - Windows-specific features, UTF-8, Rterm, paths
+
+
+### Publishing
+
+To officially publish the rendered blog at <https://blog.R-project.org/> the
+following steps are used:
+
+1. Add a new subdirectory in `posts` and push it to the `main` branch,
+   either directly or through a pull request.
+2. Double-check that the rendered version of the post looks ok,
+   either locally or in the GitHub pages (see below).
+3. Push the rendered website into the `publish` branch, from where it
+   will be picked up automatically and deployed to the official URL
+   above (approximately once per hour).
+
+**Step 1:** This is done "as usual" in Git/GitHub.
+
+**Step 2:** To render the website locally use
+
+```
+quarto render
+```
+
+and then inspect `_site/index.html` by opening it in the browser.
+
+Additionally, the rendering is done upon any push to the `main` branch
+by a GitHub Action running the
+[quarto.yml](https://github.com/r-devel/blog.r-project.org/blob/main/.github/workflows/quarto.yml)
+workflow. The rendered site is then pushed to the `gh-pages` branch
+and can be inspected at <https://contributor.r-project.org/blog.r-project.org/>.
+
+**Step 3:** For deploying the rendered site to the official URL
+it needs to be pushed to the `publish` branch. This can either be done
+from the locally rendered version or merged from the `gh-pages` branch:
+
+```
+git checkout gh-pages
+git pull
+git switch publish
+git merge gh-pages
+git push
+```
