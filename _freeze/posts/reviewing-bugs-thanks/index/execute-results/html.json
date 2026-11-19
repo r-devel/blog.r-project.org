@@ -1,0 +1,17 @@
+{
+  "hash": "91e417ab5dcb0be99b1c92241e2f5f14",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Thanks for Reviewing Bug Reports\"\nauthor: \"Tomas Kalibera, Luke Tierney\"\ndate: 2019-12-16\ncategories: [\"R Core\", \"community\", \"testing\"]\ndescription: \"Community effort significantly improves R bug resolution rate and backlog management.\"\naliases:\n  - \"/2019/12/16/thanks-for-reviewing-bug-reports/index.html\"\n---\n\n\n\nJust a quick update and note of thanks to all who have responded to\nour [blog post](/2019/10/09/r-can-use-your-help-reviewing-bug-reports/index.html)\non 2019-10-09 and helped with reviewing and resolving bug reports.\nThanks to your help the pace at which bugs have been resolved has\nincreased nicely since the date of that post:\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n\n\nOur special thanks to Michael Chirico, Henrik Bengtsson, Suharto Anggono,\nHugo Gabriel Eyherabide and Elin Waring, who have contributed most in this\nperiod.  There is still a a lot of work to do, so please keep your\ncontributions coming!\n\n\n\n\n\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

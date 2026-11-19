@@ -1,0 +1,15 @@
+{
+  "hash": "fcbf5efe4c07d520356e044c678b89d9",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"S at 50\"\nauthor: \"Martyn Plummer\"\ndate: 2026-05-05\ncategories: [\"R Foundation\", \"R Core\"]\ndescription: \"Celebrating 50 years of the S and R programming languages with historical perspective.\"\naliases:\n  - \"/2026/05/05/s-at-50/index.html\"\n---\n\n\nToday marks 50 years since Rick Becker and John Chambers presented a new project to a few of their colleagues in Statistics and Data Analysis research at Bell Labs. John writes:\n\n> It had no name and we were unsure what it was, exactly.  A few months later it was named S, initially called an interactive environment.  Only a revised version was referred to as a language.  (Lately I’ve been labelling it R Version 0.)\n\nA poster by Balasubramanian Narasimhan summarizes 50 years of S and R. You can [download](s_at_50_poster.jpg) the full size poster or open up the image below in a new tab to see it full size.\n\n<img src=\"s_at_50_poster.jpg\" width=\"540\" height=\"720\" />\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
